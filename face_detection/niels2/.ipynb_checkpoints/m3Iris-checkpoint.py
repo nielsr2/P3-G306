@@ -3,6 +3,8 @@ import numpy as np
 from matplotlib import pyplot as plt
 import m3F
 import os
+from PIL import ImageFilter
+
 def findCircle(imgPath):
     print("****************************************************************************************************************")
     print("proccesing", imgPath)
@@ -12,6 +14,10 @@ def findCircle(imgPath):
     if not isinstance(img, type(None)):
 
         img  = cv2.medianBlur(img,5)
+        #
+        img = m3F.typeSwap(img)
+        img = img.filter(ImageFilter.BLUR)
+        img = m3F.typeSwap(img)
         cimg=cv2.cvtColor(img,cv2.COLOR_GRAY2BGR )
 
         

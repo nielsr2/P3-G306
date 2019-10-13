@@ -1,5 +1,6 @@
 import PIL
 from matplotlib import pyplot as plt
+import numpy as np
 
 # http://ozzmaker.com/add-colour-to-text-in-python/
 def printRed(stringarr):
@@ -19,6 +20,15 @@ def printBlue(stringarr):
     
     
     
+def evalSize(imagePath, w, h):
+    im = PIL.Image.open(imagePath)
+    print("W & H", im.width, im.height)
+    if (im.width > w and im.height > h):
+        # was larger, 
+        return True;
+    else:
+        # too small
+        return False;
     
     
     
@@ -41,3 +51,16 @@ def gHist(imagePath):
     for i in range(0, 256):
         plt.bar(i, hist[i], alpha=0.3)
     plt.show()
+
+    
+def typeSwap(inputIm):
+    printBlue("typeswap:")
+    nd = np.ndarray(1)
+    im = PIL.Image.Image()
+    print(type(inputIm), type(nd))
+    if (type(inputIm) == type(nd)):
+        inputIm = PIL.Image.fromarray(inputIm)
+        return inputIm;
+    elif(type(inputIm) == type(im)):
+        inputIm = np.asarray(inputIm)
+        return inputIm;        

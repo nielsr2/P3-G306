@@ -47,8 +47,8 @@ def findEyes(inputImPath):
         else:
             # If tilted right
             print("was tilted")
-            left = [left_eye[0][0]-mg,left_eye[1][1]-mg,left_eye[3][0]+mg,left_eye[4][1]+mg]
-            right = [right_eye[0][0]-mg,right_eye[1][1]-mg,right_eye[3][0]+mg,right_eye[4][1]+mg]
+            left = [left_eye[0][0]-mg,left_eye[1][1]-mg,left_eye[3][0]+mg,left_eye[4][1]]
+            right = [right_eye[0][0]-mg,right_eye[1][1]-mg,right_eye[3][0]+mg,right_eye[4][1]]
             d.rectangle((left))
             d.rectangle((right))
             #return np.asarray(pil_image.crop(left));
