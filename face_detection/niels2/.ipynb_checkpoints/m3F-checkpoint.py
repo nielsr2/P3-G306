@@ -54,7 +54,7 @@ def gHist(imagePath):
 
     
 def typeSwap(inputIm):
-    printBlue("typeswap:")
+    #printBlue("typeswap:")
     nd = np.ndarray(1)
     im = PIL.Image.Image()
     print(type(inputIm), type(nd))

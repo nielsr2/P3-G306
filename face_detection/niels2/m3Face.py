@@ -32,7 +32,7 @@ def findEyes(inputImPath):
         left_eye = face_landmarks['left_eye']
         right_eye = face_landmarks['right_eye']
     
-        mg = (left_eye[3][0]-left_eye[0][0])*0.1
+        mg = (left_eye[3][0]-left_eye[0][0])*0.2
     
         if left_eye[0][1] > left_eye[3][1]:
             # If tilted left - based on how it's seen on image
@@ -47,8 +47,8 @@ def findEyes(inputImPath):
         else:
             # If tilted right
             print("was tilted")
-            left = [left_eye[0][0]-mg,left_eye[1][1]-mg,left_eye[3][0]+mg,left_eye[4][1]]
-            right = [right_eye[0][0]-mg,right_eye[1][1]-mg,right_eye[3][0]+mg,right_eye[4][1]]
+            left = [left_eye[0][0]-mg,left_eye[1][1]-mg,left_eye[3][0]+mg,left_eye[4][1]+mg]
+            right = [right_eye[0][0]-mg,right_eye[1][1]-mg,right_eye[3][0]+mg,right_eye[4][1]+mg]
             d.rectangle((left))
             d.rectangle((right))
             #return np.asarray(pil_image.crop(left));
