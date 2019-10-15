@@ -19,7 +19,7 @@ def findCircle(imgPath):
         cimg=cv2.cvtColor(img,cv2.COLOR_GRAY2BGR )
         
         img = m3F.typeSwap(img)
-        #img = img.filter(ImageFilter.BoxBlur(1.5))
+        img = img.filter(ImageFilter.GaussianBlur(1.4))
         img = img.filter(ImageFilter.UnsharpMask(radius=2, percent=200, threshold=1))
         img = ImageEnhance.Contrast(img).enhance(1.4)
         #img = ImageEnhance.Sharpness(img).enhance(2.)
@@ -37,7 +37,7 @@ def findCircle(imgPath):
         #cimg = cv2.cvtColor(thresh1,cv2.COLOR_GRAY2BGR)
         #plt.imshow(cimg)
         #plt.show()
-        circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,1,120,param1=50,param2=30,minRadius=0,maxRadius=0)
+        circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,1.5,120,param1=60,param2=15,minRadius=0,maxRadius=int(m3F.typeSwap(img).height/2))
 
         #print("type(circles) IS: ", type(circles))
         if not isinstance(circles, type(None)):
@@ -51,7 +51,7 @@ def findCircle(imgPath):
                     # draw the center of the circle
                     cv2.circle(cimg,(i[0],i[1]),2,(0,0,255),3)
                     #plt.show(cimg)
-                    can = cv2.Canny(img,50,30)
+                    can = cv2.Canny(img,30,60)
                     combined = np.hstack((cimg,can))
                     plt.imshow(combined)
                     plt.show()
@@ -59,7 +59,6 @@ def findCircle(imgPath):
                     m3F.printGreen("CIRCLES FOUND^^^")
                     return cimg;
         else:
-
             can = cv2.Canny(img,50,30)
             combined = np.hstack((cimg,can))
             plt.imshow(combined)
