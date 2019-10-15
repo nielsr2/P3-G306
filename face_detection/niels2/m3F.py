@@ -22,7 +22,7 @@ def printBlue(stringarr):
     
 def evalSize(imagePath, w, h):
     im = PIL.Image.open(imagePath)
-    print("W & H", im.width, im.height)
+    # print("W & H", im.width, im.height)
     if (im.width > w and im.height > h):
         # was larger, 
         return True;
@@ -54,10 +54,10 @@ def gHist(imagePath):
 
     
 def typeSwap(inputIm):
-    printBlue("typeswap:")
+    #printBlue("typeswap:")
     nd = np.ndarray(1)
     im = PIL.Image.Image()
-    print(type(inputIm), type(nd))
+    #print(type(inputIm), type(nd))
     if (type(inputIm) == type(nd)):
         inputIm = PIL.Image.fromarray(inputIm)
         return inputIm;
