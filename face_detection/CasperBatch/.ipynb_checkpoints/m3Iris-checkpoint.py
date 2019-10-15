@@ -21,7 +21,7 @@ def findCircle(imgPath):
         
         img = m3F.typeSwap(img)
         img = img.filter(ImageFilter.GaussianBlur(1.4))
-        img = img.filter(ImageFilter.UnsharpMask(radius=2, percent=200, threshold=1))
+        #img = img.filter(ImageFilter.UnsharpMask(radius=2, percent=200, threshold=1))
         #img = img.filter(ImageFilter.SHARPEN)
         #img = img.filter(ImageFilter.SHARPEN)
         img =img.filter(ImageFilter.EDGE_ENHANCE_MORE)
