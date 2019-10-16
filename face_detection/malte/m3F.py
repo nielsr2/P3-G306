@@ -1,6 +1,7 @@
 import PIL
 from matplotlib import pyplot as plt
 import numpy as np
+import os, os.path
 
 # http://ozzmaker.com/add-colour-to-text-in-python/
 def printRed(stringarr):
@@ -64,3 +65,6 @@ def typeSwap(inputIm):
     elif(type(inputIm) == type(im)):
         inputIm = np.asarray(inputIm)
         return inputIm;        
+    
+def filecount(dir_name):
+    return len([f for f in os.listdir(dir_name) if os.path.isfile(f)])

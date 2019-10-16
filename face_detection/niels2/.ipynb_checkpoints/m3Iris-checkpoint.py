@@ -25,7 +25,6 @@ def findCircle(imgPath):
         img = img.filter(ImageFilter.UnsharpMask(radius=2, percent=200, threshold=1))
         img = ImageEnhance.Contrast(img).enhance(1.4)
         #img = ImageEnhance.Sharpness(img).enhance(2.)
-        
         img = m3F.typeSwap(img)
         img = cv2.medianBlur(img,5)
         cimg=img.copy()
