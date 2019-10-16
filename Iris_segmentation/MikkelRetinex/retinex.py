@@ -121,4 +121,8 @@ def MSRCP(img, sigma_list, low_clip, high_clip):
 
     img_msrcp = np.uint8(img_msrcp - 1.0)
 
-    return img_msrcp
+    arr = np.random.uniform(size=(3, 256, 256)) * 255
+    img = img_msrcp.fromarray(arr.T, 'RGB')
+
+
+    return img
