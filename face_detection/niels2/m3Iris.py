@@ -7,7 +7,9 @@ from PIL import ImageFilter, ImageEnhance
 import PIL
 
 def findCircle(imgPath):
-    print("****************************************************************************************************************")
+    print("***************************************************************************************")
+    #if (type(imgPath) == type(str)):
+        #print("WAS STRING ")
     print("proccesing", imgPath)
 
     img = cv2.imread(imgPath,0)
