@@ -6,11 +6,16 @@ import os
 from PIL import ImageFilter, ImageEnhance
 import PIL
 
-def findCircle(imgPath):
-    print("****************************************************************************************************************")
-    print("proccesing", imgPath)
-
-    img = cv2.imread(imgPath,0)
+def findCircle(inputImg):
+    
+    print("***************************************************************************************")
+    if (type(inputImg) == str):
+        img = cv2.imread(inputImg,0)
+        print("proccesing", inputImg)
+        #print("input was string (filepath), image read from filepath")
+    else:
+        #print("input was image", type(imgPath))
+        img = inputImg
     count = 0
     if not isinstance(img, type(None)):
 
