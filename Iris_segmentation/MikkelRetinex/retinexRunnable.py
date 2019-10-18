@@ -10,9 +10,11 @@ import retinex
 def runMSRCP(imgPath):
     with open('config.json', 'r') as f:
         config = json.load(f)
-    
+
     img = cv2.imread(imgPath,1)
-    shape = img.shape
+    print("img after reading", img.shape)
+    #img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    #shape = img.shape
     img_msrcp = retinex.MSRCP(
         img,
         config['sigma_list'],
@@ -21,8 +23,9 @@ def runMSRCP(imgPath):
     )
     
     
-        
-    img_msrcp=cv2.cvtColor(img_msrcp,cv2.COLOR_RGB2BGR)
+
+    print("img_msrcp", img_msrcp.shape)
+    #img_msrcp=cv2.cvtColor(img_msrcp,cv2.COLOR_BGR2RGB)
     plt.title("MSRCP")
     plt.imshow(img_msrcp)
     plt.show()

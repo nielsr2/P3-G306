@@ -10,23 +10,22 @@ import PIL
 def findCircle(inputImg):
     print("***************************************************************************************")
     if (type(inputImg) == str):
-        img = cv2.imread(inputImg, 0)
+        img = cv2.imread(inputImg, 1)
         print("proccesing", inputImg)
         # print("input was string (filepath), image read from filepath")
     else:
         # print("input was image", type(imgPath))
         img = inputImg
+        print("img loaded", img.shape)
+        #img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     count = 0
     if not isinstance(img, type(None)):
-        uImg = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+        cimg = img
+        if len(img.shape) == 3:
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        #img = cv2.medianBlur(img, 5)
 
-        plt.title("unprocessed")
-        plt.imshow(uImg)
-        plt.show()
 
-        print(img.shape)
-        img = cv2.medianBlur(img, 5)
-        cimg = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
         # 1
 
 
@@ -48,7 +47,8 @@ def findCircle(inputImg):
                     plt.imshow(cimg)
                     plt.show()
                     m3F.printGreen("CIRCLES FOUND^^^")
-                    return cimg;
+                    print("img out", img.shape)
+                    return img;
         else:
             can = cv2.Canny(img, 50, 30)
             combined = np.hstack((cimg, can))
