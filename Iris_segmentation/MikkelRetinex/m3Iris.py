@@ -20,7 +20,8 @@ def findCircle(inputImg):
         cimg = img
         if len(img.shape) == 3:
             img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        # img = cv2.medianBlur(img, 5)
+        # img = cv2.medianBlur
+        m3F.imshow(img[:,:,2],"red")
 
         circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, 1, 20, param1=50, param2=30, minRadius=0, maxRadius=0)
 
@@ -42,6 +43,7 @@ def findCircle(inputImg):
                     return img;
         else:
             can = cv2.Canny(img, 50, 30)
+            can = cv2.cvtColor(can, cv2.COLOR_GRAY2BGR)
             combined = np.hstack((cimg, can))
             m3F.imshow(combined,"combined")
             m3F.gHist(img)
