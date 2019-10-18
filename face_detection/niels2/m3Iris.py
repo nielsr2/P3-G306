@@ -20,7 +20,7 @@ def findCircle(imgPath):
         
         img = m3F.typeSwap(img)
         img = img.filter(ImageFilter.GaussianBlur(1.4))
-        img = img.filter(ImageFilter.UnsharpMask(radius=2, percent=200, threshold=1))
+        img = img.filter(ImageFilter.UnsharpMask(radius=2, percent=200, threshold=5))
         img = ImageEnhance.Contrast(img).enhance(1.4)
         #img = ImageEnhance.Sharpness(img).enhance(2.)
         img = m3F.typeSwap(img)
@@ -37,7 +37,8 @@ def findCircle(imgPath):
         #plt.imshow(cimg)
         #plt.show()
         circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,1.5,120,param1=60,param2=15,minRadius=0,maxRadius=int(m3F.typeSwap(img).height/2))
-
+        
+        
         #print("type(circles) IS: ", type(circles))
         if not isinstance(circles, type(None)):
             #print("was not note None, was: ", type(circles))
@@ -52,7 +53,8 @@ def findCircle(imgPath):
                     #plt.show(cimg)
                     can = cv2.Canny(img,30,60)
                     combined = np.hstack((cimg,can))
-                    plt.imshow(combined)
+                    finalImg = cv2.cvtColor(combined, cv2.COLOR_BGR2RGB)
+                    plt.imshow(finalImg)
                     plt.show()
                     m3F.gHist(img)
                     m3F.printGreen("CIRCLES FOUND^^^")
