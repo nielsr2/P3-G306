@@ -20,13 +20,15 @@ def findCircle(inputImg):
         cimg = img
         if len(img.shape) == 3:
             img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        img = cv2.medianBlur(img, 17)
+        # img = cv2.medianBlur(img, 17)
         # m3F.imshow(img[:,:,2],"red")
 
-        circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, 1, 20, param1=50, param2=30, minRadius=0, maxRadius=0)
+        circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, 1, 20, param1=50, param2=30, minRadius=45, maxRadius=85)
 
         if not isinstance(circles, type(None)):
             if (circles.size != 0):
+                print("circle size inside: ", circles.size)
+
                 circles = np.uint16(np.around(circles))
                 # print(circles)
                 for i in circles[0, :]:
@@ -37,15 +39,12 @@ def findCircle(inputImg):
 
                     # can = cv2.Canny(img, 30, 60)
                     # combined = np.hstack((cimg, can))
-                    m3F.imshow(cimg,"Circle")
-                    m3F.printGreen("CIRCLES FOUND^^^")
-                    print("img out", img.shape)
-                    return img;
+                m3F.imshow(cimg,"Circle")
+                m3F.printGreen("CIRCLES FOUND^^^")
+                print("img out", img.shape)
+                return img;
         else:
-            can = cv2.Canny(img, 50, 30)
-            can = cv2.cvtColor(can, cv2.COLOR_GRAY2BGR)
-            combined = np.hstack((cimg, can))
-            m3F.imshow(combined,"combined")
+            m3F.imshow(cimg,"no circles found")
             m3F.gHist(img)
             m3F.printRed("NO CIRCLES FOUND^^^")
     else:
