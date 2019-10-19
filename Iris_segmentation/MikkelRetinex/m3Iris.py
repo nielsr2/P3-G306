@@ -20,8 +20,8 @@ def findCircle(inputImg):
         cimg = img
         if len(img.shape) == 3:
             img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        # img = cv2.medianBlur
-        m3F.imshow(img[:,:,2],"red")
+        img = cv2.medianBlur(img, 17)
+        # m3F.imshow(img[:,:,2],"red")
 
         circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, 1, 20, param1=50, param2=30, minRadius=0, maxRadius=0)
 
