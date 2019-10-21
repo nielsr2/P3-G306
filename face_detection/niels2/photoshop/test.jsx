@@ -1,4 +1,9 @@
 #target photoshop
+// links
+// http://lacuisine.tech/2018/08/09/execute-python-script-from-photoshop/
+// https://www.davidebarranca.com/2012/10/scriptui-window-in-photoshop-palette-vs-dialog/
+// https://www.makeuseof.com/tag/how-to-automate-photoshop-with-scripts/-
+
 
 current_document = app.activeDocument;
 current_layer = current_document.activeLayer;
@@ -16,17 +21,6 @@ app.activeDocument = current_document;
 
 
 
-
-// new_width = 200;
-//
-// current_document.resizeImage(
-//   UnitValue(new_width, 'px'),
-//   null,
-//   null,
-//   ResampleMethod.BICUBIC
-// );
-// http://lacuisine.tech/2018/08/09/execute-python-script-from-photoshop/
-fileRef = File("/Users/n/School/MED3/P3/test.png")
 outPath = "/Users/n/School/MED3/P3/Code/P3-G306/face_detection/niels2/photoshop/out.jpg"
 fileRef = File("/Users/n/School/MED3/P3/Code/P3-G306/face_detection/niels2/photoshop/out.jpg")
 
@@ -43,18 +37,6 @@ docExportOptions.PNG8 = false
 
 current_document.exportDocument(fileRef, ExportType.SAVEFORWEB, docExportOptions)
 
-
-// Same as before, we gather the information we need
-// Get the active document name
-var theDoc = app.activeDocument;
-// Save the name without fullpath
-var docName = theDoc.name.replace(/\..+$/, '');
-
-// we set the path to our temporary .command (Mac equivalent of .bat)
-// we use the current date time as string in the filename
-var date = Number(new Date());
-// https://www.davidebarranca.com/2012/10/scriptui-window-in-photoshop-palette-vs-dialog/--
-// var execFilePath = "/Users/n/School/MED3/P3/Code/P3-G306/face_detection/niels2/photoshop/"+ date +".command"
 var execFilePath = "/Users/n/School/MED3/P3/Code/P3-G306/face_detection/niels2/photoshop/c.command"
 
 // we create the command file, and setup it before opening it
