@@ -1,5 +1,5 @@
 
-def f1(string, p):
+def f1(string):
     return string + "f1"
 
 
@@ -81,7 +81,8 @@ def test3():
     inputString = "yay first"
     for key in fArray:
         current = fArray[key]
+        print("current", current)
         current["string"] = inputString
-        returnedString = key(*fArray[key])
+        returnedString = key(**current)
         print("RE" + returnedString)
         inputString = returnedString
