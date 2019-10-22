@@ -10,23 +10,27 @@ import PIL
 
 def findCircle(inputImg, resolution, min_dist, param_1, param_2, min_radius, max_radius):
     # old params for HoughCircle: img, cv2.HOUGH_GRADIENT, 1.5, 120, param1=60, param2=15, minRadius=0, maxRadius=int(m3F.typeSwap(img).height / 2))
-    __run(inputImg, resolution, min_dist, param_1, param_2, min_radius, max_radius)
+    run(inputImg, resolution, min_dist, param_1, param_2, min_radius, max_radius)
 
 
 def findCircle(inputImg):
-    __run(inputImg, 1.5, 120, param1=60, param2=15, minRadius=0, maxRadius=int(m3F.typeSwap(inputImg).height / 2))
+    run(inputImg, 1, 120, 60, 15, 10, 100)
 
 
-def __run(tempInputImg, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMin_radius, tempMax_radius):
+def run(tempInputImg, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMinRadius, tempMaxRadius):
     print("***************************************************************************************")
+
     img = tempInputImg
+    print(tempMinRadius)
+
     if not isinstance(img, type(None)):
         cimg = img
         if len(img.shape) == 3:
             img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
         circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, tempResolution, tempMin_dist, tempParam_1, tempParam_2,
-                                   tempMin_radius, tempMax_radius)
+                                   tempMinRadius, tempMaxRadius)
+        m3F.imshow(cimg,"image!")
 
         if not isinstance(circles, type(None)):
 
