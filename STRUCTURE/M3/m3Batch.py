@@ -1,46 +1,45 @@
 import glob
-from PIL import Image
+# from PIL import Image
 import cv2
-import numpy as np
-import types
+# import numpy as np
+# import types
 import os
-import m3Iris
-import m3F
-inputFolder = "eyes/"
-outputFolder = "irises/"
+import datetime
 
 
-inputImages = glob.glob(inputFolder + "*.j*")
+# **********************************************************************
+# exampe of input
+'''
+fArray = {function1: {"image": "ignorethis", "param1": "blalbal1"},
+          function2: {"image": "ignorethis", "param2": "blalbal2"}}
+'''
+# **********************************************************************
 
-for imagePath in inputImages:
-    # TODO: fix how these folders work
-    # if outfolder does not exist, create it
-    if not (os.path.exists(outputFolder)):
-        os.mkdir(outputFolder)
-        print("output folder did not exist,", outputFolder, "created.")
 
-
-    if (m3F.evalSize(imagePath, 10, 10)):
-        # -1 means "return the loaded image as is (with alpha channel)."
-        imgIn = cv2.imread(imagePath, -1)
-        # &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-        # &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-        # &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-        # DO STUFF TO IMAGES IN THIS BLOCK
-        # TODO: check if this was afunction, if we can have an array of functions parsed in here
-        # https://stackoverflow.com/questions/706721/how-do-i-pass-a-method-as-a-parameter-in-python
-        imgOut = m3Iris.findCircle(imagePath)
-        # &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-        # &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-        # &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-    else:
-        print("****************************************************************************************************************")
-        m3F.printRed("####IMAGE TOOO SMALL###")
-        continue
-        # *************************
-
-     # change imagePath from input folder to output folder
-    imagePath = imagePath.replace(inputFolder, "")
-    imagePath = outputFolder + imagePath
-    # print("imagePath", imagePath)
-    cv2.imwrite(imagePath, imgOut)
+def batchProcess(inputFolder, functionArray, export):
+    inputImages = glob.glob(inputFolder + "*.j*")
+    outputFolder = "../PICTURES"
+    if not (os.path.exists(outputFolder)):  # if outfolder does not exist, create it
+        os.mkdir("../PICTURES/" + datetime.date())
+    if (export):
+        print("../PICTURES/" + datetime.date())
+    # print("output folder did not exist,", outputFolder, "created.")
+    for imagePath in inputImages:
+        if (m3F.evalSize(imagePath, 10, 10)):
+            # -1 means "return the loaded image as is (with alpha channel)."
+            inputImage = cv2.imread(imagePath, -1)
+            for key in functionArray:
+                current = functionArray[key]
+                print("current function: ", current)
+                current["image"] = inputImage
+                outputImage = key(**current)  # https://realpython.com/python-kwargs-and-args/
+                inputImage = outputImage
+        else:
+            print("************************************************************\
+                    ****************************************************")
+            m3F.printRed("IMAGE TOOO SMALL")
+            continue
+        if (export):
+            imagePath = imagePath.replace(inputFolder, "")
+            imagePath = outputFolder + imagePath
+            cv2.imwrite(imagePath, outputImage)

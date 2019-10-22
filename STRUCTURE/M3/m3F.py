@@ -3,6 +3,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 import os
 import os.path
+import cv2
 
 # http://ozzmaker.com/add-colour-to-text-in-python/
 

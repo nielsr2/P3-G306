@@ -4,6 +4,7 @@
 // https://www.davidebarranca.com/2012/10/scriptui-window-in-photoshop-palette-vs-dialog/
 // https://www.makeuseof.com/tag/how-to-automate-photoshop-with-scripts/-
 
+// https://community.adobe.com/t5/Photoshop/Interactive-ScriptUI-Builder/td-p/10481030
 current_document = app.activeDocument;
 current_layer = current_document.activeLayer;
 var clCopy = current_document.activeLayer.copy();
@@ -18,8 +19,8 @@ app.activeDocument = tempDoc;
 tempDoc.paste();
 app.activeDocument = current_document;
 
-outPath = "/Users/n/School/MED3/P3/Code/P3-G306/face_detection/niels2/photoshop/out.jpg"
-fileRef = File("/Users/n/School/MED3/P3/Code/P3-G306/face_detection/niels2/photoshop/out.jpg")
+outPath = "/Users/n/School/MED3/P3/Code/P3-G306/STRUCTURE/PHOTOSHOP/PhotoshopOut.jpg"
+fileRef = File(outPath)
 
 docExportOptions = new ExportOptionsSaveForWeb
 
@@ -34,19 +35,19 @@ docExportOptions.PNG8 = false
 
 current_document.exportDocument(fileRef, ExportType.SAVEFORWEB, docExportOptions)
 
-var execFilePath = "/Users/n/School/MED3/P3/Code/P3-G306/face_detection/niels2/photoshop/c.command"
+var execFilePath = "/Users/n/School/MED3/P3/Code/P3-G306/STRUCTURE/PHOTOSHOP/c.command"
 
 // we create the command file, and setup it before opening it
-// var execFile = new File(execFilePath);
-// execFile.encoding = "UTF-8";
-// execFile.lineFeed = "Unix";
-// execFile.open("w");
+var execFile = new File(execFilePath);
+execFile.encoding = "UTF-8";
+execFile.lineFeed = "Unix";
+execFile.open("w");
 
 // now we write on the .command file,
 // that it's a bash script, calling python with an argument
-// execFile.write(
-//   "#!/bin/bash\n\n" +
-//   "python /Users/n/School/MED3/P3/Code/P3-G306/face_detection/niels2/photoshop/function.py " + outPath);
+ execFile.write(
+   "#!/bin/bash\n\n" +
+   "python /Users/n/School/MED3/P3/Code/P3-G306/STRUCTURE/PHOTOSHOP/function.py " + outPath + " 'SOME OTHER TEST ARG'");
 
 // you can repeat that command and write many lines instead
 
@@ -90,7 +91,7 @@ $.setTimeout(function() {
 // var w = W();
 // $.writeln(w.show());
 
-maskPath = File("/Users/n/School/MED3/P3/Code/P3-G306/face_detection/niels2/photoshop/canny.jpeg")
+maskPath = File("/Users/n/School/MED3/P3/Code/P3-G306/STRUCTURE/PHOTOSHOP/PythonOut.jpeg")
 
 var openedMask = open(maskPath)
 

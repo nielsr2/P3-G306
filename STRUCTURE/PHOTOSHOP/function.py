@@ -14,7 +14,7 @@ def main(argv):
     # edges = cv.Canny(image, (h, w), 20, 40)
     edges = cv.Canny(image, 100, 200)
     cv.imwrite(
-        "/Users/n/School/MED3/P3/Code/P3-G306/face_detection/niels2/photoshop/" + "canny.jpeg", edges)
+        "/Users/n/School/MED3/P3/Code/P3-G306/STRUCTURE/PHOTOSHOP/PythonOut.jpeg", edges)
     # imageOut = cv2.canny
 
 
