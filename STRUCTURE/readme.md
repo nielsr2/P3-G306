@@ -7,7 +7,9 @@ notebooks
 pics
 
 # FUNCTION GUIDELINES
-* must have boolean parameter to print the processed pictures in notebook
+
+* first param must image
+* must have boolean parameter to print the processed pictures in notebook 
 
 
 # TODOS

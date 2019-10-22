@@ -1,7 +1,8 @@
-import cv2
+import cv2, sys
 import numpy as np
 from matplotlib import pyplot as plt
-import m3F
+sys.path.append("/M3")
+from M3 import m3F as m3F
 import os
 from PIL import ImageFilter, ImageEnhance
 import PIL
@@ -13,7 +14,7 @@ def findCircle(inputImg, resolution, min_dist, param_1, param_2, min_radius, max
 
 
 def findCircle(inputImg):
-    __run(inputImg, 1.5, 120, param1=60, param2=15, minRadius=0, maxRadius=int(m3F.typeSwap(img).height / 2))
+    __run(inputImg, 1.5, 120, param1=60, param2=15, minRadius=0, maxRadius=int(m3F.typeSwap(inputImg).height / 2))
 
 
 def __run(tempInputImg, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMin_radius, tempMax_radius):

@@ -1,3 +1,5 @@
+# __name__ = "__main__"
+
 import PIL
 from matplotlib import pyplot as plt
 import numpy as np
