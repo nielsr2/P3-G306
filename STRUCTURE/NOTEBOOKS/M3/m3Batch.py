@@ -1,33 +1,27 @@
 import glob
-# from PIL import Image
 import cv2
-# import numpy as np
-# import types
 import os
 from datetime import datetime
-from matplotlib import pyplot as plt
-
 from . import m3F
 
 # **********************************************************************
 # exampe of input
-'''
+'''Batch process a image folder with an array of functions.
+
+Keyword arguments:
+inputFolder -- String for inputFolder (relative to where function is called)
+functionArray -- A dictionary of function : {params}. see example:
+
 fArray = {function1: {"inputImg": "ignorethis", "param1": "blalbal1"},
           function2: {"inputImg": "ignorethis", "param2": "blalbal2"}}
+
+export = boolean on whether to export the final result as an img
 '''
 # **********************************************************************
 
 
 def batchProcess(inputFolder, functionArray, export):
-    """Batch process a image folder with an array of functions.
 
-    Keyword arguments:
-    inputFolder -- String for inputFolder (relative to where function is called)
-    functionArray -- A dictionary of function : {params}. see example:\
-     fArray = {function1: {"inputImg": "ignorethis", "param1": "blalbal1"},\
-              function2: {"inputImg": "ignorethis", "param2": "blalbal2"}}
-    export = boolean on whether to export the final result as an img
-    """
     # print("batchProcess ran with folder: " + inputFolder)
     inputImages = glob.glob(inputFolder + "*.j*")
     outputFolder = "../PICTURES"
