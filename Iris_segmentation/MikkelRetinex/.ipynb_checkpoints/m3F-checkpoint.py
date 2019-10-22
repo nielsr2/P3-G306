@@ -1,7 +1,7 @@
 import PIL
+import cv2
 from matplotlib import pyplot as plt
 import numpy as np
-import cv2
 import os, os.path
 
 # http://ozzmaker.com/add-colour-to-text-in-python/
@@ -68,10 +68,12 @@ def typeSwap(inputIm):
         return inputIm;        
     
 def filecount(dir_name):
-    return len([f for f in os.listdir(dir_name) if os.path.isfile(f)])
+    return len([f for f in os.listdir(dir_name)if os.path.isfile(os.path.join(dir_name, f))])
 
 def imshow(img, title):
     plt.title(title)
     plt.axis("off")
     plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
     plt.show()
+
+
