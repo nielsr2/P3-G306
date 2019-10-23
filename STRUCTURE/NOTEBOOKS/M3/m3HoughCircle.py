@@ -28,9 +28,8 @@ def run(tempInputImg, tempResolution, tempMin_dist, tempParam_1, tempParam_2, te
         if len(img.shape) == 3:
             img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-        circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, tempResolution, tempMin_dist, tempParam_1, tempParam_2,
-                                   tempMinRadius, tempMaxRadius)
-        m3F.imshow(cimg,"image!")
+        circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, tempResolution, tempMin_dist,
+                                   param1=tempParam_1, param2=tempParam_2, minRadius=tempMinRadius, maxRadius=tempMaxRadius)
 
         if not isinstance(circles, type(None)):
 
