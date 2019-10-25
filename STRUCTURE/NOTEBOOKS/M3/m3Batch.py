@@ -37,16 +37,20 @@ def batchProcess(inputFolder, functionArray, export):
     # print("output folder did not exist,", outputFolder, "created.")
     for imagePath in inputImages:
         if (m3F.evalSize(imagePath, 10, 10)):
+            print("************************************************************\
+                ****************************************************")
+            print("processing: " + imagePath)
             # -1 means "return the loaded image as is (with alpha channel)."
             inputImage = cv2.imread(imagePath, -1)
-            for key in functionArray:
-                current = functionArray[key]
+            for function in functionArray:
+                currentFunction = functionArray[function]
                 # print("current function: ", current)
-                current["inputImg"] = inputImage
-
+                currentFunction["inputImg"] = inputImage
                 # m3F.imshow(inputImage, "BATCH DEBUGGING")
                 # https://realpython.com/python-kwargs-and-args/
-                outputImage = key(**current)
+                print("**************************************")
+                print("running" + str(function))
+                outputImage = function(**currentFunction)
                 inputImage = outputImage
         else:
             print("************************************************************\
