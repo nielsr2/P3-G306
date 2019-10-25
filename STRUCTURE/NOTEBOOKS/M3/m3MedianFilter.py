@@ -8,6 +8,6 @@ from PIL import ImageFilter, ImageEnhance
 import PIL
 
 
-def medianFilter(inputImg):
+def medianFilter(inputImg, show):
     outputImg = cv2.medianBlur(inputImg,3)
     return outputImg
