@@ -4,6 +4,11 @@ import numpy as np
 import os
 import os.path
 import cv2
+from matplotlib import pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import cm,colors 
+
+
 
 
 def imshow(inputImg, title):
@@ -12,3 +17,77 @@ def imshow(inputImg, title):
     plt.imshow(cv2.cvtColor(inputImg, cv2.COLOR_BGR2RGB))
     plt.show()
     return inputImg
+
+
+def scatter(inputImg):
+    #Splits the image into three channel; rgb 
+    b, g, r = cv2.split(inputImg)
+    fig = plt.figure()
+    axis = fig.add_subplot(1, 1, 1, projection="3d")
+    
+    #Normalizing pixels (0-1) and set it to it's true color 
+    pixel_colors = inputImg.reshape((np.shape(inputImg)[0]*np.shape(inputImg)[1], 3))
+    norm = colors.Normalize(vmin=-1.,vmax=1.)
+    norm.autoscale(pixel_colors)
+    pixel_colors = norm(pixel_colors).tolist()
+    
+    #Plot it in x,y,z
+    axis.scatter(r.flatten(), g.flatten(), b.flatten(), facecolors=pixel_colors, marker=".")
+    axis.set_xlabel("Red")
+    axis.set_ylabel("Green")
+    axis.set_zlabel("Blue")
+    scatterPlot=plt.show()
+    
+    return (inputImg)
+ 
+
+def Histogram(inputImg):
+    
+    #load image and split the image into the color channels
+    b, g, r = cv2.split(inputImg)
+    
+    
+    #Creates a histogram of the different channels
+    plt.hist(b.ravel(), 256, [0, 256])
+    plt.hist(g.ravel(), 256, [0, 256])
+    plt.hist(r.ravel(), 256, [0, 256])
+    BGR_Histogram =plt.show()
+    
+    return (inputImg)
+ 
+
+
+
+
+def rgbToHSV(inputImg):
+    
+    hsv_pic = cv2.cvtColor(inputImg, cv2.COLOR_RGB2HSV)
+    
+    #Splits into color channels and creates a 3D plot 
+    h,s,v = cv2.split(hsv_pic)
+    fig = plt.figure()
+    axis = fig.add_subplot(1, 1, 1, projection="3d")
+    
+    #Pixels colors and normalize 
+    pixel_colors = inputImg.reshape((np.shape(inputImg)[0]*np.shape(inputImg)[1], 3))
+    norm = colors.Normalize(vmin=-1.,vmax=1.)
+    norm.autoscale(pixel_colors)
+    pixel_colors = norm(pixel_colors).tolist()
+    
+    #plots into H, S and V
+    axis.scatter(h.flatten(), s.flatten(), v.flatten(), facecolors=pixel_colors, marker=".")
+    axis.set_xlabel("Hue")
+    axis.set_ylabel("Saturation")
+    axis.set_zlabel("Value")
+
+    result = plt.show()
+    
+    return (inputImg)
+ 
+
+
+
+
+
+   
+
