@@ -8,6 +8,6 @@ from PIL import ImageFilter, ImageEnhance
 import PIL
 
 
-def denoise(inputImg):
+def denoise(inputImg, show):
     outputImg = cv2.fastNlMeansDenoisingColored(inputImg,7,21,20,10)
     return outputImg
