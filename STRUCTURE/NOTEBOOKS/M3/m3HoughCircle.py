@@ -7,17 +7,17 @@ import os
 from PIL import ImageFilter, ImageEnhance
 import PIL
 
-
-def findCircle(inputImg, resolution, min_dist, param_1, param_2, min_radius, max_radius):
+# TODO - RENAME THEM FROM PARAMX TO SOOMETHINNG MEANINGFUL
+def findCircle(inputImg, resolution, min_dist, param_1, param_2, min_radius, max_radius, show):
     # old params for HoughCircle: img, cv2.HOUGH_GRADIENT, 1.5, 120, param1=60, param2=15, minRadius=0, maxRadius=int(m3F.typeSwap(img).height / 2))
     run(inputImg, resolution, min_dist, param_1, param_2, min_radius, max_radius)
 
 
-def findCircle(inputImg):
-    run(inputImg, 1, 120, 60, 15, 10, 100)
+def findCircle(inputImg, show):
+    run(inputImg, 1, 120, 60, 15, 10, 100, show)
 
 
-def run(tempInputImg, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMinRadius, tempMaxRadius):
+def run(tempInputImg, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMinRadius, tempMaxRadius, tempShow):
     print("***************************************************************************************")
 
     img = tempInputImg
@@ -41,13 +41,14 @@ def run(tempInputImg, tempResolution, tempMin_dist, tempParam_1, tempParam_2, te
                     cv2.circle(cimg, (i[0], i[1]), i[2], (0, 255, 0), 2)
                     # draw the center of the circle
                     cv2.circle(cimg, (i[0], i[1]), 2, (0, 0, 255), 3)
-
-                m3F.imshow(cimg, "Circle")
-                m3F.printGreen("CIRCLES FOUND^^^")
-                print("img out", img.shape)
+                if (tempShow):
+                    m3F.imshow(cimg, "Circle")
+                    m3F.printGreen("CIRCLES FOUND^^^")
+                    print("img out", img.shape)
                 return img
         else:
-            m3F.imshow(cimg, "no circles found")
-            m3F.printRed("NO CIRCLES FOUND^^^")
+            if (tempShow):
+                m3F.imshow(cimg, "no circles found")
+                m3F.printRed("NO CIRCLES FOUND^^^")
     else:
         m3F.printRed("Image is NONE")
