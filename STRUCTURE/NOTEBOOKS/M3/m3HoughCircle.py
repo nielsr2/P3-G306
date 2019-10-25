@@ -13,7 +13,7 @@ def findCircle(inputImg, resolution, min_dist, param_1, param_2, min_radius, max
     run(inputImg, resolution, min_dist, param_1, param_2, min_radius, max_radius)
 
 
-def findCircle(inputImg, show):
+def findCircleSimple(inputImg, show):
     run(inputImg, 1, 120, 60, 15, 10, 100, show)
 
 
