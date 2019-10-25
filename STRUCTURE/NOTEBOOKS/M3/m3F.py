@@ -88,4 +88,11 @@ def imshow(inputImg, title):
     plt.imshow(cv2.cvtColor(inputImg, cv2.COLOR_BGR2RGB))
     plt.show()
 
+def getRed(inputImg, show):
+
+    (channel_b, channel_g, channel_r) = cv2.split(inputImg)
+    if (show):
+        imshow(channel_r,"red")
+    return channel_r
+
 
