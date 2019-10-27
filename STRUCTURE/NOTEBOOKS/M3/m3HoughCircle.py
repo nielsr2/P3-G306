@@ -29,6 +29,7 @@ def run(tempInputImg, tempResolution, tempMin_dist, tempParam_1, tempParam_2, te
 
     if not isinstance(img, type(None)):
         cimg = img
+
         if len(img.shape) == 3:
             img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
@@ -68,6 +69,8 @@ def runDouble(tempInputImg, tempResolution, tempMin_dist, tempParam_1, tempParam
         if len(img.shape) == 3:
             img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
+        bwimg = img.copy()
+
         circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, tempResolution, tempMin_dist,
                                    param1=tempParam_1, param2=tempParam_2, minRadius=tempMinRadius, maxRadius=tempMaxRadius)
 
@@ -76,23 +79,37 @@ def runDouble(tempInputImg, tempResolution, tempMin_dist, tempParam_1, tempParam
             if (circles.size != 0):
                 circles = np.uint16(np.around(circles))
                 # print(circles)
-                for i in circles[0, :]:
-                    # draw the outer circle
-                    cv2.circle(cimg, (i[0], i[1]), i[2], (0, 255, 0), 2)
-                    # draw the center of the circle
-                    cv2.circle(cimg, (i[0], i[1]), 2, (0, 0, 255), 3)
 
-                    pupilCircle = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, 1, 20,
+                for i in circles[0, :]:
+                    bwimg.fill(0)
+                    # draw the outer circle
+                    cv2.circle(bwimg, (i[0], i[1]), i[2], 255, -1)
+                    # draw the center of the circle
+                    # cv2.circle(cimg, (i[0], i[1]), 2, (0, 0, 255), 3)
+                    # m3F.imshow(bwimg,"circle")
+
+                    mask = cv2.bitwise_and(img, bwimg)
+                    # finalImg = cv2.cvtColor(mask, cv2.COLOR_BGR2RGB)
+
+                    #m3F.imshow(mask, "final img")
+
+                    pupilCircle = cv2.HoughCircles(mask, cv2.HOUGH_GRADIENT, 1, 3,
                                                    param1=60, param2=20, minRadius=5,
                                                    maxRadius=40)
-                    if (pupilCircle.size != 0):
-                        pupilCircle = np.uint16(np.around(pupilCircle))
-                        # print(circles)
-                        for i in pupilCircle[0, :]:
-                            # draw the outer circle
-                            cv2.circle(cimg, (i[0], i[1]), i[2], (255, 255, 0), 2)
-                            # draw the center of the circle
-                            cv2.circle(cimg, (i[0], i[1]), 2, (0, 0, 255), 3)
+                    if not isinstance(pupilCircle, type(None)):
+
+                        if (pupilCircle.size != 0):
+                            pupilCircle = np.uint16(np.around(pupilCircle))
+                            # print(circles)
+                            for j in pupilCircle[0, :]:
+                                wiggle = 3
+                                if i[0] + wiggle > j[0] > i[0] - wiggle and i[1] + wiggle > j[1] > i[1] - wiggle and i[2] > j[2]+10:
+                                    # draw the outer circle
+                                    cv2.circle(mask, (j[0], j[1]), j[2], (255, 255, 0), 0)
+                                    # draw the center of the circle
+                                    cv2.circle(mask, (j[0], j[1]), 2, (0, 0, 255), 1)
+                                    m3F.imshow(mask, "final img")
+
             if (tempShow):
                 m3F.imshow(cimg, "Circle")
                 m3F.printGreen("CIRCLES FOUND^^^")
