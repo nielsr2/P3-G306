@@ -14,7 +14,8 @@ def findCircle(inputImg, resolution, min_dist, param_1, param_2, min_radius, max
 
 
 def findCircleSimple(inputImg, show):
-    run(inputImg, 1, 120, 60, 15, 10, 100, show)
+    #run(inputImg, 1, 120, 60, 15, 10, 100, show)
+    run(inputImg,1,120,200,10,int(m3F.typeSwap(inputImg).height/6),int(m3F.typeSwap(inputImg).height/2.5),show)
 
 def findCircleDouble(inputImg, resolution, min_dist, param_1, param_2, min_radius, max_radius, show):
     # old params for HoughCircle: img, cv2.HOUGH_GRADIENT, 1.5, 120, param1=60, param2=15, minRadius=0, maxRadius=int(m3F.typeSwap(img).height / 2))
@@ -33,11 +34,9 @@ def run(tempInputImg, tempResolution, tempMin_dist, tempParam_1, tempParam_2, te
         if len(img.shape) == 3:
             img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             
-#        circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, tempResolution, tempMin_dist,
-#                                   param1=tempParam_1, param2=tempParam_2, minRadius=tempMinRadius, maxRadius=tempMaxRadius)
+        circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, tempResolution, tempMin_dist,
+                                   param1=tempParam_1, param2=tempParam_2, minRadius=tempMinRadius, maxRadius=tempMaxRadius)
         
-        circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,1,120,param1=200,param2=10,
-                                   minRadius=int(m3F.typeSwap(img).height/6),maxRadius=int(m3F.typeSwap(img).height/2.5))
 
         if not isinstance(circles, type(None)):
 
