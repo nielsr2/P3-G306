@@ -10,4 +10,6 @@ import PIL
 
 def medianFilter(inputImg, show):
     outputImg = cv2.medianBlur(inputImg,3)
+    if (show):
+        m3F.imshow(outputImg, "Median")
     return outputImg

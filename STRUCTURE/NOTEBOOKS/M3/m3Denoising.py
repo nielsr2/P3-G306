@@ -10,4 +10,6 @@ import PIL
 
 def denoise(inputImg, show):
     outputImg = cv2.fastNlMeansDenoisingColored(inputImg,7,21,20,10)
+    if (show):
+        m3F.imshow(outputImg, "Denoised")
     return outputImg
