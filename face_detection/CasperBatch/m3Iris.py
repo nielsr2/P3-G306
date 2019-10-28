@@ -11,24 +11,29 @@ def findCircle(imgPath):
     print("****************************************************************************************************************")
     print("proccesing", imgPath)
 
-    img = cv2.imread(imgPath,0)
+    img = cv2.imread(imgPath,1)
     count = 0
     if not isinstance(img, type(None)):
 
         img  = cv2.medianBlur(img,5)
-        #
-        cimg=cv2.cvtColor(img,cv2.COLOR_GRAY2BGR )
+        #dimg = img.copy()
+        #cimg=cv2.cvtColor(img,cv2.COLOR_GRAY2BGR )
+        #dimg=cv2.cvtColor(img[1],cv2.COLOR_GRAY2BGR )
         
+        cv2.fastNlMeansDenoisingColored(img, img, 10, 15, 7, 21)
+        
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         img = m3F.typeSwap(img)
-        img = img.filter(ImageFilter.GaussianBlur(1.4))
+        #img = img.filter(ImageFilter.GaussianBlur(1.4))
         #img = img.filter(ImageFilter.UnsharpMask(radius=2, percent=200, threshold=1))
-        #img = img.filter(ImageFilter.SHARPEN)
+        
         #img = img.filter(ImageFilter.SHARPEN)
         img =img.filter(ImageFilter.EDGE_ENHANCE_MORE)
+        img = img.filter(ImageFilter.SHARPEN)
+        
         #img = ImageOps.invert(img)
         img = ImageEnhance.Contrast(img).enhance(1.4)
-        #img = ImageEnhance.Sharpness(img).enhance(2.)
-        
+        img = ImageEnhance.Sharpness(img).enhance(2.)
         
         img = m3F.typeSwap(img)
         img = cv2.medianBlur(img,5)

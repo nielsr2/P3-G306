@@ -81,8 +81,18 @@ def filecount(dir_name):
 
 
 # shows image in notebook
-def imshow(img, title):
+
+def imshow(inputImg, title):
     plt.title(title)
     plt.axis("off")
-    plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    plt.imshow(cv2.cvtColor(inputImg, cv2.COLOR_BGR2RGB))
     plt.show()
+
+def getRed(inputImg, show):
+
+    (channel_b, channel_g, channel_r) = cv2.split(inputImg)
+    if (show):
+        imshow(channel_r,"red")
+    return channel_r
+
+
