@@ -1,50 +1,76 @@
+from M3 import m3Class
+from M3 import m3F as m3F
 import cv2
+import sys
 from PIL import Image, ImageDraw
 import face_recognition
 import numpy as np
 from matplotlib import pyplot as plt
-# import M3.m3F
-
+sys.path.append("/M3")
+from M3 import m3F as m3F
+from M3 import m3Show
 
 # Find all facial features in all the faces in the image
 
-def findEyes(inputIm):
-    # print("proccesing", inputImPath),
 
-    # inputIm = cv2.imread(inputImPath)
+def findEyes(inputImg, show):
+    # print("proccesing", inputImgPath),
 
-    face_landmarks_list = face_recognition.face_landmarks(inputIm)
+    # inputImg = cv2.imread(inputImgPath)
+
+    face_landmarks_list = face_recognition.face_landmarks(inputImg)
     #print("I found {} face(s) in this photograph.".format(len(face_landmarks_list)))
     #print("face_landmarks_list type was", type(face_landmarks_list))
     # Create a PIL imagedraw object so we can draw on the picture
-    pil_image = Image.fromarray(inputIm)
-    eyeImages = []
-
+    pil_image = Image.fromarray(inputImg)
     if (len(face_landmarks_list) == 0):
         m3F.printRed(" found no faces in this picture")
-        plt.imshow(cv2.cvtColor(inputIm,cv2.COLOR_RGB2BGR))
+        plt.imshow(cv2.cvtColor(inputImg, cv2.COLOR_RGB2BGR))
         plt.show()
     for face_landmarks in face_landmarks_list:
 
-        left_eye = face_landmarks['left_eye']
-        right_eye = face_landmarks['right_eye']
+        lEyeCoor = face_landmarks['left_eye']
+        rEyeCoor = face_landmarks['right_eye']
 
-        mg = (left_eye[3][0]-left_eye[0][0])*0.2
+        mg = (lEyeCoor[3][0] - lEyeCoor[0][0]) * 0.2
 
-        if left_eye[0][1] > left_eye[3][1]:
+        # **********************************************************************
+        imgwithPoints = inputImg.copy()
+        for eye in (lEyeCoor, rEyeCoor):
+            for x, y in eye:
+                imgwithPoints = cv2.rectangle(imgwithPoints, (x - 2, y - 20), (x + 20, y + 20), (0, 0, 255), -1)
+        # **********************************************************************
+        # if debug:
+        #     m3Show.imshow(imgwithPoints, "with points")
+
+        if lEyeCoor[0][1] > lEyeCoor[3][1]:
             # If tilted left - based on how it's seen on image
-            print("tilted left")
-            left = [left_eye[0][0]-mg, left_eye[2][1]-mg, left_eye[3][0]+mg, left_eye[5][1]+mg]
-            right = [right_eye[0][0]-mg, right_eye[2][1]-mg, right_eye[3][0]+mg, right_eye[5][1]+mg]
-            eyeImages.append(np.asarray(pil_image.crop(left)))
-            eyeImages.append(np.asarray(pil_image.crop(right)))
+            # print("tilted left")
+            left = [lEyeCoor[0][0] - mg, lEyeCoor[2][1] - mg, lEyeCoor[3][0] + mg, lEyeCoor[5][1] + mg]
+            left = [round(num) for num in left]
+            right = [rEyeCoor[0][0] - mg, rEyeCoor[2][1] - mg, rEyeCoor[3][0] + mg, rEyeCoor[5][1] + mg]
+            right = [round(num) for num in right]
+            print("L AND R" + str(left) + " " + str(right))
+            lEye = m3Class.Eye(np.asarray(
+                pil_image.crop(left)), left, lEyeCoor)
+            lEye.landmarkPoints = lEyeCoor
+            rEye = m3Class.Eye(np.asarray(pil_image.crop(right)), right, rEyeCoor)
+            rEye.landmarkPoints = rEyeCoor
         else:
             # If tilted right
-            print("tilted right")
-            left = [left_eye[0][0]-mg, left_eye[1][1]-mg, left_eye[3][0]+mg, left_eye[4][1]+mg]
-            right = [right_eye[0][0]-mg, right_eye[1][1]-mg, right_eye[3][0]+mg, right_eye[4][1]+mg]
-            eyeImages.append(np.asarray(pil_image.crop(left)))
-            eyeImages.append(np.asarray(pil_image.crop(right)))
-
-    print('eyeImages', type(eyeImages), len(eyeImages))
-    return eyeImages
+            # print("tilted right")
+            left = [lEyeCoor[0][0] - mg, lEyeCoor[1][1] -
+                    mg, lEyeCoor[3][0] + mg, lEyeCoor[4][1] + mg]
+            left = [round(num) for num in left]
+            right = [rEyeCoor[0][0] - mg, rEyeCoor[1][1] -
+                     mg, rEyeCoor[3][0] + mg, rEyeCoor[4][1] + mg]
+            right = [round(num) for num in right]
+            lEye = m3Class.Eye(np.asarray(
+                pil_image.crop(left)), left, lEyeCoor)
+            lEye.landmarkPoints = lEyeCoor
+            rEye = m3Class.Eye(np.asarray(
+                pil_image.crop(right)), right, rEyeCoor)
+            rEye.landmarkPoints = rEyeCoor
+    # print('eyeImages', type(eyeImages), len(eyeImages))
+    # return eyeImages
+        return [lEye, rEye]
