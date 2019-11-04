@@ -10,6 +10,10 @@ import cv2
 # http://ozzmaker.com/add-colour-to-text-in-python/
 
 
+def star():
+    print("***********************************************************************")
+
+
 def printRed(stringarr):
     #prstr = ""
     # for el in stringarr:
@@ -29,7 +33,13 @@ def printBlue(stringarr):
 
 
 def evalSize(imagePath, w, h):
-    im = PIL.Image.open(imagePath)
+    nd = np.ndarray(1)
+    im = cv2.imread(imagePath)
+    if (type(imagePath) == type(nd)):
+        im = typeSwap(im)
+    elif(type(imagePath) == type(str)):
+        im = PIL.Image.open(imagePath)
+
     # print("W & H", im.width, im.height)
     if (im.width > w and im.height > h):
         # was larger,
@@ -81,8 +91,16 @@ def filecount(dir_name):
 
 
 # shows image in notebook
-def imshow(img, title):
+
+def imshow(inputImg, title):
     plt.title(title)
     plt.axis("off")
-    plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    plt.imshow(cv2.cvtColor(inputImg, cv2.COLOR_BGR2RGB))
     plt.show()
+
+def getRed(inputImg, show):
+
+    (channel_b, channel_g, channel_r) = cv2.split(inputImg)
+    if (show):
+        imshow(channel_r,"red")
+    return channel_r
