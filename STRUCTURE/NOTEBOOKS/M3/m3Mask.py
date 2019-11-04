@@ -45,7 +45,7 @@ def makeFullMask(inputImg, show):
 
 
 def makePolyMask(inputImg, show, apply=False):
-        polyMask = inputImg.orginalImage.copy()
+    polyMask = inputImg.orginalImage.copy()
     polyMask.fill(0)
     for eye in inputImg.eyes:
         polyMask = cv2.fillPoly(polyMask, np.int_([eye.landmarkPoints]), (255, 255, 255))
@@ -57,4 +57,4 @@ def makePolyMask(inputImg, show, apply=False):
     return inputImg
 
 
-def applyMask(inputImg, )
+# def applyMask(inputImg, )
