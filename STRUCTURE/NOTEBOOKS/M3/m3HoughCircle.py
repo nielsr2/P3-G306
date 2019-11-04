@@ -3,6 +3,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 sys.path.append("/M3")
 from M3 import m3F as m3F
+from M3 import m3Class
 import os
 from PIL import ImageFilter, ImageEnhance
 import PIL
@@ -26,16 +27,21 @@ def run(tempInputImg, tempResolution, tempMin_dist, tempParam_1, tempParam_2, te
 
     img = tempInputImg
     print(tempMinRadius)
-
+    isEyeClass = False
+    eye = None
+    if isinstance(img, type(m3Class.Eye())):
+        isEyeClass = True
+        eye = tempInputImg
+        img = eye.image
     if not isinstance(img, type(None)):
         cimg = img
 
         if len(img.shape) == 3:
             img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            
+
 #        circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, tempResolution, tempMin_dist,
 #                                   param1=tempParam_1, param2=tempParam_2, minRadius=tempMinRadius, maxRadius=tempMaxRadius)
-        
+
         circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,1,120,param1=200,param2=10,
                                    minRadius=int(m3F.typeSwap(img).height/6),maxRadius=int(m3F.typeSwap(img).height/2.5))
 
@@ -53,13 +59,19 @@ def run(tempInputImg, tempResolution, tempMin_dist, tempParam_1, tempParam_2, te
                 m3F.imshow(cimg, "Circle")
                 m3F.printGreen("CIRCLES FOUND^^^")
                 print("img out", img.shape)
-            return img
+            if isEyeClass:
+                eye.circle = circles
+                print("RETURNED AN EYE WITH CIRCLES")
+                return eye
+            else:
+                return img
         else:
             if (tempShow):
                 m3F.imshow(cimg, "no circles found")
                 m3F.printRed("NO CIRCLES FOUND^^^")
     else:
         m3F.printRed("Image is NONE")
+
 
 def runDouble(tempInputImg, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMinRadius, tempMaxRadius, tempShow):
     print("***************************************************************************************")
