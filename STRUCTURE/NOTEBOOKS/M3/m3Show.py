@@ -1,5 +1,7 @@
 import PIL
 from matplotlib import pyplot as plt
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure
 import numpy as np
 import os
 import os.path
@@ -42,7 +44,7 @@ def scatter(inputImg):
     return (inputImg)
 
 
-def Histogram(inputImg):
+def Histogram(inputImg, passThru=True):
 
     newInputImg = cv2.cvtColor(inputImg, cv2.COLOR_BGR2RGB)
     # load image and split the image into the color channels
@@ -50,12 +52,47 @@ def Histogram(inputImg):
 
 
     # Creates a histogram of the different channels
+    # fig = plt.figure()
     plt.hist(b.ravel(), 256, [0, 256])
     plt.hist(g.ravel(), 256, [0, 256])
     plt.hist(r.ravel(), 256, [0, 256])
-    BGR_Histogram =plt.show()
 
-    return (inputImg)
+    if passThru:
+        BGR_Histogram =plt.show()
+        return (inputImg)
+    else:
+        fig, axs = plt.subplots()
+        # fig = Figure()
+        canvas = FigureCanvas(fig)
+        axs.hist(b.ravel(), 256, [0, 256])
+        axs.hist(g.ravel(), 256, [0, 256])
+        axs.hist(r.ravel(), 256, [0, 256])
+        axs.axis('off')
+        fig.tight_layout(pad=0)
+
+        # fig.add_axes(plt.hist(b.ravel(), 256, [0, 256]))
+        # fig.add_a(plt.hist(g.ravel(), 256, [0, 256]))
+        # fig.add_a(plt.hist(r.ravel(), 256, [0, 256]))
+        # width, height = fig.get_size_inches(fig) * fig.get_dpi()
+        # foo = canvas.get_width_height()[::-1] + (3,)
+
+        canvas = FigureCanvas(fig)
+        foo = canvas.get_width_height()[::-1] + (3,)
+        print("foo", foo)
+        canvas.draw()       # draw the canvas, cache the renderer
+        s, (width, height) = canvas.print_to_buffer()
+
+        # return np.fromstring(canvas.tostring_rgb(), dtype='uint8').reshape(height, width, 3)
+        # img = np.fromstring(canvas.to_string_rgb(), dtype='uint8')
+        # img.reshape(height, width, 3)
+        s = np.frombuffer(fig.canvas.tostring_rgb(), dtype=np.uint8)
+        print("stype:", type(s), s.shape)
+        imshow(s, "hist")
+        s = s.reshape(foo)
+        imshow(s, "hist")
+        #[::-1] + (3,))
+        print("stype:", type(s), s.shape)
+        return s
 
 
 def rgbToHSV(inputImg):

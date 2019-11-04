@@ -1,9 +1,11 @@
+import numpy as np
 import glob
 import cv2
 import os
 from datetime import datetime
 from . import m3F
 from M3 import m3Class
+from M3 import m3Show
 
 # **********************************************************************
 # exampe of input
@@ -34,7 +36,8 @@ def batchProcess2(inputFolder, functionArray, export):
     if (export):
         now = datetime.now()
         now_string = now.strftime("-%d-%m-%Y---%H-%M-%S")
-        outputFolder = os.getcwd() + "/EXPORTS/" + inputFolder.replace("PICTURES/", "").replace("/", "") + now_string
+        outputFolder = os.getcwd() + "/EXPORTS/" + inputFolder.replace("PICTURES/",
+                                                                       "").replace("/", "") + now_string
         # print("path", outputFolder)
         os.mkdir(outputFolder)
         # print("../PICTURES/" + datetime.date())
@@ -42,7 +45,7 @@ def batchProcess2(inputFolder, functionArray, export):
 
 # **********************************************************************
 # IF FACE
-    eyeImgArray = []
+    faceArray = []
     didEyes = False
     for function in functionArray:
         if (function.__name__ == "findEyes"):
@@ -55,13 +58,13 @@ def batchProcess2(inputFolder, functionArray, export):
                 currentFunction["inputImg"] = inputImage
                 face = m3Class.Immer(inputImage, imagePath)
                 face.eyes = function(**currentFunction)
-                eyeImgArray.append(face)
+                faceArray.append(face)
     functionArray.pop(eyeFunc)
 # **********************************************************************
     if (didEyes):
-        inputImages = eyeImgArray
+        inputImages = faceArray
     for imagePath in inputImages:
-
+        m3Show.imshow(imagePath.orginalImage, "original photo")
         print("************************************************************\
             ****************************************************")
 
@@ -92,6 +95,9 @@ def batchProcess2(inputFolder, functionArray, export):
                         print("FULL OR POLY")
                         currentFunction["inputImg"] = imagePath
                         imagePath = function(**currentFunction)
+                    if(currentFunctionName == "makeComparison"):
+                        currentFunction["faceArray"] = faceArray
+                        function(**currentFunction)
             else:
                 currentFunction["inputImg"] = inputImage
                 outputImage = function(**currentFunction)
@@ -144,3 +150,49 @@ def batchProcess(inputFolder, functionArray, export):
             imagePath = imagePath.replace(inputFolder, "")
             imagePath = outputFolder + imagePath
             cv2.imwrite(imagePath, outputImage)
+
+
+def makeComparison(faceArray):
+    for face in faceArray:
+        eyes = []
+        for eye in face.eyes:
+            eyes.append(eye.image)
+        # print(np.maximum(eyes))
+        eyes = concat(eyes)
+        h = m3Show.Histogram(face.orginalImage, passThru=False)
+
+        sum = concat((eyes, face.orginalImage, h))
+        m3Show.imshow(sum, "sum")
+        # m3Show.imshow(m3Show.Histogram(face.orginalImage, passThru=False), "hist")
+
+        # numpy_vertical = np.vstack((image, grey_3_channel))
+        # HeyeStack = np.hstack((eyes))
+        # HeyeStack = np.concatenate((eyes), axis=0)
+        # fnes = np.concatenate((face.orginalImage, np.concatenate((eyes), axis=0)), axis=1)
+        # m3Show.imshow(fnes, "eyesStack")
+        # m3Show.imshow(HeyeStack, "eyesStack")
+# numpy_vertical_concat = np.concatenate((image, grey_3_channel), axis=0)
+# numpy_horizontal_concat = np.concatenate((image, grey_3_channel), axis=1)
+
+
+def concat(images, direction="h"):
+    hs, ws = [], []
+    for img in images:
+        h, w, c = img.shape
+        hs.append(h)
+        ws.append(w)
+    hs.sort(reverse=True)
+    ws.sort(reverse=True)
+    outImgs = []
+    for img in images:
+        newSize = np.zeros_like(img)
+        newSize = np.resize(newSize, (hs[0], ws[0], 3))
+        newSize[0:img.shape[0], 0:img.shape[1]] = img
+        outImgs.append(newSize)
+    if (direction == "h"):
+        result = np.concatenate((outImgs), axis=1)
+    else:
+        result = np.concatenate((outImgs), axis=0)
+    return result
+    # m3Show.imshow(fnes, "new sie test")
+    # print("sort", hs[0], newSize.shape)
