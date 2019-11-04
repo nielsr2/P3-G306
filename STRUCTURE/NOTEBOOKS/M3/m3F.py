@@ -39,6 +39,7 @@ def evalSize(imagePath, w, h):
         im = typeSwap(im)
     elif(type(imagePath) == type(str)):
         im = PIL.Image.open(imagePath)
+        im = typeSwap(im)
 
     # print("W & H", im.width, im.height)
     if (im.width > w and im.height > h):
