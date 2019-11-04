@@ -88,7 +88,7 @@ def batchProcess2(inputFolder, functionArray, export):
                         # elif not (currentFunctionName == "makeFullMask"):
                         #     currentFunction["inputImg"] = eye.image
                         #     eye.image = function(**currentFunction)
-                    if(currentFunctionName == "makeFullMask" or currentFunctionName == "makePolyMask"):
+                    if(currentFunctionName == "makeFullMask" or currentFunctionName == "makePolyMask" or currentFunctionName == "applyPolyMask"):
                         print("FULL OR POLY")
                         currentFunction["inputImg"] = imagePath
                         imagePath = function(**currentFunction)

@@ -17,6 +17,7 @@ class Eye:
     circle = None
     mask = None
     polyMask = None
+    polyMaskedImage = None
 
     def __init__(self, im="None", coor="None", landmarkPoints="None"):
         self.image = im

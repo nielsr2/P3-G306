@@ -45,18 +45,24 @@ def makeFullMask(inputImg, show):
 
 
 def makePolyMask(inputImg, show, apply=False):
-    print("lalala")
-    polyMask = inputImg.orginalImage.copy()
-    polyMask.fill(0)
+
     for eye in inputImg.eyes:
+        polyMask = inputImg.orginalImage.copy()
+        polyMask.fill(0)
+        print("EYE COOR", eye.coordinates)
         polyMask = cv2.fillPoly(polyMask, np.int_([eye.landmarkPoints]), (255, 255, 255))
-        eye.polyMask = polyMask
+        # epm = m3Class.Eye(np.asarray(pil_image.crop(left)), left, lEyeCoor)
+        # epm = polyMask.crop(eye.coordinates)
+
+        eye.polyMask = m3F.typeSwap(m3F.typeSwap(polyMask).crop(eye.coordinates))
         if show:
-            m3Show.imshow(polyMask, "poly")
-        if apply:
-            print("lalla")
-            # masked = cv2..bitwise_and(img, mask)
-        return inputImg
+            m3Show.imshow(eye.polyMask, "poly")
+    return inputImg
 
 
-# def applyMask(inputImg, )
+def applyPolyMask(inputImg, show=True):
+    for eye in inputImg.eyes:
+        eye.image = cv2.bitwise_and(eye.image, eye.polyMask)
+        if show:
+            m3Show.imshow(eye.image, "masked")
+    return inputImg
