@@ -19,12 +19,15 @@ fArray = {function1: {"inputImg": "tobereplacebyactualimageobj", "param1": "blal
 export = boolean on whether to export the final result as an img
 '''
 # **********************************************************************
+
+
 def nTest():
     return "test1", "test2"
 
+
 def batchProcess(inputFolder, functionArray, export):
     # print("batchProcess ran with folder: " + inputFolder)
-    inputImages = glob.glob(inputFolder + "*.p*")
+    inputImages = glob.glob(inputFolder + "*.*g")
     outputFolder = "../PICTURES"
     # if not (os.path.exists(outputFolder)):  # if outfolder does not exist, create it
     # print("inputImages", inputImages)

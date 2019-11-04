@@ -45,6 +45,7 @@ def makeFullMask(inputImg, show):
 
 
 def makePolyMask(inputImg, show, apply=False):
+    print("lalala")
     polyMask = inputImg.orginalImage.copy()
     polyMask.fill(0)
     for eye in inputImg.eyes:
@@ -53,8 +54,9 @@ def makePolyMask(inputImg, show, apply=False):
         if show:
             m3Show.imshow(polyMask, "poly")
         if apply:
-            masked = cv2.bitwise_and(img, mask)
-    return inputImg
+            print("lalla")
+            # masked = cv2..bitwise_and(img, mask)
+        return inputImg
 
 
 # def applyMask(inputImg, )
