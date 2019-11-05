@@ -9,9 +9,10 @@ import cv2
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm,colors
-
+import time
 
 def imshow(inputImg, title):
+    plt.clf()
     plt.title(title)
     plt.axis("off")
     plt.imshow(cv2.cvtColor(inputImg, cv2.COLOR_BGR2RGB), interpolation='none')
@@ -45,7 +46,7 @@ def scatter(inputImg):
 
 
 def Histogram(inputImg, passThru=True):
-
+    # plt.clf()
     newInputImg = cv2.cvtColor(inputImg, cv2.COLOR_BGR2RGB)
     # load image and split the image into the color channels
     b, g, r = cv2.split(newInputImg)
@@ -67,7 +68,7 @@ def Histogram(inputImg, passThru=True):
         axs.hist(b.ravel(), 256, [0, 256])
         axs.hist(g.ravel(), 256, [0, 256])
         axs.hist(r.ravel(), 256, [0, 256])
-        axs.axis('off')
+        # axs.axis('off')
         fig.tight_layout(pad=0)
 
         # fig.add_axes(plt.hist(b.ravel(), 256, [0, 256]))
@@ -81,17 +82,27 @@ def Histogram(inputImg, passThru=True):
         print("foo", foo)
         canvas.draw()       # draw the canvas, cache the renderer
         s, (width, height) = canvas.print_to_buffer()
+        print("(width, height)", (width, height))
+        # time.sleep(.500)
+        hh, ww = fig.get_size_inches()
+        dpi = fig.get_dpi()
+
+        print("dpi", dpi)
 
         # return np.fromstring(canvas.tostring_rgb(), dtype='uint8').reshape(height, width, 3)
         # img = np.fromstring(canvas.to_string_rgb(), dtype='uint8')
         # img.reshape(height, width, 3)
+
         s = np.frombuffer(fig.canvas.tostring_rgb(), dtype=np.uint8)
-        print("stype:", type(s), s.shape)
+        # time.sleep(.500)
+        # print("stype:", type(s), s.shape)
+        # imshow(s, "hist")
+        fafafa = int(hh * dpi)
+        fafafa2 = int(ww * dpi)
+        s = s.reshape(height, width, 3)
+        # time.sleep(.500)
         imshow(s, "hist")
-        s = s.reshape(foo)
-        imshow(s, "hist")
-        #[::-1] + (3,))
-        print("stype:", type(s), s.shape)
+        # print("stype:", type(s), s.shape)
         return s
 
 

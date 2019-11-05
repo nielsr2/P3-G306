@@ -153,16 +153,19 @@ def batchProcess(inputFolder, functionArray, export):
 
 
 def makeComparison(faceArray):
+    faces = []
     for face in faceArray:
         eyes = []
         for eye in face.eyes:
-            eyes.append(eye.image)
+            h = m3Show.Histogram(eye.image, passThru=False)
+            eyes.append(concat((h, eye.image)))
         # print(np.maximum(eyes))
         eyes = concat(eyes)
-        h = m3Show.Histogram(face.orginalImage, passThru=False)
+        faces.append(eyes)
+        # h = m3Show.Histogram(face.orginalImage, passThru=False)
+        # m3Show.imshow(sum, "sum")
+        
 
-        sum = concat((eyes, face.orginalImage, h))
-        m3Show.imshow(sum, "sum")
         # m3Show.imshow(m3Show.Histogram(face.orginalImage, passThru=False), "hist")
 
         # numpy_vertical = np.vstack((image, grey_3_channel))
