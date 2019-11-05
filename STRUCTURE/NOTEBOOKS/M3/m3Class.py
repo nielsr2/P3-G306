@@ -5,7 +5,7 @@ class Immer:
     orginalImage = None
     mask = None
 
-    def __init__(self, orginalImage, path):
+    def __init__(self, orginalImage="None", path="None"):
         self.orginalImage = orginalImage
         self.path = path
 
