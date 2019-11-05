@@ -16,7 +16,11 @@ def findCircle(inputImg, resolution, min_dist, param_1, param_2, min_radius, max
 
 def findCircleSimple(inputImg, show):
     #run(inputImg, 1, 120, 60, 15, 10, 100, show)
-    run(inputImg, 1, 120, 200, 10, int(m3F.typeSwap(inputImg).height/6), int(m3F.typeSwap(inputImg).height/2.5), show)
+    # print("inputImg type", type(inputImg))
+    if isinstance(inputImg, type(m3Class.Eye())):
+        run(inputImg, 1, 120, 200, 10, int(m3F.typeSwap(inputImg.image).height/6), int(m3F.typeSwap(inputImg.image).height/2.5), show)
+    else:
+        run(inputImg, 1, 120, 200, 10, int(m3F.typeSwap(inputImg).height/6), int(m3F.typeSwap(inputImg).height/2.5), show)
 
 
 def findCircleDouble(inputImg, resolution, min_dist, param_1, param_2, min_radius, max_radius, show):
