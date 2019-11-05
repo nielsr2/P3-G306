@@ -9,7 +9,9 @@ import PIL
 
 
 def contrast(inputImg, show):
+    inputImg = PIL.Image.fromarray(inputImg)
     outputImg = ImageEnhance.Contrast(inputImg).enhance(1.4)
     if (show):
         m3F.imshow(outputImg, "Contrast")
+    outputImg = np.asarray(outputImg)
     return outputImg
