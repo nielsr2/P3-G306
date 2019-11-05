@@ -88,7 +88,7 @@ def batchProcess2(inputFolder, functionArray, export):
                         if (currentFunctionName == "findCircleSimple" or currentFunctionName == "makeCircularMask"):
                             currentFunction["inputImg"] = eye
                             eye = function(**currentFunction)
-                        elif not (currentFunctionName == "makeFullMask" or currentFunctionName == "makePolyMask" or currentFunctionName == "applyPolyMask"):
+                        elif not (currentFunctionName == "makeFullMask" or currentFunctionName == "makePolyMask" or currentFunctionName == "applyPolyMask" or currentFunctionName == "makeComparison"):
                             currentFunction["inputImg"] = eye.image
                             eye.image = function(**currentFunction)
                         # elif not (currentFunctionName == "makeFullMask"):
