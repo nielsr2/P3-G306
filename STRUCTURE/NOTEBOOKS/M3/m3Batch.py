@@ -97,6 +97,7 @@ def batchProcess2(inputFolder, functionArray, export):
                         imagePath = function(**currentFunction)
                     if(currentFunctionName == "makeComparison"):
                         currentFunction["faceArray"] = faceArray
+                        currentFunction["functionArray"] = functionArray
                         function(**currentFunction)
             else:
                 currentFunction["inputImg"] = inputImage
@@ -152,31 +153,31 @@ def batchProcess(inputFolder, functionArray, export):
             cv2.imwrite(imagePath, outputImage)
 
 
-def makeComparison(faceArray):
+def makeComparison(faceArray, functionArray, fileName):
     faces = []
+    # print(str(functionArray))
     for face in faceArray:
         eyes = []
-        for eye in face.eyes:
-            h = m3Show.Histogram(eye.image, passThru=False)
-            eyes.append(concat((h, eye.image)))
-        # print(np.maximum(eyes))
+        if not (type(face.eyes) == type(None)):
+            for eye in face.eyes:
+                # h = m3Show.Histogram(eye.image, passThru=False)
+                eyes.append(eye.image)
+        else:
+            text = np.zeros(shape=[200, 300, 3], dtype=np.uint8)
+            cv2.putText(
+                    img=text,
+                    text="no eyes found",
+                    org=(0, 0),
+                    fontFace=cv2.FONT_HERSHEY_COMPLEX,
+                    fontScale=4,
+                    color=(255, 255, 255))
+            eyes.append(text)
         eyes = concat(eyes)
         faces.append(eyes)
-        # h = m3Show.Histogram(face.orginalImage, passThru=False)
-        # m3Show.imshow(sum, "sum")
-        
-
-        # m3Show.imshow(m3Show.Histogram(face.orginalImage, passThru=False), "hist")
-
-        # numpy_vertical = np.vstack((image, grey_3_channel))
-        # HeyeStack = np.hstack((eyes))
-        # HeyeStack = np.concatenate((eyes), axis=0)
-        # fnes = np.concatenate((face.orginalImage, np.concatenate((eyes), axis=0)), axis=1)
-        # m3Show.imshow(fnes, "eyesStack")
-        # m3Show.imshow(HeyeStack, "eyesStack")
-# numpy_vertical_concat = np.concatenate((image, grey_3_channel), axis=0)
-# numpy_horizontal_concat = np.concatenate((image, grey_3_channel), axis=1)
-
+        now = datetime.now()
+        now_string = now.strftime("%d-%m-%Y--%H-%M-%S")
+    output = concat(faces, direction="v")
+    cv2.imwrite("EXPORTS/COMPARISONS/" + fileName + ".jpg", output)
 
 def concat(images, direction="h"):
     hs, ws = [], []
