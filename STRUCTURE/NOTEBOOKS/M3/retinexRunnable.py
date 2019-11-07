@@ -29,5 +29,19 @@ def runMSRCP(inputImg, show):
 
     return img_msrcp
 
+def runSSR(inputImg, sigma, show):
+
+    img_ssr = retinex.singleScaleRetinex(inputImg, sigma)
+
+    plt.imshow(img_ssr)
+    plt.show
+
+    if (show):
+        m3F.imshow(img_ssr, "SSR")
+
+    return img_ssr
+
+
+
 
     
