@@ -84,3 +84,81 @@ def rgbToHSV(inputImg):
     result = plt.show()
 
     return (inputImg)
+    
+def h_Pass(inputImg):
+    
+    #Converting img to grayscale
+    
+
+    inputImg = cv2.cvtColor(inputImg, cv2.COLOR_BGR2GRAY)
+    inputImg1 = cv2.GaussianBlur(inputImg,(5,5),0)
+    
+    #Adding lowpass laplacian_filter
+    laplacian = cv2.Laplacian(inputImg1,cv2.CV_64F)
+    #Adding lowpass sobelX_filter
+    sobelx = cv2.Sobel(inputImg1,cv2.CV_64F,1,0,ksize=5)
+    #Adding lowpass sobelY_filter
+    sobely = cv2.Sobel(inputImg1,cv2.CV_64F,0,1,ksize=5)
+    
+    plt.subplot(2,2,2),plt.imshow(laplacian,cmap = 'gray')
+    plt.title('Laplacian'), plt.xticks([]), plt.yticks([])
+    plt.subplot(2,2,3),plt.imshow(sobelx,cmap = 'gray')
+    plt.title('Sobel X'), plt.xticks([]), plt.yticks([])
+    plt.subplot(2,2,4),plt.imshow(sobely,cmap = 'gray')
+    plt.title('Sobel Y'), plt.xticks([]), plt.yticks([])
+    
+    #plt.imshow((laplacian*255).astype(np.uint8))
+    plt.show()
+
+    return (inputImg)
+ 
+def r_Channel (inputImg):
+    
+    img = inputImg
+   
+
+    b = img.copy()
+    # set green and red channels to 0
+    b[:, :, 1] = 0
+    b[:, :, 2] = 0
+
+
+    g = img.copy()
+    # set blue and red channels to 0
+    g[:, :, 0] = 0
+    g[:, :, 2] = 0
+
+    r = img.copy()
+    # set blue and green channels to 0
+    r[:, :, 0] = 0
+    r[:, :, 1] = 0
+
+
+    # RGB - Blue
+    cv2.imshow('B-RGB', b)
+
+    # RGB - Green
+    cv2.imshow('G-RGB', g)
+
+    # RGB - Red
+    redImg= cv2.imshow('R-RGB', r)
+    
+    return (redImg)
+
+
+def r_channel (inputImg):
+
+    img = imread(inputImg,1)
+    b,g,r = cv2.split(img)
+    cv2.imshow('Blue Channel',b)
+    cv2.imshow('Green Channel',g)
+    cv2.imshow('Red Channel',r)
+    img=cv2.merge((b,g,r))
+    cv2.imshow('Merged Output',img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+    
+    return (inputImg)
+
+
+
