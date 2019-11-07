@@ -84,6 +84,7 @@ def rgbToHSV(inputImg):
     result = plt.show()
 
     return (inputImg)
+<<<<<<< HEAD
     
 def h_Pass(inputImg):
     
@@ -111,6 +112,8 @@ def h_Pass(inputImg):
     plt.show()
 
     return (inputImg)
+=======
+>>>>>>> 65f6e067f2782bb3e41ba6cb579a082cb7f375f0
  
 def r_Channel (inputImg):
     

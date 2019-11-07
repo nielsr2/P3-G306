@@ -16,12 +16,20 @@ def findCircle(inputImg, resolution, min_dist, param_1, param_2, min_radius, max
 
 def findCircleSimple(inputImg, show):
     #run(inputImg, 1, 120, 60, 15, 10, 100, show)
-    run(inputImg, 1, 120, 200, 10, int(m3F.typeSwap(inputImg).height/6), int(m3F.typeSwap(inputImg).height/2.5), show)
+    # print("inputImg type", type(inputImg))
+    if isinstance(inputImg, type(m3Class.Eye())):
+        run(inputImg, 1, 120, 200, 10, int(m3F.typeSwap(inputImg.image).height/6), int(m3F.typeSwap(inputImg.image).height/2.5), show)
+    else:
+        run(inputImg, 1, 120, 200, 10, int(m3F.typeSwap(inputImg).height/6), int(m3F.typeSwap(inputImg).height/2.5), show)
 
 
 def findCircleDouble(inputImg, resolution, min_dist, param_1, param_2, min_radius, max_radius, show):
     # old params for HoughCircle: img, cv2.HOUGH_GRADIENT, 1.5, 120, param1=60, param2=15, minRadius=0, maxRadius=int(m3F.typeSwap(img).height / 2))
     runDouble(inputImg, resolution, min_dist, param_1, param_2, min_radius, max_radius, show)
+
+def findCircleSimpleDouble(inputImg, show):
+    #run(inputImg, 1, 120, 60, 15, 10, 100, show)
+    runDouble(inputImg,1,120,200,10,int(m3F.typeSwap(inputImg).height/6),int(m3F.typeSwap(inputImg).height/2.5),show)
 
 
 def run(tempInputImg, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMinRadius, tempMaxRadius, tempShow):
@@ -116,22 +124,22 @@ def runDouble(tempInputImg, tempResolution, tempMin_dist, tempParam_1, tempParam
 
                     #m3F.imshow(mask, "final img")
 
-                    pupilCircle = cv2.HoughCircles(mask, cv2.HOUGH_GRADIENT, 1, 3,
-                                                   param1=60, param2=20, minRadius=5,
-                                                   maxRadius=40)
+                    pupilCircle = cv2.HoughCircles(mask, cv2.HOUGH_GRADIENT, 1, 50,
+                                                   param1=200, param2=10, minRadius=int(i[2]/6),
+                                                   maxRadius=int(i[2]/4*3))
                     if not isinstance(pupilCircle, type(None)):
 
                         if (pupilCircle.size != 0):
                             pupilCircle = np.uint16(np.around(pupilCircle))
                             # print(circles)
                             for j in pupilCircle[0, :]:
-                                wiggle = 3
-                                if i[0] + wiggle > j[0] > i[0] - wiggle and i[1] + wiggle > j[1] > i[1] - wiggle and i[2] > j[2]+10:
+                                wiggle = 5
+                                if i[0] + wiggle > j[0] > i[0] - wiggle and i[1] + wiggle > j[1] > i[1] - wiggle:
                                     # draw the outer circle
-                                    cv2.circle(mask, (j[0], j[1]), j[2], (255, 255, 0), 0)
+                                    cv2.circle(mask, (j[0], j[1]), j[2], (255, 255, 0), 1)
                                     # draw the center of the circle
-                                    cv2.circle(mask, (j[0], j[1]), 2, (0, 0, 255), 1)
-                                    m3F.imshow(mask, "final img")
+                                    cv2.circle(mask, (j[0], j[1]), 2, (0, 0, 255), 3)
+                            m3F.imshow(mask, "final img")
 
             if (tempShow):
                 m3F.imshow(cimg, "Circle")
