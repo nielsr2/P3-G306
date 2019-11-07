@@ -43,8 +43,13 @@ def fullImgEyeOutline(inputImg, show):
         if not isinstance(eye.mask, type(None)):
             coor = eye.coordinates
             # fullMask[coor[0]:x, coor[1]:y] = eye.mask
+            
+            for i in eye.circle[0, :]:
+                print("i", i)
+                cv2.circle(fullMask, (coor[0]+i[0], coor[1]+i[1]), i[2], (0, 255, 0), 2)
+            
             print("coor", coor)
-            fullMask[coor[1]:coor[1]+eye.mask.shape[0], coor[0]:coor[0]+eye.mask.shape[1]] = eye.mask
+            #fullMask[coor[1]:coor[1]+eye.mask.shape[0], coor[0]:coor[0]+eye.mask.shape[1]] = eye.mask
     inputImg.mask = fullMask
     if (show):
         m3Show.imshow(inputImg.orginalImage, "full original")
