@@ -164,36 +164,49 @@ def makeComparison(faceArray, functionArray, fileName):
         if not (type(face.eyes) == type(None)):
             for eye in face.eyes:
                 # h = m3Show.Histogram(eye.image, passThru=False)
+                print( "**********************************************************************")
+                print("appending EYES ******")
                 eyes.append(eye.image)
-        else:
-            text = np.zeros(shape=[200, 300, 3], dtype=np.uint8)
-            cv2.putText(
-                    img=text,
-                    text="no eyes found",
-                    org=(0, 0),
-                    fontFace=cv2.FONT_HERSHEY_COMPLEX,
-                    fontScale=4,
-                    color=(255, 255, 255))
-            eyes.append(text)
-        eyes = concat(eyes)
-        faces.append(eyes)
+        # else:
+        #     text = np.zeros(shape=[200, 300, 3], dtype=np.uint8)
+        #     cv2.putText(
+        #             img=text,
+        #             text="no eyes found",
+        #             org=(0, 0),
+        #             fontFace=cv2.FONT_HERSHEY_COMPLEX,
+        #             fontScale=4,
+        #             color=(255, 255, 255))
+        #     eyes.append(text)
+            eyes = concat(eyes)
+            faces.append(eyes)
         now = datetime.now()
         now_string = now.strftime("%d-%m-%Y--%H-%M-%S")
     output = concat(faces, direction="v")
     cv2.imwrite("EXPORTS/COMPARISONS/" + fileName + ".jpg", output)
 
 def concat(images, direction="h"):
+    # print("images", images)
     hs, ws = [], []
     for img in images:
-        h, w, c = img.shape
-        hs.append(h)
-        ws.append(w)
+        if (len(img.shape) == 3):
+            print("######## WAS 3 DIM")
+            h, w, c = img.shape
+            hs.append(h)
+            ws.append(w)
+        else:
+            print("######## WAS ELSE DIM")
+            h, w = img.shape
+            hs.append(h)
+            ws.append(w)
     hs.sort(reverse=True)
     ws.sort(reverse=True)
     outImgs = []
     for img in images:
         newSize = np.zeros_like(img)
-        newSize = np.resize(newSize, (hs[0], ws[0], 3))
+        if (len(img.shape) == 3):
+            newSize = np.resize(newSize, (hs[0], ws[0], 3))
+        else:
+            newSize = np.resize(newSize, (hs[0], ws[0]))
         newSize[0:img.shape[0], 0:img.shape[1]] = img
         outImgs.append(newSize)
     if (direction == "h"):
