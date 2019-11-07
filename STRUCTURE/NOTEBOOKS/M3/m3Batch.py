@@ -85,16 +85,16 @@ def batchProcess2(inputFolder, functionArray, export):
                 if (imagePath.eyes is not None):
                     for eye in imagePath.eyes:
                         # print("eye coor: " + str(eye.coordinates))
-                        if (currentFunctionName == "findCircleSimple" or currentFunctionName == "makeCircularMask"):
+                        if (currentFunctionName == "findCircleSimple" or currentFunctionName == "makeCircularMask" or currentFunctionName == "makeCircularOutline"):
                             currentFunction["inputImg"] = eye
                             eye = function(**currentFunction)
-                        elif not (currentFunctionName == "makeFullMask" or currentFunctionName == "makePolyMask" or currentFunctionName == "applyPolyMask" or currentFunctionName == "makeComparison"):
+                        elif not (currentFunctionName == "makeFullMask" or currentFunctionName == "makePolyMask" or currentFunctionName == "applyPolyMask" or currentFunctionName == "makeComparison" or currentFunctionName == "fullImgEyeOutline"):
                             currentFunction["inputImg"] = eye.image
                             eye.image = function(**currentFunction)
                         # elif not (currentFunctionName == "makeFullMask"):
                         #     currentFunction["inputImg"] = eye.image
                         #     eye.image = function(**currentFunction)
-                    if(currentFunctionName == "makeFullMask" or currentFunctionName == "makePolyMask" or currentFunctionName == "applyPolyMask"):
+                    if(currentFunctionName == "makeFullMask" or currentFunctionName == "makePolyMask" or currentFunctionName == "applyPolyMask" or currentFunctionName == "fullImgEyeOutline"):
                         print("FULL OR POLY")
                         currentFunction["inputImg"] = imagePath
                         imagePath = function(**currentFunction)
