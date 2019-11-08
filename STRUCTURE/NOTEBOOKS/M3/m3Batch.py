@@ -59,7 +59,7 @@ def batchProcess2(inputFolder, functionArray, export):
                 face = m3Class.Immer(inputImage, imagePath)
                 face.eyes = function(**currentFunction)
                 faceArray.append(face)
-    functionArray.pop(eyeFunc)
+    #functionArray.pop(eyeFunc)
 # **********************************************************************
     if (didEyes):
         inputImages = faceArray
