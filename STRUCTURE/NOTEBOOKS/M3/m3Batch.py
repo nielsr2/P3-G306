@@ -27,9 +27,12 @@ def nTest():
     return "test1", "test2"
 
 
-def batchProcess2(inputFolder, functionArray, export):
+def batchProcess2(inputFolder, functionArray, export, onephoto):
     # print("batchProcess ran with folder: " + inputFolder)
-    inputImages = glob.glob(inputFolder + "*.*g")
+    if onephoto:
+        inputImages = inputFolder
+    else:
+        inputImages = glob.glob(inputFolder + "*.*g")
     outputFolder = "../PICTURES"
     # if not (os.path.exists(outputFolder)):  # if outfolder does not exist, create it
     # print("inputImages", inputImages)
@@ -47,29 +50,37 @@ def batchProcess2(inputFolder, functionArray, export):
 # IF FACE
     faceArray = []
     didEyes = False
+
+
     for function in functionArray:
         if (function.__name__ == "findEyes"):
             didEyes = True
             eyeFunc = function
             currentFunction = functionArray[function]
-
-            for imagePath in inputImages:
-                inputImage = cv2.imread(imagePath, -1)
-                currentFunction["inputImg"] = inputImage
-                face = m3Class.Immer(inputImage, imagePath)
+            if not onephoto:
+                for imagePath in inputImages:
+                    inputImage = cv2.imread(imagePath, -1)
+                    currentFunction["inputImg"] = inputImage
+                    face = m3Class.Immer(inputImage, imagePath)
+                    face.eyes = function(**currentFunction)
+                    faceArray.append(face)
+            else:
+                currentFunction["inputImg"] = inputImages
+                face = m3Class.Immer(inputImages, "bah")
                 face.eyes = function(**currentFunction)
                 faceArray.append(face)
-    #functionArray.pop(eyeFunc)
+    # functionArray.pop(eyeFunc)
 # **********************************************************************
     if (didEyes):
         inputImages = faceArray
+
     for imagePath in inputImages:
         m3Show.imshow(imagePath.orginalImage, "original photo")
         print("************************************************************\
             ****************************************************")
 
         # -1 means "return the loaded image as is (with alpha channel)."
-        if (didEyes):
+        if (didEyes or onephoto):
             inputImage = imagePath
         else:
             print("processing: " + imagePath)
@@ -111,6 +122,9 @@ def batchProcess2(inputFolder, functionArray, export):
             outPath = outputFolder + "/" + imagePath2
             # print("OUT PATH: ", outPath)
             cv2.imwrite(outPath, outputImage)
+        if (onephoto):
+            print("TRALALALLALALAL")
+            return outputImage
 
 
 def batchProcess(inputFolder, functionArray, export):
