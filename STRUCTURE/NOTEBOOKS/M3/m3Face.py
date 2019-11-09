@@ -13,7 +13,10 @@ from M3 import m3Show
 # Find all facial features in all the faces in the image
 
 
-def findEyes(inputImg, show):
+def findEyes(photo, show):
+    # print("photo type", type(photo))
+    inputImg = photo.originalImage.copy()
+    # m3Show.imshow(photo.originalImage, " FINDEYS TEST")
     # print("proccesing", inputImgPath),
 
     # inputImg = cv2.imread(inputImgPath)
@@ -75,5 +78,4 @@ def findEyes(inputImg, show):
     # print('eyeImages', type(eyeImages), len(eyeImages))
     # return eyeImages
         faces.append(m3Class.Face([lEye, rEye]))
-    print(faces)
     return faces

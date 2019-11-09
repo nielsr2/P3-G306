@@ -9,40 +9,40 @@ from PIL import ImageFilter, ImageEnhance
 import PIL
 
 # TODO - RENAME THEM FROM PARAMX TO SOOMETHINNG MEANINGFUL
-def findCircle(inputImg, resolution, min_dist, param_1, param_2, min_radius, max_radius, show):
+def findCircle(eye, resolution, min_dist, param_1, param_2, min_radius, max_radius, show):
     # old params for HoughCircle: img, cv2.HOUGH_GRADIENT, 1.5, 120, param1=60, param2=15, minRadius=0, maxRadius=int(m3F.typeSwap(img).height / 2))
-    run(inputImg, resolution, min_dist, param_1, param_2, min_radius, max_radius, show)
+    run(eye, resolution, min_dist, param_1, param_2, min_radius, max_radius, show)
 
 
-def findCircleSimple(inputImg, show):
-    #run(inputImg, 1, 120, 60, 15, 10, 100, show)
-    # print("inputImg type", type(inputImg))
-    if isinstance(inputImg, type(m3Class.Eye())):
-        run(inputImg, 1, 120, 200, 10, int(m3F.typeSwap(inputImg.image).height/6), int(m3F.typeSwap(inputImg.image).height/2.5), show)
+def findCircleSimple(eye, show):
+    #run(eye, 1, 120, 60, 15, 10, 100, show)
+    # print("eye type", type(eye))
+    if isinstance(eye, type(m3Class.Eye())):
+        run(eye, 1, 120, 200, 10, int(m3F.typeSwap(eye.wip).height/6), int(m3F.typeSwap(eye.wip).height/2.5), show)
     else:
-        run(inputImg, 1, 120, 200, 10, int(m3F.typeSwap(inputImg).height/6), int(m3F.typeSwap(inputImg).height/2.5), show)
+        run(eye, 1, 120, 200, 10, int(m3F.typeSwap(eye).height/6), int(m3F.typeSwap(eye).height/2.5), show)
 
 
-def findCircleDouble(inputImg, resolution, min_dist, param_1, param_2, min_radius, max_radius, show):
+def findCircleDouble(eye, resolution, min_dist, param_1, param_2, min_radius, max_radius, show):
     # old params for HoughCircle: img, cv2.HOUGH_GRADIENT, 1.5, 120, param1=60, param2=15, minRadius=0, maxRadius=int(m3F.typeSwap(img).height / 2))
-    runDouble(inputImg, resolution, min_dist, param_1, param_2, min_radius, max_radius, show)
+    runDouble(eye, resolution, min_dist, param_1, param_2, min_radius, max_radius, show)
 
-def findCircleSimpleDouble(inputImg, show):
-    #run(inputImg, 1, 120, 60, 15, 10, 100, show)
-    runDouble(inputImg,1,120,200,10,int(m3F.typeSwap(inputImg).height/6),int(m3F.typeSwap(inputImg).height/2.5),show)
+def findCircleSimpleDouble(eye, show):
+    #run(eye, 1, 120, 60, 15, 10, 100, show)
+    runDouble(eye,1,120,200,10,int(m3F.typeSwap(eye).height/6),int(m3F.typeSwap(eye).height/2.5),show)
 
 
-def run(tempInputImg, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMinRadius, tempMaxRadius, tempShow):
+def run(tempeye, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMinRadius, tempMaxRadius, tempShow):
     print("***************************************************************************************")
 
-    img = tempInputImg
+    img = tempeye
     print(tempMinRadius)
     isEyeClass = False
     eye = None
     if isinstance(img, type(m3Class.Eye())):
         isEyeClass = True
-        eye = tempInputImg
-        img = eye.image
+        eye = tempeye
+        img = eye.wip
     if not isinstance(img, type(None)):
         cimg = img
 
@@ -89,10 +89,10 @@ def run(tempInputImg, tempResolution, tempMin_dist, tempParam_1, tempParam_2, te
         m3F.printRed("Image is NONE")
 
 
-def runDouble(tempInputImg, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMinRadius, tempMaxRadius, tempShow):
+def runDouble(tempeye, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMinRadius, tempMaxRadius, tempShow):
     print("***************************************************************************************")
 
-    img = tempInputImg
+    img = tempeye
     print(tempMinRadius)
 
     if not isinstance(img, type(None)):

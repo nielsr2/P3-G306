@@ -102,11 +102,9 @@ def imshow(inputImg, title):
 def getRed(inputImg, show):
 
     (channel_b, channel_g, channel_r) = cv2.split(inputImg)
-    print("before")
-    print(channel_r)
+
     channel_r = cv2.cvtColor(channel_r, cv2.COLOR_GRAY2BGR)
-    print("after")
-    print(channel_r)
+    
 
 
     if (show):

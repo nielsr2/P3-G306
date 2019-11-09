@@ -9,39 +9,37 @@ from matplotlib import pyplot as plt
 sys.path.append("/M3")
 
 
-def makeCircularMask(photo, show):
+def makeCircularMask(eye, show):
+    maskImg = eye.image.copy()
+    maskImg.fill(0)
+    if not isinstance(eye.circle, type(None)):
+        # firstCircle = eye.circle[0]
+        for i in eye.circle[0, :]:
+            print("i", i)
+            cv2.circle(maskImg, (i[0], i[1]), i[2], (255, 255, 255), -1)
+            if (show):
+                m3Show.imshow(maskImg, "mask")
+        eye.mask = maskImg
+    return eye
+
+
+def makeCircularOutline(photo, show):
     for face in photo.faces:
         for eye in face.eyes:
-            maskImg = eye.image.copy()
-            maskImg.fill(0)
+            maskImg = eye.wip.copy()
             if not isinstance(eye.circle, type(None)):
                 # firstCircle = eye.circle[0]
                 for i in eye.circle[0, :]:
                     print("i", i)
-                    cv2.circle(maskImg, (i[0], i[1]), i[2], (255, 255, 255), -1)
+                    cv2.circle(maskImg, (i[0], i[1]), i[2], (255, 255, 255), 2)
                     eye.mask = maskImg
                     if (show):
                         m3Show.imshow(maskImg, "mask")
     return photo
 
 
-def makeCircularOutline(photo, show):
-    for face in photo.faces:
-        for eye in face.eyes:
-            maskImg = eye.image.copy()
-            if not isinstance(eye.circle, type(None)):
-                # firstCircle = eye.circle[0]
-                for i in eye.circle[0, :]:
-                    print("i", i)
-                    cv2.circle(maskImg, (i[0], i[1]), i[2], (255, 255, 255), 2)
-                    if (show):
-                        m3Show.imshow(maskImg, "mask")
-                        eye.mask = maskImg
-    return photo
-
 def fullImgEyeOutline(photo, show):
-
-    fullMask = photo.orginalImage.copy()
+    fullMask = photo.originalImage.copy()
     x, y, channels = fullMask.shape
     for face in photo.faces:
         for eye in face.eyes:
@@ -55,38 +53,35 @@ def fullImgEyeOutline(photo, show):
 
                     print("coor", coor)
                     #fullMask[coor[1]:coor[1]+eye.mask.shape[0], coor[0]:coor[0]+eye.mask.shape[1]] = eye.mask
-                photo.mask = fullMask
-
+    photo.mask = fullMask
     if (show):
-        m3Show.imshow(photo.orginalImage, "full original")
+        m3Show.imshow(photo.originalImage, "full original")
         m3Show.imshow(fullMask, "full mask")
-
     return photo
 
 
-def makeFullMask(photo, show):
-    fullMask = photo.orginalImage.copy()
+def makeFullMask(inputImg, show):
+    fullMask = inputImg.orginalImage.copy()
     fullMask.fill(0)
 
     # img1 = cv.imread('messi5.jpg')
     # img2 = cv.imread('opencv-logo-white.png')
     # I want to put logo on top-left corner, So I create a ROI
     x, y, channels = fullMask.shape
-    for face in photo.faces:
-        for eye in inputImg.eyes:
-            if not isinstance(eye.mask, type(None)):
-                coor = eye.coordinates
-                # fullMask[coor[0]:x, coor[1]:y] = eye.mask
-                print("coor", coor)
-                fullMask[coor[1]:coor[1]+eye.mask.shape[0], coor[0]:coor[0]+eye.mask.shape[1]] = eye.mask
-    photo.mask = fullMask
+    for eye in inputImg.eyes:
+        if not isinstance(eye.mask, type(None)):
+            coor = eye.coordinates
+            # fullMask[coor[0]:x, coor[1]:y] = eye.mask
+            print("coor", coor)
+            fullMask[coor[1]:coor[1]+eye.mask.shape[0], coor[0]:coor[0]+eye.mask.shape[1]] = eye.mask
+    inputImg.mask = fullMask
     if (show):
-        m3Show.imshow(photo.orginalImage, "full original")
+        m3Show.imshow(inputImg.orginalImage, "full original")
         m3Show.imshow(fullMask, "full mask")
-    return photo
+    return inputImg
 
 
-def makePolyMask(photo, show, apply=False):
+def makePolyMask(inputImg, show, apply=False):
 
     for eye in inputImg.eyes:
         polyMask = inputImg.orginalImage.copy()

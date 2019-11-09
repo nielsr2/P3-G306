@@ -4,17 +4,22 @@ import numpy as np
 class Photo:
     originalImage = None
     path = None
-    faces = None
+    faces = []
     mask = None
-    def __init__(self, orginalImage="None", path="None"):
-        self.orginalImage = orginalImage
+    def __init__(self, originalImage="None", path="None"):
+        self.originalImage = originalImage
         self.path = path
 
 
 class Face:
+    path = ""
+    images = []
     eyes = []
+    originalImage = None
+    mask = None
+    wip = None
 
-    def __init__(self, eyes="None"):
+    def __init__(self, eyes=None):
         self.eyes = eyes
 
 class Eye:
