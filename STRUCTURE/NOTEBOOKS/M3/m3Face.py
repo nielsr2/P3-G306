@@ -15,7 +15,7 @@ from M3 import m3Show
 
 def findEyes(photo, show):
     # print("photo type", type(photo))
-    inputImg = photo.originalImage.copy()
+    inputImg = photo.originalImage
     # m3Show.imshow(photo.originalImage, " FINDEYS TEST")
     # print("proccesing", inputImgPath),
 
@@ -26,10 +26,11 @@ def findEyes(photo, show):
     #print("face_landmarks_list type was", type(face_landmarks_list))
     # Create a PIL imagedraw object so we can draw on the picture
     pil_image = Image.fromarray(inputImg)
-    if (len(face_landmarks_list) == 0):
-        m3F.printRed(" found no faces in this picture")
-        plt.imshow(cv2.cvtColor(inputImg, cv2.COLOR_RGB2BGR))
-        plt.show()
+    if show:
+        if (len(face_landmarks_list) == 0):
+            m3F.printRed(" found no faces in this picture")
+            plt.imshow(cv2.cvtColor(inputImg, cv2.COLOR_RGB2BGR))
+            plt.show()
     faces = []
     for face_landmarks in face_landmarks_list:
 
@@ -54,7 +55,7 @@ def findEyes(photo, show):
             left = [round(num) for num in left]
             right = [rEyeCoor[0][0] - mg, rEyeCoor[2][1] - mg, rEyeCoor[3][0] + mg, rEyeCoor[5][1] + mg]
             right = [round(num) for num in right]
-            print("L AND R" + str(left) + " " + str(right))
+            # print("L AND R" + str(left) + " " + str(right))
             lEye = m3Class.Eye(np.asarray(
                 pil_image.crop(left)), left, lEyeCoor)
             lEye.landmarkPoints = lEyeCoor

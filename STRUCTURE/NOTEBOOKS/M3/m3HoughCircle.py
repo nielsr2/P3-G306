@@ -33,10 +33,10 @@ def findCircleSimpleDouble(eye, show):
 
 
 def run(tempeye, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMinRadius, tempMaxRadius, tempShow):
-    print("***************************************************************************************")
+    # print("***************************************************************************************")
 
     img = tempeye
-    print(tempMinRadius)
+    # print(tempMinRadius)
     isEyeClass = False
     eye = None
     if isinstance(img, type(m3Class.Eye())):
@@ -77,7 +77,8 @@ def run(tempeye, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMin
                 print("img out", img.shape)
             if isEyeClass:
                 eye.circle = circles
-                print("RETURNED AN EYE WITH CIRCLES")
+                if tempShow:
+                    print("RETURNED AN EYE WITH CIRCLES")
                 return eye
             else:
                 return img
@@ -86,7 +87,8 @@ def run(tempeye, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMin
                 m3F.imshow(cimg, "no circles found")
                 m3F.printRed("NO CIRCLES FOUND^^^")
     else:
-        m3F.printRed("Image is NONE")
+        if tempShow:
+            m3F.printRed("Image is NONE")
 
 
 def runDouble(tempeye, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMinRadius, tempMaxRadius, tempShow):

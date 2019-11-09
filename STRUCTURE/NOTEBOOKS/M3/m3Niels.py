@@ -8,7 +8,7 @@ from M3 import m3Class
 from M3 import m3Show
 
 
-def iterFunction(photo, functionArray):
+def iterFunction(photo, functionArray, debug=False):
     # **********************************************************************
     # doing facedetection
     # find function in array, run it, and remove it from array. results in Photo obj with data
@@ -26,23 +26,27 @@ def iterFunction(photo, functionArray):
     for function in functionArray:
         functionParams = functionArray[function]
         currentFunctionName = function.__name__
-        m3F.printBlue("function name " + currentFunctionName)
+        if debug:
+            m3F.printBlue("function name " + currentFunctionName)
         # currentFunction["inputImg"] = inputImages
         # **********************************************************************
         if ("inputImg" in functionParams and didFaceDetection):
             # print("was inputImg")
             for face in photo.faces:
                 for eye in face.eyes:
-                    m3F.printBlue(("Doing an inputimg as eye.wip with" + currentFunctionName))
+                    if debug:
+                        m3F.printBlue(("Doing an inputimg as eye.wip with" + currentFunctionName))
                     functionParams["inputImg"] = eye.wip
                     eye.wip = function(**functionParams)
                     # m3Show.imshow(eye.wip, "eye.wip")
         if ("photo" in functionParams and didFaceDetection):
-            m3F.printBlue("Doing an photo with" + currentFunctionName)
+            if debug:
+                m3F.printBlue("Doing an photo with" + currentFunctionName)
             functionParams["photo"] = photo
             photo = function(**functionParams)
         if ("eye" in functionParams and didFaceDetection):
-            m3F.printBlue(("Doing an eye with" + currentFunctionName))
+            if debug:
+                m3F.printBlue(("Doing an eye with" + currentFunctionName))
             for face in photo.faces:
                 for eye in face.eyes:
                     functionParams["eye"] = eye
@@ -72,7 +76,7 @@ def nibBatch(ins, functionArray, exportAs="live", debug=True):
         photoArray.append(m3Class.Photo(ins, "bla"))
 
     for photo in photoArray:
-        photo = iterFunction(photo, copyfunctionArray)
+        photo = iterFunction(photo, copyfunctionArray, debug)
 
 
     if (exportAs == "live"):
