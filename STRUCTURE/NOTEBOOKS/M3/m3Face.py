@@ -27,6 +27,7 @@ def findEyes(inputImg, show):
         m3F.printRed(" found no faces in this picture")
         plt.imshow(cv2.cvtColor(inputImg, cv2.COLOR_RGB2BGR))
         plt.show()
+    faces = []
     for face_landmarks in face_landmarks_list:
 
         lEyeCoor = face_landmarks['left_eye']
@@ -73,4 +74,6 @@ def findEyes(inputImg, show):
             rEye.landmarkPoints = rEyeCoor
     # print('eyeImages', type(eyeImages), len(eyeImages))
     # return eyeImages
-        return [lEye, rEye]
+        faces.append(m3Class.Face([lEye, rEye]))
+    print(faces)
+    return faces
