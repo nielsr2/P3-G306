@@ -9,6 +9,7 @@ class Photo:
     def __init__(self, originalImage="None", path="None"):
         self.originalImage = originalImage
         self.path = path
+        self.mask = None
 
 
 class Face:

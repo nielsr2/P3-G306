@@ -56,7 +56,7 @@ def fullImgEyeOutline(photo, show):
     photo.mask = fullMask
     if (show):
         m3Show.imshow(photo.originalImage, "full original")
-        m3Show.imshow(fullMask, "full mask")
+        m3Show.imshow(photo.mask, "full mask")
     return photo
 
 
