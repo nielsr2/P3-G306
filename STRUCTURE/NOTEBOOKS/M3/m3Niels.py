@@ -1,5 +1,5 @@
 import numpy as np
-import glob, json, copy
+import glob
 import cv2
 import os
 from datetime import datetime
@@ -8,7 +8,7 @@ from M3 import m3Class
 from M3 import m3Show
 
 
-def iterFunction(photo, functionArray, debug=False):
+def iterFunction(photo, functionArray):
     # **********************************************************************
     # doing facedetection
     # find function in array, run it, and remove it from array. results in Photo obj with data
@@ -26,27 +26,23 @@ def iterFunction(photo, functionArray, debug=False):
     for function in functionArray:
         functionParams = functionArray[function]
         currentFunctionName = function.__name__
-        if debug:
-            m3F.printBlue("function name " + currentFunctionName)
+        m3F.printBlue("function name " + currentFunctionName)
         # currentFunction["inputImg"] = inputImages
         # **********************************************************************
         if ("inputImg" in functionParams and didFaceDetection):
             # print("was inputImg")
             for face in photo.faces:
                 for eye in face.eyes:
-                    if debug:
-                        m3F.printBlue(("Doing an inputimg as eye.wip with" + currentFunctionName))
+                    m3F.printBlue(("Doing an inputimg as eye.wip with" + currentFunctionName))
                     functionParams["inputImg"] = eye.wip
                     eye.wip = function(**functionParams)
                     # m3Show.imshow(eye.wip, "eye.wip")
         if ("photo" in functionParams and didFaceDetection):
-            if debug:
-                m3F.printBlue("Doing an photo with" + currentFunctionName)
+            m3F.printBlue("Doing an photo with" + currentFunctionName)
             functionParams["photo"] = photo
             photo = function(**functionParams)
         if ("eye" in functionParams and didFaceDetection):
-            if debug:
-                m3F.printBlue(("Doing an eye with" + currentFunctionName))
+            m3F.printBlue(("Doing an eye with" + currentFunctionName))
             for face in photo.faces:
                 for eye in face.eyes:
                     functionParams["eye"] = eye
@@ -54,23 +50,11 @@ def iterFunction(photo, functionArray, debug=False):
     return photo
 
 
-def transform(multilevelDict):
-    dict = []
-    for function in multilevelDict:
-
-        print(function.__name__)
-        e = {function.__name__: multilevelDict[function]}
-        dict.append(e)
-    return dict
-
-
 def nibBatch(ins, functionArray, exportAs="live", debug=True):
-    photoArray = None
     photoArray = []
     isSingle = False
-    # copyfunctionArray = copy.deepcopy(functionArray)
-    # text = transform(copyfunctionArray)
-    # if debug:an
+    copyfunctionArray = functionArray.copy()
+    # if debug:
     for function in functionArray:
         functionParams = functionArray[function]
         functionParams["show"] = debug
@@ -88,19 +72,15 @@ def nibBatch(ins, functionArray, exportAs="live", debug=True):
         photoArray.append(m3Class.Photo(ins, "bla"))
 
     for photo in photoArray:
-        photo = iterFunction(photo, functionArray, debug)
+        photo = iterFunction(photo, copyfunctionArray)
+
 
     if (exportAs == "live"):
-        # print(photoArray[0].)
-        print(len(photoArray))
+        # print("photoArray[0].mask", type(photoArray[0].mask))
+        # print("rep", repr(photoArray[0].mask))
         if (photoArray[0].mask is None):
             # m3F.printRed("NO FACES, JUST PASSING INPUT")
             return cv2.cvtColor(ins, cv2.COLOR_BGR2GRAY)
         else:
             # m3F.printGreen("PASSING MASK")
             return photoArray[0].mask
-
-    # if (exportAs == "comparison"):
-    #     # text = transform(copyfunctionArray)
-    #     print(text)
-    #     makeComparison2(photoArray, text, "bla")
