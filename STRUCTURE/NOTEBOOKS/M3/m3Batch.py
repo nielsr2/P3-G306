@@ -203,6 +203,7 @@ def makeComparison(photoArray, functionArray, fileName):
         now = datetime.now()
         now_string = now.strftime("%d-%m-%Y--%H-%M-%S")
     output = concat(faces, direction="v")
+    m3Show.imshow(output, "bag")
     cv2.imwrite("EXPORTS/COMPARISONS/" + fileName + ".jpg", output)
 
 def concat(images, direction="h"):

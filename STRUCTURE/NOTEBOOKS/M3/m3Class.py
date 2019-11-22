@@ -19,9 +19,10 @@ class Face:
     originalImage = None
     mask = None
     wip = None
-
-    def __init__(self, eyes=None):
+    noFaceImg = None
+    def __init__(self, eyes=None, noFaceImg=None):
         self.eyes = eyes
+        self.noFaceImg = noFaceImg
 
 class Eye:
     image = None

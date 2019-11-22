@@ -6,12 +6,13 @@ from datetime import datetime
 from . import m3F
 from M3 import m3Class
 from M3 import m3Show
+import json
 
 
 def iterFunction(photo, functionArray):
     # **********************************************************************
     # doing facedetection
-    # find function in array, run it, and remove it from array. results in Photo obj with data
+    # find face function in array, run it, and remove it from array. results in Photo obj with data
     # **********************************************************************
     didFaceDetection = False
     for function in functionArray:
@@ -50,15 +51,25 @@ def iterFunction(photo, functionArray):
     return photo
 
 
-def nibBatch(ins, functionArray, exportAs="live", debug=True):
+def funcArrToStr(multilevelDict):
+    dict = []
+    for function in multilevelDict:
+
+        print(function.__name__)
+        e = {function.__name__: multilevelDict[function]}
+        dict.append(e)
+    return json.dumps(dict)
+
+
+def nibBatch(ins, functionArray, exportAs="live", comparisonName=None, debug=True):
     photoArray = []
     isSingle = False
-    copyfunctionArray = functionArray.copy()
+    copyfunctionArray = funcArrToStr(functionArray)
     # if debug:
     for function in functionArray:
         functionParams = functionArray[function]
         functionParams["show"] = debug
-    if (type(ins) is type("str")):
+    if (type(ins) is type("str")): #is folder, since it's a folder path
         # doing batchprocess for folder of images
         # m3F.printBlue("doing batchprocess for folder of images")
         inputImages = glob.glob(ins + "*.*g")
@@ -72,8 +83,7 @@ def nibBatch(ins, functionArray, exportAs="live", debug=True):
         photoArray.append(m3Class.Photo(ins, "bla"))
 
     for photo in photoArray:
-        photo = iterFunction(photo, copyfunctionArray)
-
+        photo = iterFunction(photo, functionArray)
 
     if (exportAs == "live"):
         # print("photoArray[0].mask", type(photoArray[0].mask))
@@ -84,3 +94,73 @@ def nibBatch(ins, functionArray, exportAs="live", debug=True):
         else:
             # m3F.printGreen("PASSING MASK")
             return photoArray[0].mask
+
+    if (exportAs == "comparison"):
+        facesToSave = []
+        for photo in photoArray:
+            for face in photo.faces:
+                eyesToSave = []
+                if not (type(face.eyes) == type(None)):
+                    for eye in face.eyes:
+                        eyesToSave.append(eye.wip)
+                    facesToSave.append(concat(eyesToSave))
+        now = datetime.now()
+        now_string = now.strftime("%d-%m-%Y--%H-%M-%S")
+        output = concat(facesToSave, direction="v")
+        m3Show.imshow(output, "asdfadf")
+        if (comparisonName is not None):
+            file = open(("EXPORTS/COMPARISONS/" + comparisonName + "_" + now_string + ".txt"), "w+")
+            file.write(copyfunctionArray)
+            cv2.imwrite("EXPORTS/COMPARISONS/" + comparisonName + "_" + now_string + ".jpg", output)
+        else:
+            cv2.imwrite("EXPORTS/COMPARISONS/" + now_string + ".jpg", output)
+
+#
+# def makeComparison(photoArray, functionArray, fileName):
+#     faces = []
+#     # print(str(functionArray))
+#     for face in photoArray:
+#         eyes = []
+#         if not (type(face.eyes) == type(None)):
+#             for eye in face.eyes:
+#                 # h = m3Show.Histogram(eye.image, passThru=False)
+#                 print( "**********************************************************************")
+#                 print("appending EYES ******")
+#                 eyes.append(eye.image)
+#             eyes = concat(eyes)
+#             faces.append(eyes)
+#         now = datetime.now()
+#         now_string = now.strftime("%d-%m-%Y--%H-%M-%S")
+#     output = concat(faces, direction="v")
+#     cv2.imwrite("EXPORTS/COMPARISONS/" +  + ".jpg", output)
+
+def concat(images, direction="h"):
+    # print("images", images)
+    hs, ws = [], []
+    for img in images:
+        if (len(img.shape) == 3):
+            print("######## WAS 3 DIM")
+            h, w, c = img.shape
+            hs.append(h)
+            ws.append(w)
+        else:
+            print("######## WAS ELSE DIM")
+            h, w = img.shape
+            hs.append(h)
+            ws.append(w)
+    hs.sort(reverse=True)
+    ws.sort(reverse=True)
+    outImgs = []
+    for img in images:
+        newSize = np.zeros_like(img)
+        if (len(img.shape) == 3):
+            newSize = np.resize(newSize, (hs[0], ws[0], 3))
+        else:
+            newSize = np.resize(newSize, (hs[0], ws[0]))
+        newSize[0:img.shape[0], 0:img.shape[1]] = img
+        outImgs.append(newSize)
+    if (direction == "h"):
+        result = np.concatenate((outImgs), axis=1)
+    else:
+        result = np.concatenate((outImgs), axis=0)
+    return result

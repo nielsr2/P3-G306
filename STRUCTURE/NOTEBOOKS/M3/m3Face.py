@@ -30,6 +30,7 @@ def findEyes(photo, show):
         m3F.printRed(" found no faces in this picture")
         plt.imshow(cv2.cvtColor(inputImg, cv2.COLOR_RGB2BGR))
         plt.show()
+        return m3Class.Face(noFaceImg=inputImg)
     faces = []
     for face_landmarks in face_landmarks_list:
 
