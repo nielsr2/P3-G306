@@ -9,8 +9,7 @@ from matplotlib import pyplot as plt
 sys.path.append("/M3")
 
 
-def makeCircularMask(inputImg, show):
-    eye = inputImg
+def makeCircularMask(eye, show):
     maskImg = eye.image.copy()
     maskImg.fill(0)
     if not isinstance(eye.circle, type(None)):
@@ -24,9 +23,47 @@ def makeCircularMask(inputImg, show):
     return eye
 
 
+def makeCircularOutline(photo, show):
+    for face in photo.faces:
+        for eye in face.eyes:
+            maskImg = eye.wip.copy()
+            if not isinstance(eye.circle, type(None)):
+                # firstCircle = eye.circle[0]
+                for i in eye.circle[0, :]:
+                    print("i", i)
+                    cv2.circle(maskImg, (i[0], i[1]), i[2], (255, 255, 255), 2)
+                    eye.mask = maskImg
+                    if (show):
+                        m3Show.imshow(maskImg, "mask")
+    return photo
+
+
+def fullImgEyeOutline(photo, show):
+    fullMask = photo.originalImage.copy()
+    x, y, channels = fullMask.shape
+    for face in photo.faces:
+        for eye in face.eyes:
+            if not isinstance(eye.mask, type(None)):
+                coor = eye.coordinates
+                # fullMask[coor[0]:x, coor[1]:y] = eye.mask
+
+                for i in eye.circle[0, :]:
+                    print("i", i)
+                    cv2.circle(fullMask, (coor[0]+i[0], coor[1]+i[1]), i[2], (0, 255, 0), 2)
+
+                    print("coor", coor)
+                    #fullMask[coor[1]:coor[1]+eye.mask.shape[0], coor[0]:coor[0]+eye.mask.shape[1]] = eye.mask
+    photo.mask = fullMask
+    if (show):
+        m3Show.imshow(photo.originalImage, "full original")
+        m3Show.imshow(photo.mask, "full mask")
+    return photo
+
+
 def makeFullMask(inputImg, show):
     fullMask = inputImg.orginalImage.copy()
     fullMask.fill(0)
+
     # img1 = cv.imread('messi5.jpg')
     # img2 = cv.imread('opencv-logo-white.png')
     # I want to put logo on top-left corner, So I create a ROI

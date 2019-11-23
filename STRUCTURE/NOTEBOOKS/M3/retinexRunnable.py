@@ -25,7 +25,7 @@ def runMSRCP(inputImg, show):
     )
 
     if (show):
-        m3F.imshow(img_msrcp,"MSRCP")
+        m3F.imshow(img_msrcp, "MSRCP")
 
     return img_msrcp
 
@@ -40,8 +40,3 @@ def runSSR(inputImg, sigma, show):
         m3F.imshow(img_ssr, "SSR")
 
     return img_ssr
-
-
-
-
-    

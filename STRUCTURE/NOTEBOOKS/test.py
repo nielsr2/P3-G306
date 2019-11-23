@@ -19,4 +19,4 @@ fArray = {function1: {"inputImg": "ignorethis", "param1": "blalbal1"},
 fArray = {m3HoughCircle.findCircle: {"inputImg": "ignorethis"}}
 
 # inputfolder, functionarray, export to file
-m3Batch.batchProcess("/PICTURES/Eyes", fArray, False)
+m3Batch.batchProcess3("/PICTURES/Eyes", fArray, False)

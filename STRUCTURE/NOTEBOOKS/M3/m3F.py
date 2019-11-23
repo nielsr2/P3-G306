@@ -102,6 +102,13 @@ def imshow(inputImg, title):
 def getRed(inputImg, show):
 
     (channel_b, channel_g, channel_r) = cv2.split(inputImg)
+
+    channel_r = cv2.cvtColor(channel_r, cv2.COLOR_GRAY2BGR)
+    
+
+
     if (show):
         imshow(channel_r,"red")
+
+
     return channel_r
