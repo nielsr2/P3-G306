@@ -37,8 +37,7 @@ def batchProcess2(inputFolder, functionArray, export, onephoto):
     # if not (os.path.exists(outputFolder)):  # if outfolder does not exist, create it
     # print("inputImages", inputImages)
     if (export):
-        now = datetime.now()
-        now_string = now.strftime("-%d-%m-%Y---%H-%M-%S")
+    
         outputFolder = os.getcwd() + "/EXPORTS/" + inputFolder.replace("PICTURES/",
                                                                        "").replace("/", "") + now_string
         # print("path", outputFolder)
