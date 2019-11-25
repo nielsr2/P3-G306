@@ -11,6 +11,9 @@ class Photo:
         self.path = path
         self.mask = None
 
+    def __str__(self):
+        return str(self.__class__) + ": " + str(self.__dict__)
+
 
 class Face:
     path = ""
@@ -23,6 +26,9 @@ class Face:
     def __init__(self, eyes=None, noFaceImg=None):
         self.eyes = eyes
         self.noFaceImg = noFaceImg
+
+    def __str__(self):
+        return str(self.__class__) + ": " + str(self.__dict__)
 
 class Eye:
     image = None
@@ -40,3 +46,6 @@ class Eye:
         self.coordinates = coor
         self.landmarkPoints = landmarkPoints
         self.wip = np.copy(self.image)
+
+    def __str__(self):
+        return str(self.__class__) + ": " + str(self.__dict__)

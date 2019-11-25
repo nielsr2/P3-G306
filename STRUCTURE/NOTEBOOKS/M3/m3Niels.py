@@ -12,45 +12,34 @@ import json
 def iterFunction(photo, functionArray):
     # iter for iterate ,
     # Iterate: make repeated use of a mathematical or computational procedure, applying it each time to the result of the previous application; perform iteration.
-    # **********************************************************************
-    # doing facedetection
-    # find face function in array, run it, and remove it from array. results in Photo obj with data
-    # **********************************************************************
-    didFaceDetection = False  #use this for keeping track of this
-    for function in functionArray:
-        if (function.__name__ == "findEyes"):
-            didFaceDetection = True
-            findEyesFunction = function
-            functionParams = functionArray[function]
-            functionParams["photo"] = photo
-            photo.faces = function(**functionParams)  # read this, but it's parsing the paramters into the function1
-                                                      # http://book.pythontips.com/en/latest/args_and_kwargs.html
-    if  (didFaceDetection):
-        functionArray.pop(findEyesFunction)
+
     for function in functionArray:
         functionParams = functionArray[function]
         currentFunctionName = function.__name__
         m3F.printBlue("function name " + currentFunctionName)
         # currentFunction["inputImg"] = inputImages
         # **********************************************************************
-        if ("inputImg" in functionParams and didFaceDetection):
+        if ("inputImg" in functionParams):
             # print("was inputImg")
+            # print(photo)
             for face in photo.faces:
-                for eye in face.eyes:
-                    m3F.printBlue(("Doing an inputimg as eye.wip with" + currentFunctionName))
-                    functionParams["inputImg"] = eye.wip
-                    eye.wip = function(**functionParams)
-                    # m3Show.imshow(eye.wip, "eye.wip")
-        if ("photo" in functionParams and didFaceDetection):
+                if face.eyes is not None:
+                    for eye in face.eyes:
+                        m3F.printBlue(("Doing an inputimg as eye.wip with" +    currentFunctionName))
+                        functionParams["inputImg"] = eye.wip
+                        eye.wip = function(**functionParams)
+                        # m3Show.imshow(eye.wip, "eye.wip")
+        if ("photo" in functionParams):
             m3F.printBlue("Doing an photo with" + currentFunctionName)
             functionParams["photo"] = photo
             photo = function(**functionParams)
-        if ("eye" in functionParams and didFaceDetection):
+        if ("eye" in functionParams):
             m3F.printBlue(("Doing an eye with" + currentFunctionName))
             for face in photo.faces:
-                for eye in face.eyes:
-                    functionParams["eye"] = eye
-                    eye = function(**functionParams)
+                if face.eyes is not None:
+                    for eye in face.eyes:
+                        functionParams["eye"] = eye
+                        eye = function(**functionParams)
     return photo
 
 
@@ -83,14 +72,14 @@ def generateComparison(photoArray, fileName=None):
     facesToSave = []
     for photo in photoArray:
         # if (jnustEyes
-        print("PHOTO")
+        # print("PHOTO")
         for face in photo.faces:
-            print("FACE")
+            # print("FACE")
             eyesToSave = []
             if not (type(face.eyes) == type(None)):
                 for eye in face.eyes:
                     m3Show.imshow(eye.wip,"fasf")
-                    print(eye,)
+                    # print("EYEYEYEYEYEYEYEYEY")
                     eyesToSave.append(eye.wip)
                     facesToSave.append(concat(eyesToSave))
     now = datetime.now()
@@ -119,63 +108,157 @@ def generateComparison(photoArray, fileName=None):
 
 def exportToFolder(photoArray, folderName=None):
     now_string = datetime.now().strftime("-%d-%m-%Y---%H-%M-%S")
-    outputFolder = os.getcwd() + "/EXPORTS/" + inputFolder.replace("PICTURES/","").replace("/", "") + folderName + "_" +  now_string
+    outputFolder = os.getcwd() + "/EXPORTS/" + folderName + "_" +  now_string
     # print("path", outputFolder)
     os.mkdir(outputFolder)
     for photo in photoArray:
-        imagePath = photo.path
-        imagePath = imagePath.replace(inputFolder, "")
-        imagePath = outputFolder + imagePath
-        cv2.imwrite(imagePath, outputImage)
+        # imagePath = imagePath.replace(inputFolder, "")
+        for face in photo.faces:
+            # i++
+            for eye in face.eyes:
+                imagePath = outputFolder + "/" + os.path.basename(photo.path) #takes just the filename part of the path
+        cv2.imwrite(imagePath, eye)
         pass
+
+
+
+def test(photoArray, parent=None, fileName=None):
+    print("TEST RAN!!!!!")
+
+    if parent is "Photo":
+        for photo in photoArray:
+            pass
+            # rr = photo.__dict__.items()
+    if parent is "Eye":
+        for photo in photoArray:
+            for face in photo.faces:
+                for eye in face.eyes:
+                    for attr in eye.__dict__.items():
+                        print("attr", attr)
+                        if attr[0] is fileName:
+                            m3Show.imshow(attr[1],"asdf")
+                            print("GO CRAY CRAY CRAY")
+
+        # for x in dir(photo):'
+        # if childType is not None:
+            # for child in
+            #     print("debuggins; ", child)
+            #     if (type(child[1]) is type(childType)):
+            #         for property in child[1].__dict__.items():
+            #             if (property is property[0]):
+            #                 print("SUCCESS", property)
+
+                    # print(item[0])
+                    # print("x",int, x, "type(someType)", type(fileType))
+                    # int + 1
+                    # if (type(x) is type(someType)):
+                    # print(x, "WAS TYPE")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 def photoBatch(ins, functionArray, postArray=None, preArray=None,  debug=True ):
     photoArray = []
-    isSingle = False
-    copyfunctionArray = funcArrToStr(functionArray)
-    # if debug:
+    # copyfunctionArray = funcArrToStr(functionArray)
+
+    # **********************************************************************
+    #  checking if folder with imgs, or just a single img
+    if (type(ins) is type("str")): #is folder, since it's a folder path
+        # print("???????????")
+        # doing batchprocess for folder of images
+        # m3F.printBlue("doing batchprocess for folder of images")
+        # print("is " + ins)
+        inputImages = glob.glob(ins + "*.*g")
+        #print("is " + inputImages)
+        for imagePath in inputImages:
+            # print("?????!!!!!??????")
+            inputImage = cv2.imread(imagePath, -1)
+            photoArray.append(m3Class.Photo(inputImage, imagePath))
+
+    else:
+        # doing batchprocess for single image
+        # m3F.printBlue("doing batchprocess for single image")
+        photoArray.append(m3Class.Photo(ins, "bla"))
+    # **********************************************************************
+    # perform PRE functions ( like face detection! )
     for function in preArray:
-        params = preArray[function]
-        function(photoArray, **params)
+        print("function.__name__  in pre: ", function.__name__ )
+        if (function.__name__ == "findEyes"):
+            print("FOUND FINDEYES FUNC")
+            for photo in photoArray:
+                # print("NIBBBBBsss")
+                params = preArray[function]
+                photo.faces = function(photo, **params)
+        elif (function.__name__ == "fakeEyes"):
+            print("fakeEyes")
+            params = preArray[function]
+            photoArray = function(photoArray, **params)
+        else:
+            # for photo in photoArray:
+            params = preArray[function]
+            function(photoArray, **params)
+
+    # **********************************************************************
+    #  Set debug flag for all functions in functionArray
     for function in functionArray:
         functionParams = functionArray[function]
         functionParams["show"] = debug
 
-    if (type(ins) is type("str")): #is folder, since it's a folder path
-        # doing batchprocess for folder of images
-        # m3F.printBlue("doing batchprocess for folder of images")
-        inputImages = glob.glob(ins + "*.*g")
-        for imagePath in inputImages:
-            inputImage = cv2.imread(imagePath, -1)
-            photoArray.append(m3Class.Photo(inputImage, imagePath))
-    else:
-        # doing batchprocess for single image
-        isSingle = True
-        # m3F.printBlue("doing batchprocess for single image")
-        photoArray.append(m3Class.Photo(ins, "bla"))
-
+    # **********************************************************************
+    #  perform iterations on photos
     for photo in photoArray:
+        # print(photo)
+        # for face in photo.faces:
+        #     print(face)
         photo = iterFunction(photo, functionArray)
 
+    # **********************************************************************
+    #  perform POST functions ( such as generate comparison etc.)
     for function in postArray:
+
         params = postArray[function]
         function(photoArray, **params)
 
+    #
+    #
+    # # **********************************************************************
+    # # doing facedetection
+    # # find face function in array, run it, and remove it from array. results in Photo obj with data
+    # # **********************************************************************
+    # didFaceDetection = False  #use this for keeping track of this
+    # for function in functionArray:
+    #      # read this, but it's parsing the paramters into the function1
+    #                                                   # http://book.pythontips.com/en/latest/args_and_kwargs.html
+    # if  (didFaceDetection):
+    #     functionArray.pop(findEyesFunction)
+    #
+    #
+    #
 
 
-
-
-
-
-
-
-
-
-
-
-
+def fakeEyes(photoArray):
+    print("fakeEyes ran")
+    for photo in photoArray:
+        # m3Show.imshow(photo.originalImage,"asdfasdf")
+        temp = []
+        temp.append(m3Class.Face([m3Class.Eye(photo.originalImage)]))
+        photo.faces = temp
+    return photoArray
 
 
 
@@ -207,12 +290,12 @@ def concat(images, direction="h"):
     hs, ws = [], []
     for img in images:
         if (len(img.shape) == 3):
-            print("######## WAS 3 DIM")
+            # print("######## WAS 3 DIM")
             h, w, c = img.shape
             hs.append(h)
             ws.append(w)
         else:
-            print("######## WAS ELSE DIM")
+            # print("######## WAS ELSE DIM")
             h, w = img.shape
             hs.append(h)
             ws.append(w)
