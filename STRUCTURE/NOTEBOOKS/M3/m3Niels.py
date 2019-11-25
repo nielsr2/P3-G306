@@ -106,25 +106,29 @@ def generateComparison(photoArray, fileName=None):
     #         return photoArray[0].mask
 
 
-def exportToFolder(photoArray, folderName=None):
+# def exportToFolder(photoArray, folderName=None):
+#     now_string = datetime.now().strftime("-%d-%m-%Y---%H-%M-%S")
+#     outputFolder = os.getcwd() + "/EXPORTS/" + folderName + "_" +  now_string
+#     # print("path", outputFolder)
+#     os.mkdir(outputFolder)
+#     for photo in photoArray:
+#         # kjkm,
+#         for face in photo.faces:
+#             # i++
+#             for eye in face.eyes:
+#                 imagePath = outputFolder + "/" + os.path.basename(photo.path) #takes just the filename part of the path
+#         cv2.imwrite(imagePath, eye)
+#         pass
+
+
+
+def exportToFolder(photoArray, inputFolder, parent=None, fileName=None):
+    print("TEST RAN!!!!!", os.path.basename(inputFolder))
+    # outputFolder = os.getcwd() + "/EXPORTS/" + folderName + "_" +  now_string
     now_string = datetime.now().strftime("-%d-%m-%Y---%H-%M-%S")
-    outputFolder = os.getcwd() + "/EXPORTS/" + folderName + "_" +  now_string
-    # print("path", outputFolder)
-    os.mkdir(outputFolder)
-    for photo in photoArray:
-        # imagePath = imagePath.replace(inputFolder, "")
-        for face in photo.faces:
-            # i++
-            for eye in face.eyes:
-                imagePath = outputFolder + "/" + os.path.basename(photo.path) #takes just the filename part of the path
-        cv2.imwrite(imagePath, eye)
-        pass
-
-
-
-def test(photoArray, parent=None, fileName=None):
-    print("TEST RAN!!!!!")
-
+    outputFolder = os.getcwd() + "/EXPORTS/" + inputFolder.replace("PICTURES/InputPictures","").replace("/", "") + now_string
+    print("outputFolder", outputFolder)
+        # print("path", outputFolder)
     if parent is "Photo":
         for photo in photoArray:
             pass
@@ -132,12 +136,17 @@ def test(photoArray, parent=None, fileName=None):
     if parent is "Eye":
         for photo in photoArray:
             for face in photo.faces:
+                eyeCount = 0
                 for eye in face.eyes:
                     for attr in eye.__dict__.items():
-                        print("attr", attr)
+                        # print("attr", attr)
                         if attr[0] is fileName:
                             m3Show.imshow(attr[1],"asdf")
-                            print("GO CRAY CRAY CRAY")
+                            os.mkdir(outputFolder + "/")
+                            path = outputFolder + "/" + os.path.basename(photo.path) + "_" + str(eyeCount) + ".jpeg"
+                            print("path", path)
+                            cv2.imwrite(path, attr[1])
+                            eyeCount += 1
 
         # for x in dir(photo):'
         # if childType is not None:
@@ -230,9 +239,11 @@ def photoBatch(ins, functionArray, postArray=None, preArray=None,  debug=True ):
     # **********************************************************************
     #  perform POST functions ( such as generate comparison etc.)
     for function in postArray:
-
         params = postArray[function]
-        function(photoArray, **params)
+        if (function.__name__ == "exportToFolder"):
+            function(photoArray, ins, **params)
+        else:
+            function(photoArray, **params)
 
     #
     #
