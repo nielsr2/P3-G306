@@ -23,7 +23,7 @@ class Face:
     mask = None
     wip = None
     noFaceImg = None
-    def __init__(self, eyes=None, noFaceImg=None):
+    def __init__(self, eyes=[], noFaceImg=None):
         self.eyes = eyes
         self.noFaceImg = noFaceImg
 

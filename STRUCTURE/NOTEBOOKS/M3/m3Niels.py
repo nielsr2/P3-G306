@@ -123,10 +123,9 @@ def generateComparison(photoArray, fileName=None):
 
 
 def exportToFolder(photoArray, inputFolder, parent=None, fileName=None):
-    print("TEST RAN!!!!!", os.path.basename(inputFolder))
     # outputFolder = os.getcwd() + "/EXPORTS/" + folderName + "_" +  now_string
     now_string = datetime.now().strftime("-%d-%m-%Y---%H-%M-%S")
-    outputFolder = os.getcwd() + "/EXPORTS/" + inputFolder.replace("PICTURES/InputPictures","").replace("/", "") + now_string
+    outputFolder = os.getcwd() + "/EXPORTS/" + inputFolder.replace("PICTURES/InputPictures","").replace("/", "") + now_string + "/"
     print("outputFolder", outputFolder)
         # print("path", outputFolder)
     if parent is "Photo":
@@ -139,11 +138,11 @@ def exportToFolder(photoArray, inputFolder, parent=None, fileName=None):
                 eyeCount = 0
                 for eye in face.eyes:
                     for attr in eye.__dict__.items():
-                        # print("attr", attr)
+                        print("attr", attr)
                         if attr[0] is fileName:
                             m3Show.imshow(attr[1],"asdf")
-                            os.mkdir(outputFolder + "/")
-                            path = outputFolder + "/" + os.path.basename(photo.path) + "_" + str(eyeCount) + ".jpeg"
+                            os.makedirs(outputFolder, exist_ok=True)
+                            path = outputFolder  + os.path.basename(photo.path) + "_" + str(eyeCount) + ".jpeg"
                             print("path", path)
                             cv2.imwrite(path, attr[1])
                             eyeCount += 1
@@ -182,6 +181,7 @@ def exportToFolder(photoArray, inputFolder, parent=None, fileName=None):
 
 
 def photoBatch(ins, functionArray, postArray=None, preArray=None,  debug=True ):
+    print("photoBatch")
     photoArray = []
     # copyfunctionArray = funcArrToStr(functionArray)
 
@@ -243,8 +243,7 @@ def photoBatch(ins, functionArray, postArray=None, preArray=None,  debug=True ):
         if (function.__name__ == "exportToFolder"):
             function(photoArray, ins, **params)
         else:
-            function(photoArray, **params)
-
+            photoArray = function(photoArray, **params)
     #
     #
     # # **********************************************************************
