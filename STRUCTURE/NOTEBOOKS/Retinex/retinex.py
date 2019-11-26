@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 
+# source: https://github.com/dongb5/Retinex
 def singleScaleRetinex(img, sigma):
 
     retinex = np.log10(img) - np.log10(cv2.GaussianBlur(img, (0, 0), sigma))
