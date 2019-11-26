@@ -43,17 +43,6 @@ def iterFunction(photo, functionArray):
     return photo
 
 
-
-
-
-
-
-
-
-
-
-
-
 def funcArrToStr(multilevelDict):
     dict = []
     for function in multilevelDict:
@@ -61,10 +50,6 @@ def funcArrToStr(multilevelDict):
         e = {function.__name__: multilevelDict[function]}
         dict.append(e)
     return json.dumps(dict)
-
-
-
-
 
 
 def generateComparison(photoArray, fileName=None):
@@ -94,40 +79,13 @@ def generateComparison(photoArray, fileName=None):
     else:
         cv2.imwrite("EXPORTS/COMPARISONS/" + now_string + ".jpg", output)
 
-    #
-    # if (exportAs == "live"):
-    #     # print("photoArray[0].mask", type(photoArray[0].mask))
-    #     # print("rep", repr(photoArray[0].mask))
-    #     if (photoArray[0].mask is None):
-    #         # m3F.printRed("NO FACES, JUST PASSING INPUT")
-    #         return cv2.cvtColor(ins, cv2.COLOR_BGR2GRAY)
-    #     else:
-    #         # m3F.printGreen("PASSING MASK")
-    #         return photoArray[0].mask
-
-
-# def exportToFolder(photoArray, folderName=None):
-#     now_string = datetime.now().strftime("-%d-%m-%Y---%H-%M-%S")
-#     outputFolder = os.getcwd() + "/EXPORTS/" + folderName + "_" +  now_string
-#     # print("path", outputFolder)
-#     os.mkdir(outputFolder)
-#     for photo in photoArray:
-#         # kjkm,
-#         for face in photo.faces:
-#             # i++
-#             for eye in face.eyes:
-#                 imagePath = outputFolder + "/" + os.path.basename(photo.path) #takes just the filename part of the path
-#         cv2.imwrite(imagePath, eye)
-#         pass
-
-
 
 def exportToFolder(photoArray, inputFolder, parent=None, fileName=None):
     # outputFolder = os.getcwd() + "/EXPORTS/" + folderName + "_" +  now_string
     now_string = datetime.now().strftime("-%d-%m-%Y---%H-%M-%S")
-    outputFolder = os.getcwd() + "/EXPORTS/" + inputFolder.replace("PICTURES/InputPictures","").replace("/", "") + now_string + "/"
+    outputFolder = os.getcwd() + "/EXPORTS/" + inputFolder.replace("PICTURES/InputPictures", "").replace("/", "") + now_string + "/"
     print("outputFolder", outputFolder)
-        # print("path", outputFolder)
+    # print("path", outputFolder)
     if parent is "Photo":
         for photo in photoArray:
             pass
@@ -147,62 +105,26 @@ def exportToFolder(photoArray, inputFolder, parent=None, fileName=None):
                             cv2.imwrite(path, attr[1])
                             eyeCount += 1
 
-        # for x in dir(photo):'
-        # if childType is not None:
-            # for child in
-            #     print("debuggins; ", child)
-            #     if (type(child[1]) is type(childType)):
-            #         for property in child[1].__dict__.items():
-            #             if (property is property[0]):
-            #                 print("SUCCESS", property)
-
-                    # print(item[0])
-                    # print("x",int, x, "type(someType)", type(fileType))
-                    # int + 1
-                    # if (type(x) is type(someType)):
-                    # print(x, "WAS TYPE")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 def photoBatch(ins, functionArray, postArray=None, preArray=None,  debug=True ):
-    print("photoBatch")
+    # print("photoBatch")
     photoArray = []
-    # copyfunctionArray = funcArrToStr(functionArray)
-
     # **********************************************************************
     #  checking if folder with imgs, or just a single img
     if (type(ins) is type("str")): #is folder, since it's a folder path
-        # print("???????????")
         # doing batchprocess for folder of images
         # m3F.printBlue("doing batchprocess for folder of images")
-        # print("is " + ins)
         inputImages = glob.glob(ins + "*.*g")
         #print("is " + inputImages)
         for imagePath in inputImages:
             # print("?????!!!!!??????")
             inputImage = cv2.imread(imagePath, -1)
             photoArray.append(m3Class.Photo(inputImage, imagePath))
-
     else:
         # doing batchprocess for single image
         # m3F.printBlue("doing batchprocess for single image")
         photoArray.append(m3Class.Photo(ins, "bla"))
+
     # **********************************************************************
     # perform PRE functions ( like face detection! )
     for function in preArray:
@@ -244,21 +166,6 @@ def photoBatch(ins, functionArray, postArray=None, preArray=None,  debug=True ):
             function(photoArray, ins, **params)
         else:
             photoArray = function(photoArray, **params)
-    #
-    #
-    # # **********************************************************************
-    # # doing facedetection
-    # # find face function in array, run it, and remove it from array. results in Photo obj with data
-    # # **********************************************************************
-    # didFaceDetection = False  #use this for keeping track of this
-    # for function in functionArray:
-    #      # read this, but it's parsing the paramters into the function1
-    #                                                   # http://book.pythontips.com/en/latest/args_and_kwargs.html
-    # if  (didFaceDetection):
-    #     functionArray.pop(findEyesFunction)
-    #
-    #
-    #
 
 
 def fakeEyes(photoArray):
@@ -269,30 +176,6 @@ def fakeEyes(photoArray):
         temp.append(m3Class.Face([m3Class.Eye(photo.originalImage)]))
         photo.faces = temp
     return photoArray
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 def concat(images, direction="h"):
