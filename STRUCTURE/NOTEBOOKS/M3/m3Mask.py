@@ -114,6 +114,12 @@ def applyCircMask(photoArray, show=True):
     for photo in photoArray:
         for face in photo.faces:
             for eye in face.eyes:
+                if (eye.mask is None):
+                    print("THERE'S NOT MASK")
+                    break
+                print("eye.image.shape", eye.image.shape)
+                print("eye.mask.shape", eye.mask.shape)
+
                 eye.masked = cv2.bitwise_and(eye.image, eye.mask)
                 if show:
                     m3Show.imshow(eye.masked, "masked")

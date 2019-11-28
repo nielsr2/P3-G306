@@ -8,8 +8,8 @@ from PIL import ImageFilter, ImageEnhance
 import PIL
 
 
-def medianFilter(inputImg, show):
-    outputImg = cv2.medianBlur(inputImg, 3)
+def medianFilter(inputImg, kernelSize, show):
+    outputImg = cv2.medianBlur(inputImg, kernelSize)
     if (show):
         m3F.imshow(outputImg, "median blur")
     return outputImg
