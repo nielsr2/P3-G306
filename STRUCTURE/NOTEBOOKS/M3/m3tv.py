@@ -16,6 +16,7 @@ def denoise_tv_chambolle(inputImg, weight, eps, n_iter_max, multichannel, show):
     # standard params skimage.restoration.denoise_tv_chambolle(inputImg, weight=0.1, eps=0.0002, n_iter_max=200, multichannel=False)
     print(len(tvImg.shape))
 
+
     tvImg = img_as_ubyte(tvImg)
     if show:
         m3F.imshow(tvImg, "Total variation Chambolle")
@@ -30,7 +31,9 @@ def denoise_tv_bregman(inputImg, weight, max_iter, eps, isotropic, show):
 
     # standard params skimage.restoration.denoise_tv_bregman(image, weight, max_iter=100, eps=0.001, isotropic=True)
     print("shape is", len(tvImg.shape))
-    tvImg = np.array(tvImg, dtype=np.uint8)
+
+    tvImg = tvImg * 255
+    tvImg = cv2.convertScaleAbs(tvImg)
     #tvImg = cv2.cvtColor(tvImg, cv2.COLOR_BGR2GRAY)
 
     #tvImg = img_as_ubyte(tvImg)
