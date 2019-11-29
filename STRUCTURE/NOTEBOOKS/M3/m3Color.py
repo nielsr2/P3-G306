@@ -9,7 +9,6 @@ from sklearn.metrics import pairwise_distances_argmin
 from sklearn.datasets import load_sample_image
 from sklearn.utils import shuffle
 from time import time
-from skimage import img_as_ubyte
 
 
 def reduceColor(inputImg, show, n_colors=16):
@@ -22,9 +21,7 @@ def reduceColor(inputImg, show, n_colors=16):
     # be in the range [0-1])
 
     if not isinstance(img, type(None)):
-        print(img.dtype)
-        img = np.array(img, dtype=np.uint8) / 255
-        # img = img_as_ubyte(img)
+        img = np.array(img, dtype=np.float64) / 255
 
         # Load Image and transform to a 2D numpy array.
         w, h, d = original_shape = tuple(img.shape)
@@ -43,12 +40,14 @@ def reduceColor(inputImg, show, n_colors=16):
             plt.clf()
             plt.axis('off')
             plt.title('Quantized image (64 colors, K-Means)')
-            # plt.imshow(recreate_image(kmeans.cluster_centers_, labels, w, h))
+            plt.imshow(recreate_image(kmeans.cluster_centers_, labels, w, h))
             plt.show()
-
-        img = recreate_image(kmeans.cluster_centers_, labels, w, h)
-        m3Show.imshow(img, "Quantized image (64 colors, K-Means)")
-        return recreate_image(kmeans.cluster_centers_, labels, w, h)
+        output = recreate_image(kmeans.cluster_centers_, labels, w, h)
+        output = output*255
+        output = cv2.convertScaleAbs(output)
+        output = cv2.cvtColor(output, cv2.COLOR_RGB2BGR)
+        print("output",output.dtype, output)
+        return output
 
 def recreate_image(codebook, labels, w, h):
     """Recreate the (compressed) image from the code book & labels"""
@@ -59,5 +58,6 @@ def recreate_image(codebook, labels, w, h):
         for j in range(h):
             image[i][j] = codebook[labels[label_idx]]
             label_idx += 1
-    print("END TYPE:", image.dtype)
+    
+    print("image.dtype",image.dtype)
     return image
