@@ -22,6 +22,14 @@ def findCircleSimple(eye, show):
     else:
         run(eye, 1, 120, 200, 10, int(m3F.typeSwap(eye).height/6), int(m3F.typeSwap(eye).height/2.5), show)
 
+def findCircleSimpleEdge(eye, show):
+    #run(eye, 1, 120, 60, 15, 10, 100, show)
+    # print("eye type", type(eye))
+    if isinstance(eye, type(m3Class.Eye())):
+        run(eye, 1, 120, 200, 10, int(m3F.typeSwap(eye.wip).width), 0, show)
+    else:
+        run(eye, 1, 120, 200, 10, int(m3F.typeSwap(eye).width), 0, show)
+
 
 def findCircleDouble(eye, resolution, min_dist, param_1, param_2, min_radius, max_radius, show):
     # old params for HoughCircle: img, cv2.HOUGH_GRADIENT, 1.5, 120, param1=60, param2=15, minRadius=0, maxRadius=int(m3F.typeSwap(img).height / 2))
@@ -30,6 +38,7 @@ def findCircleDouble(eye, resolution, min_dist, param_1, param_2, min_radius, ma
 def findCircleSimpleDouble(eye, show):
     #run(eye, 1, 120, 60, 15, 10, 100, show)
     runDouble(eye,1,120,200,10,int(m3F.typeSwap(eye).height/6),int(m3F.typeSwap(eye).height/2.5),show)
+
 
 
 def run(tempeye, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMinRadius, tempMaxRadius, tempShow):
