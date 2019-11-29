@@ -40,6 +40,13 @@ def iterFunction(photo, functionArray):
                     for eye in face.eyes:
                         functionParams["eye"] = eye
                         eye = function(**functionParams)
+        if ("iris" in functionParams):
+            m3F.printBlue(("Doing an eye with" + currentFunctionName))
+            for face in photo.faces:
+                if face.eyes is not None:
+                    for eye in face.eyes:
+                        functionParams["eye"] = eye.masked
+                        eye.masked = function(**functionParams)
     return photo
 
 

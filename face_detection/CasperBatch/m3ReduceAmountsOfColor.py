@@ -11,17 +11,17 @@ from sklearn.utils import shuffle
 from time import time
 
 
-def reduceAmoutOfColors(imputImg, show)
+def reduceColor(imputImg, show, n_colors = 16)
 
-    
-    n_colors = 16
-    
+
+
+
     img = cv2.imread(image)
     #img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     # Convert to floats instead of the default 8 bits integer coding. Dividing by
     # 255 is important so that plt.imshow behaves works well on float data (need to
     # be in the range [0-1])
-    
+
     if not isinstance(img, type(None)):
         img = np.array(img, dtype=np.float64) / 255
 
@@ -29,13 +29,13 @@ def reduceAmoutOfColors(imputImg, show)
         w, h, d = original_shape = tuple(img.shape)
         assert d == 3
         image_array = np.reshape(img, (w * h, d))
-        
+
         image_array_sample = shuffle(image_array, random_state=0)[:1000]
         kmeans = KMeans(n_clusters=n_colors, random_state=0).fit(image_array_sample)
 
         # Get labels for all points
         labels = kmeans.predict(image_array)
-        
+
          # Display all results, alongside original image
         if show is True
             plt.figure(1)
@@ -56,5 +56,3 @@ def recreate_image(codebook, labels, w, h):
             image[i][j] = codebook[labels[label_idx]]
             label_idx += 1
     return image
-
-       

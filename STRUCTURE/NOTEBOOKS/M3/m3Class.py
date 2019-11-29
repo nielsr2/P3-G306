@@ -30,6 +30,7 @@ class Face:
     def __str__(self):
         return str(self.__class__) + ": " + str(self.__dict__)
 
+
 class Eye:
     image = None
     coordinates = None
@@ -41,6 +42,8 @@ class Eye:
     # **********************************************************************
     # wip = work in progress
     wip = None
+    # **********************************************************************
+    iris = None
     def __init__(self, im="None", coor="None", landmarkPoints="None"):
         self.image = im
         self.coordinates = coor
@@ -49,3 +52,13 @@ class Eye:
 
     def __str__(self):
         return str(self.__class__) + ": " + str(self.__dict__)
+
+#
+# class Iris:
+#     originalImage = None
+#     circles = None
+#     irisFromMask = None
+#
+#     def __init__(self, originalImage, irisFromMask):
+#         originalImage = originalImage
+#         irisFromMask = irisFromMask

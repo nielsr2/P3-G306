@@ -18,10 +18,10 @@ def findEyes(photo, scalePercent, show):
     h, w, c = photo.originalImage.shape
     print("originalShape", h,w,c)
     # downScaledDim = (round(w/100 *(scalePercent)),round(h/100 * (scalePercent)))
-    downScaledDim = ((round(w/10)),round(h/10))
+    downScaledDim = ((round(w/20)),round(h/20))
     inputImg = photo.originalImage.copy()
     inputImg = cv2.resize(inputImg, downScaledDim)
-    dimToScaleUp = 10
+    dimToScaleUp = 20
     print("downScaledDim", downScaledDim )
     # m3Show.imshow(photo.originalImage, " FINDEYS TEST")
     # print("proccesing", inputImgPath),
