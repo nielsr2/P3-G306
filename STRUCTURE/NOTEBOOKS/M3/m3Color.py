@@ -57,5 +57,5 @@ def recreate_image(codebook, labels, w, h):
         for j in range(h):
             image[i][j] = codebook[labels[label_idx]]
             label_idx += 1
-    
+
     return image
