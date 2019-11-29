@@ -42,7 +42,12 @@ def reduceColor(inputImg, show, n_colors=16):
             plt.title('Quantized image (64 colors, K-Means)')
             plt.imshow(recreate_image(kmeans.cluster_centers_, labels, w, h))
             plt.show()
-        return img
+        output = recreate_image(kmeans.cluster_centers_, labels, w, h)
+        output = output*255
+        output = cv2.convertScaleAbs(output)
+        output = cv2.cvtColor(output, cv2.COLOR_RGB2BGR)
+        print("output",output.dtype, output)
+        return output
 
 def recreate_image(codebook, labels, w, h):
     """Recreate the (compressed) image from the code book & labels"""
@@ -53,4 +58,6 @@ def recreate_image(codebook, labels, w, h):
         for j in range(h):
             image[i][j] = codebook[labels[label_idx]]
             label_idx += 1
+    
+    print("image.dtype",image.dtype)
     return image
