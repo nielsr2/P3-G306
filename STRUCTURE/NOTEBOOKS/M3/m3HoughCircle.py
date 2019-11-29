@@ -72,16 +72,16 @@ def run(tempeye, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMin
                 circles = np.uint16(np.around(circles))
                 # print(circles)
                 for i in circles[0, :]:
-                    if img[i[1],i[0]] < 15:
+                    # if img[i[1],i[0]] < 15:
                         # draw the outer circle
                         cv2.circle(cimg, (i[0], i[1]), i[2], (0, 255, 0), 2)
                         # draw the center of the circle
                         cv2.circle(cimg, (i[0], i[1]), 2, (0, 0, 255), 3)
-                    else:
-                        # draw the outer circle
-                        cv2.circle(cimg, (i[0], i[1]), i[2], (0, 255, 0), 2)
-                        # draw the center of the circle
-                        cv2.circle(cimg, (i[0], i[1]), 2, (0, 0, 255), 3)
+                    # else:
+                    #     # draw the outer circle
+                    #     cv2.circle(cimg, (i[0], i[1]), i[2], (0, 255, 0), 2)
+                    #     # draw the center of the circle
+                    #     cv2.circle(cimg, (i[0], i[1]), 2, (0, 0, 255), 3)
             if (tempShow):
                 m3F.imshow(cimg, "Circle")
                 m3F.printGreen("CIRCLES FOUND^^^")

@@ -45,7 +45,7 @@ def reduceColor(inputImg, show, n_colors=16):
         output = recreate_image(kmeans.cluster_centers_, labels, w, h)
         output = output*255
         output = cv2.convertScaleAbs(output)
-        output = cv2.cvtColor(output, cv2.COLOR_RGB2BGR)
+        #output = cv2.cvtColor(output, cv2.COLOR_RGB2BGR)
         print("output",output.dtype, output)
         return output
 
@@ -58,6 +58,6 @@ def recreate_image(codebook, labels, w, h):
         for j in range(h):
             image[i][j] = codebook[labels[label_idx]]
             label_idx += 1
-    
+
     print("image.dtype",image.dtype)
     return image
