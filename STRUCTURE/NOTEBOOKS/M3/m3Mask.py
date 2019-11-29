@@ -9,27 +9,36 @@ from matplotlib import pyplot as plt
 sys.path.append("/M3")
 
 
-def makeCircularMask(photoArray, show=False):
-    for photo in photoArray:
-        print("photo")
-        for face in photo.faces:
-            print("facee")
-            for eye in face.eyes:
-                print("eye")
-                maskImg = eye.image.copy()
-                maskImg.fill(0)
-                if not isinstance(eye.circle, type(None)):
-                    # firstCircle = eye.circle[0]
+def makeCircularMask(photo, show=True, onlyOne=True):
+    # for photo in photoArray:
+        # print("photo")
+    # photo = inputImg
+    for face in photo.faces:
+        print("facee")
+        for eye in face.eyes:
+            print("eye")
+            maskImg = eye.image.copy()
+            maskImg.fill(0)
+            if not isinstance(eye.circle, type(None)):
+                # firstCircle = eye.circle[0]
+                if onlyOne:
+                    i = eye.circle[0][0]
+                    print("i", i)
+                    print("onlyone", i[0], i[1], i[2])
+                    cv2.circle(maskImg, (i[0], i[1]), i[2], (255,  255, 255), -1)
+                else:
                     for i in eye.circle[0, :]:
                         print("i", i)
-                        cv2.circle(maskImg, (i[0], i[1]), i[2], (255,   255, 255), -1)
-                        if (show):
-                            m3Show.imshow(maskImg, "mask")
-                        eye.mask = maskImg
-    return photoArray
+                        cv2.circle(maskImg, (i[0], i[1]), i[2], (255,  255, 255), -1)
 
 
-def makeCircularOutline(photo, show):
+                if (show):
+                    m3Show.imshow(maskImg, "mask")
+                eye.mask = maskImg
+    return photo
+
+
+def makeCircularOutline(photo, show=True):
     for face in photo.faces:
         for eye in face.eyes:
             maskImg = eye.wip.copy()
@@ -110,17 +119,18 @@ def applyPolyMask(inputImg, show=True):
             m3Show.imshow(eye.image, "masked")
     return inputImg
 
-def applyCircMask(photoArray, show=True):
-    for photo in photoArray:
-        for face in photo.faces:
-            for eye in face.eyes:
-                if (eye.mask is None):
-                    print("THERE'S NOT MASK")
-                    break
-                print("eye.image.shape", eye.image.shape)
-                print("eye.mask.shape", eye.mask.shape)
+def applyCircMask(photo, show=True):
+    # for photo in photoArray:
+    print(photo)
+    for face in photo.faces:
+        for eye in face.eyes:
+            if (eye.mask is None):
+                print("THERE'S NOT MASK")
+                break
+            print("eye.image.shape", eye.image.shape)
+            print("eye.mask.shape", eye.mask.shape)
 
-                eye.masked = cv2.bitwise_and(eye.image, eye.mask)
-                if show:
-                    m3Show.imshow(eye.masked, "masked")
-    return photoArray
+            eye.iris = cv2.bitwise_and(eye.image, eye.mask)
+            if show:
+                m3Show.imshow(eye.iris, "masked")
+    return photo
