@@ -9,10 +9,8 @@ from PIL import ImageFilter, ImageEnhance
 import PIL
 
 # TODO - RENAME THEM FROM PARAMX TO SOOMETHINNG MEANINGFUL
-def findCircle(eye, resolution, min_dist, param_1, param_2, min_radius_width_divider, max_radius_width_divider, show):
+def findCircle(eye, resolution, min_dist, param_1, param_2, min_radius, max_radius, show):
     # old params for HoughCircle: img, cv2.HOUGH_GRADIENT, 1.5, 120, param1=60, param2=15, minRadius=0, maxRadius=int(m3F.typeSwap(img).height / 2))
-    min_radius = int(m3F.typeSwap(eye.wip).width/min_radius_width_divider)
-    max_radius = int(m3F.typeSwap(eye.wip).width/max_radius_width_divider)
     run(eye, resolution, min_dist, param_1, param_2, min_radius, max_radius, show)
 
 
@@ -20,9 +18,9 @@ def findCircleSimple(eye, show):
     #run(eye, 1, 120, 60, 15, 10, 100, show)
     # print("eye type", type(eye))
     if isinstance(eye, type(m3Class.Eye())):
-        run(eye, 1, 120, 200, 10, int(m3F.typeSwap(eye.wip).width/4), int(m3F.typeSwap(eye.wip).width/3), show)
+        run(eye, 1, 120, 200, 10, int(m3F.typeSwap(eye.wip).height/6), int(m3F.typeSwap(eye.wip).height/2.5), show)
     else:
-        run(eye, 1, 120, 200, 10, int(m3F.typeSwap(eye).width/4), int(m3F.typeSwap(eye).width/3), show)
+        run(eye, 1, 120, 200, 10, int(m3F.typeSwap(eye).height/6), int(m3F.typeSwap(eye).height/2.5), show)
 
 def findCircleSimpleEdge(eye, show):
     #run(eye, 1, 120, 60, 15, 10, 100, show)
@@ -60,11 +58,11 @@ def run(tempeye, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMin
         if len(img.shape) == 3:
             img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-        circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, tempResolution, tempMin_dist,
-                                   param1=tempParam_1, param2=tempParam_2, minRadius=tempMinRadius, maxRadius=tempMaxRadius)
+#        circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, tempResolution, tempMin_dist,
+#                                   param1=tempParam_1, param2=tempParam_2, minRadius=tempMinRadius, maxRadius=tempMaxRadius)
 
-#        circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,,120,param1=200,param2=10,
-#                                   minRadius=int(m3F.typeSwap(img).height/6),maxRadius=int(m3F.typeSwap(img).height/2.5))
+        circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,1,120,param1=200,param2=10,
+                                   minRadius=int(m3F.typeSwap(img).height/6),maxRadius=int(m3F.typeSwap(img).height/2.5))
 
         if not isinstance(circles, type(None)):
 

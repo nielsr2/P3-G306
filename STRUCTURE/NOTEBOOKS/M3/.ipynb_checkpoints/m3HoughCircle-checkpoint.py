@@ -9,62 +9,43 @@ from PIL import ImageFilter, ImageEnhance
 import PIL
 
 # TODO - RENAME THEM FROM PARAMX TO SOOMETHINNG MEANINGFUL
-def findCircle(eye, resolution, min_dist, param_1, param_2, min_radius_width_divider, max_radius_width_divider, show):
+def findCircle(inputImg, resolution, min_dist, param_1, param_2, min_radius, max_radius, show):
     # old params for HoughCircle: img, cv2.HOUGH_GRADIENT, 1.5, 120, param1=60, param2=15, minRadius=0, maxRadius=int(m3F.typeSwap(img).height / 2))
-    min_radius = int(m3F.typeSwap(eye.wip).width/min_radius_width_divider)
-    max_radius = int(m3F.typeSwap(eye.wip).width/max_radius_width_divider)
-    run(eye, resolution, min_dist, param_1, param_2, min_radius, max_radius, show)
+    run(inputImg, resolution, min_dist, param_1, param_2, min_radius, max_radius, show)
 
 
-def findCircleSimple(eye, show):
-    #run(eye, 1, 120, 60, 15, 10, 100, show)
-    # print("eye type", type(eye))
-    if isinstance(eye, type(m3Class.Eye())):
-        run(eye, 1, 120, 200, 10, int(m3F.typeSwap(eye.wip).width/4), int(m3F.typeSwap(eye.wip).width/3), show)
-    else:
-        run(eye, 1, 120, 200, 10, int(m3F.typeSwap(eye).width/4), int(m3F.typeSwap(eye).width/3), show)
-
-def findCircleSimpleEdge(eye, show):
-    #run(eye, 1, 120, 60, 15, 10, 100, show)
-    # print("eye type", type(eye))
-    if isinstance(eye, type(m3Class.Eye())):
-        run(eye, 1, 120, 200, 10, int(m3F.typeSwap(eye.wip).width), 0, show)
-    else:
-        run(eye, 1, 120, 200, 10, int(m3F.typeSwap(eye).width), 0, show)
+def findCircleSimple(inputImg, show):
+    #run(inputImg, 1, 120, 60, 15, 10, 100, show)
+    run(inputImg, 1, 120, 200, 10, int(m3F.typeSwap(inputImg).height/6), int(m3F.typeSwap(inputImg).height/2.5), show)
 
 
-def findCircleDouble(eye, resolution, min_dist, param_1, param_2, min_radius, max_radius, show):
+def findCircleDouble(inputImg, resolution, min_dist, param_1, param_2, min_radius, max_radius, show):
     # old params for HoughCircle: img, cv2.HOUGH_GRADIENT, 1.5, 120, param1=60, param2=15, minRadius=0, maxRadius=int(m3F.typeSwap(img).height / 2))
-    runDouble(eye, resolution, min_dist, param_1, param_2, min_radius, max_radius, show)
-
-def findCircleSimpleDouble(eye, show):
-    #run(eye, 1, 120, 60, 15, 10, 100, show)
-    runDouble(eye,1,120,200,10,int(m3F.typeSwap(eye).height/6),int(m3F.typeSwap(eye).height/2.5),show)
+    runDouble(inputImg, resolution, min_dist, param_1, param_2, min_radius, max_radius, show)
 
 
-
-def run(tempeye, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMinRadius, tempMaxRadius, tempShow):
+def run(tempInputImg, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMinRadius, tempMaxRadius, tempShow):
     print("***************************************************************************************")
 
-    img = tempeye
+    img = tempInputImg
     print(tempMinRadius)
     isEyeClass = False
     eye = None
     if isinstance(img, type(m3Class.Eye())):
         isEyeClass = True
-        eye = tempeye
-        img = eye.wip
+        eye = tempInputImg
+        img = eye.image
     if not isinstance(img, type(None)):
         cimg = img
 
         if len(img.shape) == 3:
             img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-        circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, tempResolution, tempMin_dist,
-                                   param1=tempParam_1, param2=tempParam_2, minRadius=tempMinRadius, maxRadius=tempMaxRadius)
+#        circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, tempResolution, tempMin_dist,
+#                                   param1=tempParam_1, param2=tempParam_2, minRadius=tempMinRadius, maxRadius=tempMaxRadius)
 
-#        circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,,120,param1=200,param2=10,
-#                                   minRadius=int(m3F.typeSwap(img).height/6),maxRadius=int(m3F.typeSwap(img).height/2.5))
+        circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,1,120,param1=200,param2=10,
+                                   minRadius=int(m3F.typeSwap(img).height/6),maxRadius=int(m3F.typeSwap(img).height/2.5))
 
         if not isinstance(circles, type(None)):
 
@@ -100,10 +81,10 @@ def run(tempeye, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMin
         m3F.printRed("Image is NONE")
 
 
-def runDouble(tempeye, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMinRadius, tempMaxRadius, tempShow):
+def runDouble(tempInputImg, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMinRadius, tempMaxRadius, tempShow):
     print("***************************************************************************************")
 
-    img = tempeye
+    img = tempInputImg
     print(tempMinRadius)
 
     if not isinstance(img, type(None)):
@@ -135,22 +116,22 @@ def runDouble(tempeye, tempResolution, tempMin_dist, tempParam_1, tempParam_2, t
 
                     #m3F.imshow(mask, "final img")
 
-                    pupilCircle = cv2.HoughCircles(mask, cv2.HOUGH_GRADIENT, 1, 50,
-                                                   param1=200, param2=10, minRadius=int(i[2]/6),
-                                                   maxRadius=int(i[2]/4*3))
+                    pupilCircle = cv2.HoughCircles(mask, cv2.HOUGH_GRADIENT, 1, 3,
+                                                   param1=60, param2=20, minRadius=5,
+                                                   maxRadius=40)
                     if not isinstance(pupilCircle, type(None)):
 
                         if (pupilCircle.size != 0):
                             pupilCircle = np.uint16(np.around(pupilCircle))
                             # print(circles)
                             for j in pupilCircle[0, :]:
-                                wiggle = 5
-                                if i[0] + wiggle > j[0] > i[0] - wiggle and i[1] + wiggle > j[1] > i[1] - wiggle:
+                                wiggle = 3
+                                if i[0] + wiggle > j[0] > i[0] - wiggle and i[1] + wiggle > j[1] > i[1] - wiggle and i[2] > j[2]+10:
                                     # draw the outer circle
-                                    cv2.circle(mask, (j[0], j[1]), j[2], (255, 255, 0), 1)
+                                    cv2.circle(mask, (j[0], j[1]), j[2], (255, 255, 0), 0)
                                     # draw the center of the circle
-                                    cv2.circle(mask, (j[0], j[1]), 2, (0, 0, 255), 3)
-                            m3F.imshow(mask, "final img")
+                                    cv2.circle(mask, (j[0], j[1]), 2, (0, 0, 255), 1)
+                                    m3F.imshow(mask, "final img")
 
             if (tempShow):
                 m3F.imshow(cimg, "Circle")
