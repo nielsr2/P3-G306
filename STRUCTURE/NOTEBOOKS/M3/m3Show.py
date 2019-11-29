@@ -12,9 +12,11 @@ from matplotlib import cm,colors
 import time
 
 def imshow(inputImg, title):
+    # print(inputImg)
     plt.clf()
     plt.title(title)
     plt.axis("off")
+    # print("inputImg.shape", inputImg.shape)
     plt.imshow(cv2.cvtColor(inputImg, cv2.COLOR_BGR2RGB), interpolation='none')
     plt.show()
     # plt.axes
@@ -132,38 +134,38 @@ def rgbToHSV(inputImg):
     result = plt.show()
 
     return (inputImg)
-    
+
 def h_Pass(inputImg):
-    
+
     #Converting img to grayscale
-    
+
 
     inputImg = cv2.cvtColor(inputImg, cv2.COLOR_BGR2GRAY)
     inputImg1 = cv2.GaussianBlur(inputImg,(5,5),0)
-    
+
     #Adding lowpass laplacian_filter
     laplacian = cv2.Laplacian(inputImg1,cv2.CV_64F)
     #Adding lowpass sobelX_filter
     sobelx = cv2.Sobel(inputImg1,cv2.CV_64F,1,0,ksize=5)
     #Adding lowpass sobelY_filter
     sobely = cv2.Sobel(inputImg1,cv2.CV_64F,0,1,ksize=5)
-    
+
     plt.subplot(2,2,2),plt.imshow(laplacian,cmap = 'gray')
     plt.title('Laplacian'), plt.xticks([]), plt.yticks([])
     plt.subplot(2,2,3),plt.imshow(sobelx,cmap = 'gray')
     plt.title('Sobel X'), plt.xticks([]), plt.yticks([])
     plt.subplot(2,2,4),plt.imshow(sobely,cmap = 'gray')
     plt.title('Sobel Y'), plt.xticks([]), plt.yticks([])
-    
+
     #plt.imshow((laplacian*255).astype(np.uint8))
     plt.show()
 
     return (inputImg)
- 
+
 def r_Channel (inputImg):
-    
+
     img = inputImg
-   
+
 
     b = img.copy()
     # set green and red channels to 0
@@ -190,7 +192,7 @@ def r_Channel (inputImg):
 
     # RGB - Red
     redImg= cv2.imshow('R-RGB', r)
-    
+
     return (redImg)
 
 
@@ -205,8 +207,5 @@ def r_channel (inputImg):
     cv2.imshow('Merged Output',img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
-    
+
     return (inputImg)
-
-
-

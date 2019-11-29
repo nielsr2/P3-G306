@@ -113,7 +113,7 @@ def exportToFolder(photoArray, inputFolder, parent=None, fileName=None):
                             eyeCount += 1
 
 
-def photoBatch(ins, functionArray, postArray=None, preArray=None,  debug=True ):
+def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None, debug=True ):
     # print("photoBatch")
     photoArray = []
     # **********************************************************************
@@ -165,6 +165,21 @@ def photoBatch(ins, functionArray, postArray=None, preArray=None,  debug=True ):
         #     print(face)
         photo = iterFunction(photo, functionArray)
 
+
+    m3F.printBlue("DOING IRIS ARRAY")
+    # **********************************************************************
+    # perform stuff on irisArray
+    for function in irisArray:
+        m3F.printBlue("function name " + function.__name__)
+        params = irisArray[function]
+        for photo in photoArray:
+            for face in photo.faces:
+                if face.eyes is not None:
+                    for eye in face.eyes:
+                        if eye.iris is not None:
+                            params["inputImg"] = eye.iris
+                            eye.iris = function(**params)
+                            m3Show.imshow(eye.iris, "eye.iris NIELS TEST")
     # **********************************************************************
     #  perform POST functions ( such as generate comparison etc.)
     for function in postArray:
@@ -173,6 +188,7 @@ def photoBatch(ins, functionArray, postArray=None, preArray=None,  debug=True ):
             function(photoArray, ins, **params)
         else:
             photoArray = function(photoArray, **params)
+    return photoArray
 
 
 def fakeEyes(photoArray):
