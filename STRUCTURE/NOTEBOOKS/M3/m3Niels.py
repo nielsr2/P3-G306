@@ -181,14 +181,22 @@ def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None
     for function in irisArray:
         m3F.printBlue("function name " + function.__name__)
         params = irisArray[function]
-        for photo in photoArray:
+        if ("eye" in params):
+            # m3F.printBlue(("Doing an eye with" + currentFunctionName))
             for face in photo.faces:
                 if face.eyes is not None:
                     for eye in face.eyes:
-                        if eye.iris is not None:
-                            params["inputImg"] = eye.iris
-                            eye.iris = function(**params)
-                            m3Show.imshow(eye.iris, "eye.iris NIELS TEST")
+                        functionParams["eye"] = eye
+                        eye = function(**functionParams)
+        else:
+            for photo in photoArray:
+                for face in photo.faces:
+                    if face.eyes is not None:
+                        for eye in face.eyes:
+                            if eye.iris is not None:
+                                params["inputImg"] = eye.iris
+                                eye.iris = function(**params)
+                                m3Show.imshow(eye.iris, "eye.iris NIELS TEST")
     # **********************************************************************
     #  perform POST functions ( such as generate comparison etc.)
     for function in postArray:

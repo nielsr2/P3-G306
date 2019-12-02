@@ -127,8 +127,8 @@ def applyCircMask(photo, show=True, useOriginal=True):
             if (eye.mask is None):
                 print("THERE'S NOT MASK")
                 break
-            print("eye.image.shape", eye.image.shape)
-            print("eye.mask.shape", eye.mask.shape)
+            # print("eye.image.shape", eye.image.shape)
+            # print("eye.mask.shape", eye.mask.shape)
             if useOriginal:
                 eye.iris = cv2.bitwise_and(eye.image, eye.mask)
             else:
