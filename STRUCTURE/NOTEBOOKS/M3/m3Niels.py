@@ -70,10 +70,16 @@ def generateComparison(photoArray, fileName=None):
             eyesToSave = []
             if not (type(face.eyes) == type(None)):
                 for eye in face.eyes:
-                    m3Show.imshow(eye.wip,"fasf")
+                    # m3Show.imshow(eye.wip, "fasf")
                     # print("EYEYEYEYEYEYEYEYEY")
-                    eyesToSave.append(eye.wip)
-                    facesToSave.append(concat(eyesToSave))
+                    if eye.iris is not None:
+                        eyesToSave.append(eye.iris)
+                    else:
+                        eyesToSave.append(eye.wip)
+            # if (len(eyesToSave) > 1):
+                facesToSave.append(concat(eyesToSave))
+            # else:
+                # facesToSave.append(eyesToSave[0])
     now = datetime.now()
     now_string = now.strftime("%d-%m-%Y--%H-%M-%S")
     # print(facesToSave[0], type(facesToSave[0]))
@@ -202,30 +208,32 @@ def fakeEyes(photoArray):
 
 
 def concat(images, direction="h"):
-    # print("images", images)
+    print("images", images)
     hs, ws = [], []
     for img in images:
-        if (len(img.shape) == 3):
-            # print("######## WAS 3 DIM")
-            h, w, c = img.shape
-            hs.append(h)
-            ws.append(w)
-        else:
-            # print("######## WAS ELSE DIM")
-            h, w = img.shape
-            hs.append(h)
-            ws.append(w)
+        if img is not None:
+            if (len(img.shape) == 3):
+                # print("######## WAS 3 DIM")
+                h, w, c = img.shape
+                hs.append(h)
+                ws.append(w)
+            else:
+                # print("######## WAS ELSE DIM")
+                h, w = img.shape
+                hs.append(h)
+                ws.append(w)
     hs.sort(reverse=True)
     ws.sort(reverse=True)
     outImgs = []
     for img in images:
-        newSize = np.zeros_like(img)
-        if (len(img.shape) == 3):
-            newSize = np.resize(newSize, (hs[0], ws[0], 3))
-        else:
-            newSize = np.resize(newSize, (hs[0], ws[0]))
-        newSize[0:img.shape[0], 0:img.shape[1]] = img
-        outImgs.append(newSize)
+        if img is not None:
+            newSize = np.zeros_like(img)
+            if (len(img.shape) == 3):
+                newSize = np.resize(newSize, (hs[0], ws[0], 3))
+            else:
+                newSize = np.resize(newSize, (hs[0], ws[0]))
+                newSize[0:img.shape[0], 0:img.shape[1]] = img
+                outImgs.append(newSize)
     if (direction == "h"):
         result = np.concatenate((outImgs), axis=1)
     else:

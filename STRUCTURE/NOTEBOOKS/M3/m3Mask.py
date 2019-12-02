@@ -17,7 +17,7 @@ def makeCircularMask(photo, show=True, onlyOne=True):
         print("facee")
         for eye in face.eyes:
             print("eye")
-            maskImg = eye.image.copy()
+            maskImg = eye.wip.copy()
             maskImg.fill(0)
             if not isinstance(eye.circle, type(None)):
                 # firstCircle = eye.circle[0]
@@ -114,12 +114,12 @@ def makePolyMask(inputImg, show, apply=False):
 
 def applyPolyMask(inputImg, show=True):
     for eye in inputImg.eyes:
-        eye.image = cv2.bitwise_and(eye.image, eye.polyMask)
+        eye.image = cv2.bitwise_and(eye.wip, eye.polyMask)
         if show:
-            m3Show.imshow(eye.image, "masked")
+            m3Show.imshow(eye.wip, "masked")
     return inputImg
 
-def applyCircMask(photo, show=True):
+def applyCircMask(photo, show=True, useOriginal=True):
     # for photo in photoArray:
     print(photo)
     for face in photo.faces:
@@ -129,8 +129,10 @@ def applyCircMask(photo, show=True):
                 break
             print("eye.image.shape", eye.image.shape)
             print("eye.mask.shape", eye.mask.shape)
-
-            eye.iris = cv2.bitwise_and(eye.image, eye.mask)
+            if useOriginal:
+                eye.iris = cv2.bitwise_and(eye.image, eye.mask)
+            else:
+                eye.iris = cv2.bitwise_and(eye.wip, eye.mask)
             if show:
                 m3Show.imshow(eye.iris, "masked")
     return photo
