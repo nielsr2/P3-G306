@@ -38,6 +38,7 @@ class Eye:
     circle = None
     mask = None
     polyMask = None
+    houghOutline = None
     polyMaskedImage = None
     # **********************************************************************
     # wip = work in progress

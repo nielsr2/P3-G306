@@ -53,7 +53,7 @@ def run(tempeye, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMin
     if isinstance(img, type(m3Class.Eye())):
         isEyeClass = True
         eye = tempeye
-        img = eye.wip
+        img = eye.wip.copy()
         print("DID EYE")
     if not isinstance(img, type(None)):
         cimg = img.copy()
@@ -73,18 +73,17 @@ def run(tempeye, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMin
                 circles = np.uint16(np.around(circles))
                 # print(circles)
                 index = 0
+                for i in circles[0, :]:
+                    # if img[i[1],i[0]] < 15:
+                        # draw the outer circle
+                        cv2.circle(cimg, (i[0], i[1]), i[2], (0, 255, 0), 2)
+                        # draw the center of the circle
+                        cv2.circle(cimg, (i[0], i[1]), 2, (0, 0, 255), 3)
+                eye.houghOutline = cimg
                 if (tempShow):
-                    for i in circles[0, :]:
-                        # if img[i[1],i[0]] < 15:
-                            # draw the outer circle
-                            cv2.circle(cimg, (i[0], i[1]), i[2], (0, 255, 0), 2)
-                            # draw the center of the circle
-                            cv2.circle(cimg, (i[0], i[1]), 2, (0, 0, 255), 3)
-
-
-                            m3F.imshow(cimg, "Circle")
-                            m3F.printGreen("CIRCLES FOUND^^^")
-                            print("img out", img.shape)
+                    m3F.imshow(cimg, "Circle")
+                    m3F.printGreen("CIRCLES FOUND^^^")
+                    print("img out", img.shape)
             if isEyeClass:
                 eye.circle = circles
                 print("RETURNED AN EYE WITH CIRCLES")
