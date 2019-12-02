@@ -1,11 +1,12 @@
 import cv2 
 
+#InputImg2 has to be equal to handmade mask. 
 def cntImgPxl (inputImg1, inputImg2): 
+    
+    
     
     inputImg1 = cv2.imread("15.jpg_0hardedge.jpg",0)
     inputImg2 = cv2.imread("15.jpg_0softedge.jpg",0)
-
-
 
     ret,binary1 = cv2.threshold(inputImg1,127,255,cv2.THRESH_BINARY)
     ret,binary2 = cv2.threshold(inputImg2,127,255,cv2.THRESH_BINARY)
