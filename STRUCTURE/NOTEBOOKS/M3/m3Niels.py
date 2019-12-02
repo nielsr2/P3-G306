@@ -59,7 +59,7 @@ def funcArrToStr(multilevelDict):
     return json.dumps(dict)
 
 
-def generateComparison(photoArray, fileName=None):
+def generateComparison(photoArray, outputName=None, fileName=None):
     print("generateComparison")
     facesToSave = []
     for photo in photoArray:
@@ -70,19 +70,28 @@ def generateComparison(photoArray, fileName=None):
             eyesToSave = []
             if not (type(face.eyes) == type(None)):
                 for eye in face.eyes:
-                    m3Show.imshow(eye.wip,"fasf")
+                    # m3Show.imshow(eye.wip, "fasf")
                     # print("EYEYEYEYEYEYEYEYEY")
-                    eyesToSave.append(eye.wip)
-                    facesToSave.append(concat(eyesToSave))
+                    for attr in eye.__dict__.items():
+                        # print("attr", attr)
+                        if attr[0] is fileName:
+                            if attr[1] is not None:
+                                facesToSave.append(attr[1])
+                            else:
+                                facesToSave.append(eye.image)
+            # if (len(eyesToSave) > 1):
+                # facesToSave.append(eyesToSave)
+            # else:
+                # facesToSave.append(eyesToSave[0])
     now = datetime.now()
     now_string = now.strftime("%d-%m-%Y--%H-%M-%S")
     # print(facesToSave[0], type(facesToSave[0]))
     output = concat(facesToSave, direction="v")
     m3Show.imshow(output, "asdfadf")
-    if (fileName is not None):
+    if (outputName is not None):
         # file = open(("EXPORTS/COMPARISONS/" + fileName + "_" + now_string + ".txt"), "w+")
         # file.write(ffxa)
-        cv2.imwrite("EXPORTS/COMPARISONS/" + fileName + "_" + now_string + ".jpg", output)
+        cv2.imwrite("EXPORTS/COMPARISONS/" + outputName + "_" + now_string + ".jpg", output)
     else:
         cv2.imwrite("EXPORTS/COMPARISONS/" + now_string + ".jpg", output)
 
@@ -203,8 +212,10 @@ def fakeEyes(photoArray):
 
 def concat(images, direction="h"):
     # print("images", images)
-    hs, ws = [], []
+    hs, ws = [], [] # used for storing widths and heights, as images should be of the same size in one of the directons. used for picking highest value
     for img in images:
+        m3Show.imshow(img, "img in images (concat)")
+        # if img is not None:
         if (len(img.shape) == 3):
             # print("######## WAS 3 DIM")
             h, w, c = img.shape
@@ -219,15 +230,21 @@ def concat(images, direction="h"):
     ws.sort(reverse=True)
     outImgs = []
     for img in images:
-        newSize = np.zeros_like(img)
-        if (len(img.shape) == 3):
-            newSize = np.resize(newSize, (hs[0], ws[0], 3))
-        else:
-            newSize = np.resize(newSize, (hs[0], ws[0]))
-        newSize[0:img.shape[0], 0:img.shape[1]] = img
-        outImgs.append(newSize)
+
+        if img is not None:
+            print("img", img)
+            newSize = np.zeros_like(img)
+            if (len(img.shape) == 3):
+                newSize = np.resize(newSize, (hs[0], ws[0], 3))
+            else:
+                newSize = np.resize(newSize, (hs[0], ws[0]))
+            newSize[0:img.shape[0], 0:img.shape[1]] = img
+            outImgs.append(newSize)
+    # print("ooutImgs", outImgs)
+    # for img in outImgs:
+        # m3Show.imshow(img, "outimg in outimages (concat)")
     if (direction == "h"):
-        result = np.concatenate((outImgs), axis=1)
+        result = np.concatenate(outImgs, axis=1)
     else:
-        result = np.concatenate((outImgs), axis=0)
+        result = np.concatenate(outImgs, axis=0)
     return result

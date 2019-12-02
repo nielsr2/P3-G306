@@ -13,15 +13,17 @@ from M3 import m3Show
 # Find all facial features in all the faces in the image
 
 
-def findEyes(photo, scalePercent, show):
+def findEyes(photo, division, show=True):
     # print("photo type", type(photo))
     h, w, c = photo.originalImage.shape
     print("originalShape", h,w,c)
     # downScaledDim = (round(w/100 *(scalePercent)),round(h/100 * (scalePercent)))
-    downScaledDim = ((round(w/20)),round(h/20))
-    inputImg = photo.originalImage.copy()
+    downScaledDim = ((round(w/division)),round(h/division))
+    copy = photo.originalImage.copy()
+    pil_image = Image.fromarray(copy)
+    inputImg = copy
     inputImg = cv2.resize(inputImg, downScaledDim)
-    dimToScaleUp = 20
+    dimToScaleUp = division
     print("downScaledDim", downScaledDim )
     # m3Show.imshow(photo.originalImage, " FINDEYS TEST")
     # print("proccesing", inputImgPath),
@@ -33,7 +35,7 @@ def findEyes(photo, scalePercent, show):
     #print("face_landmarks_list type was", type(face_landmarks_list))
     # Create a PIL imagedraw object so we can draw on the picture
     # pil_image = Image.fromarray(inputImg)
-    pil_image = Image.fromarray(photo.originalImage.copy())
+
     m3Show.imshow(m3F.typeSwap(pil_image),"fadsf")
     if (len(face_landmarks_list) == 0):
         m3F.printRed(" found no faces in this picture")
