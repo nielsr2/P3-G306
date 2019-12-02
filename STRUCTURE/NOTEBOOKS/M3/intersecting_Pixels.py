@@ -27,8 +27,8 @@ def cntImgPxl (inputImg1, inputImg2):
 
     rows2,cols2 = inputImg2.shape
 
-        for i in range(rows2):
-            for j in range(cols2):
+    for i in range(rows2):
+        for j in range(cols2):
             k = inputImg2[i,j]
             #Non-black pixels
             cntNotBlack2 = cv2.countNonZero(binary2)
