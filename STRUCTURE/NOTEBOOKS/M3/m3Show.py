@@ -47,7 +47,7 @@ def scatter(inputImg):
     return (inputImg)
 
 
-def Histogram(inputImg, passThru=True):
+def Histogram(inputImg, passThru=True, show=True):
     # plt.clf()
     newInputImg = cv2.cvtColor(inputImg, cv2.COLOR_BGR2RGB)
     # load image and split the image into the color channels
@@ -62,7 +62,7 @@ def Histogram(inputImg, passThru=True):
 
     if passThru:
         BGR_Histogram =plt.show()
-        return (inputImg)
+        return inputImg
     else:
         fig, axs = plt.subplots()
         # fig = Figure()
