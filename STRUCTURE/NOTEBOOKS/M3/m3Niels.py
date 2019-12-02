@@ -186,8 +186,8 @@ def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None
             for face in photo.faces:
                 if face.eyes is not None:
                     for eye in face.eyes:
-                        functionParams["eye"] = eye
-                        eye = function(**functionParams)
+                        params["eye"] = eye
+                        eye = function(**params)
         else:
             for photo in photoArray:
                 for face in photo.faces:
