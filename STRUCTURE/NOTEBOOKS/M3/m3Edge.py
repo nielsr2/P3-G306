@@ -13,3 +13,6 @@ def canny(inputImg, show=True, thresh1=100, thresh2=100):
     if show:
         m3Show.imshow(out, "canny")
     return out
+
+def maskOutEdges(eye, show=True):
+    pass

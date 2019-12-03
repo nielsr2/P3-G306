@@ -54,13 +54,14 @@ def run(tempeye, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMin
         isEyeClass = True
         eye = tempeye
         img = eye.wip.copy()
-        print("DID EYE")
+        # print("DID EYE")
     if not isinstance(img, type(None)):
         cimg = img.copy()
 
         if len(img.shape) == 3:
             img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        print("Hough run : min:", tempMinRadius, " max: ", tempMaxRadius)
+
+        # print("Hough run : min:", tempMinRadius, " max: ", tempMaxRadius)
         circles = cv2.HoughCircles(img, cv2.HOUGH_GRADIENT, tempResolution, tempMin_dist,
                                    param1=tempParam_1, param2=tempParam_2, minRadius=tempMinRadius, maxRadius=tempMaxRadius)
 
@@ -86,7 +87,7 @@ def run(tempeye, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMin
                     print("img out", img.shape)
             if isEyeClass:
                 eye.circle = circles
-                print("RETURNED AN EYE WITH CIRCLES")
+                # print("RETURNED AN EYE WITH CIRCLES")
                 return eye
             else:
                 return img
@@ -99,10 +100,10 @@ def run(tempeye, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMin
 
 
 def runDouble(tempeye, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMinRadius, tempMaxRadius, tempShow):
-    print("***************************************************************************************")
+    # print("***************************************************************************************")
 
     img = tempeye
-    print(tempMinRadius)
+    # print(tempMinRadius)
 
     if not isinstance(img, type(None)):
         cimg = img

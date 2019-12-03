@@ -14,24 +14,22 @@ def makeCircularMask(photo, show=True, onlyOne=True):
         # print("photo")
     # photo = inputImg
     for face in photo.faces:
-        print("facee")
+        # print("facee")
         for eye in face.eyes:
-            print("eye")
+            # print("eye")
             maskImg = eye.wip.copy()
             maskImg.fill(0)
             if not isinstance(eye.circle, type(None)):
                 # firstCircle = eye.circle[0]
                 if onlyOne:
                     i = eye.circle[0][0]
-                    print("i", i)
-                    print("onlyone", i[0], i[1], i[2])
+                    # print("i", i)
+                    # print("onlyone", i[0], i[1], i[2])
                     cv2.circle(maskImg, (i[0], i[1]), i[2], (255,  255, 255), -1)
                 else:
                     for i in eye.circle[0, :]:
-                        print("i", i)
+                        # print("i", i)
                         cv2.circle(maskImg, (i[0], i[1]), i[2], (255,  255, 255), -1)
-
-
                 if (show):
                     m3Show.imshow(maskImg, "mask")
                 eye.mask = maskImg
@@ -96,36 +94,37 @@ def makeFullMask(inputImg, show):
     return inputImg
 
 
-def makePolyMask(inputImg, show, apply=False):
+def makePolyMask(eye, show=True):
 
-    for eye in inputImg.eyes:
-        polyMask = inputImg.orginalImage.copy()
-        polyMask.fill(0)
-        print("EYE COOR", eye.coordinates)
-        polyMask = cv2.fillPoly(polyMask, np.int_([eye.landmarkPoints]), (255, 255, 255))
-        # epm = m3Class.Eye(np.asarray(pil_image.crop(left)), left, lEyeCoor)
-        # epm = polyMask.crop(eye.coordinates)
+    # for eye in inputImg.eyes:
+    polyMask = eye.image.copy()
+    polyMask.fill(0)
+    print("EYE COOR", eye.landmarkPoints)
+    polyMask = cv2.fillPoly(polyMask, np.int_([eye.landmarkPoints]), (255, 255, 255))
+    m3Show.imshow(polyMask, "POLYMASK")
+    # epm = m3Class.Eye(np.asarray(pil_image.crop(left)), left, lEyeCoor)
+    # epm = polyMask.crop(eye.coordinates)
+    eye.polyMask = m3F.typeSwap(m3F.typeSwap(polyMask).crop(eye.coordinates))
+    if show:
+        m3Show.imshow(eye.polyMask, "poly")
+    return eye
 
-        eye.polyMask = m3F.typeSwap(m3F.typeSwap(polyMask).crop(eye.coordinates))
-        if show:
-            m3Show.imshow(eye.polyMask, "poly")
-    return inputImg
 
+def applyPolyMask(eye, show=True):
 
-def applyPolyMask(inputImg, show=True):
-    for eye in inputImg.eyes:
-        eye.image = cv2.bitwise_and(eye.wip, eye.polyMask)
-        if show:
-            m3Show.imshow(eye.wip, "masked")
-    return inputImg
+    eye.wip = cv2.bitwise_and(eye.wip, eye.polyMask)
+    if show:
+        m3Show.imshow(eye.wip, "masked")
+    return eye
+
 
 def applyCircMask(photo, show=True, useOriginal=True):
     # for photo in photoArray:
-    print(photo)
+    # print(photo)
     for face in photo.faces:
         for eye in face.eyes:
             if (eye.mask is None):
-                print("THERE'S NOT MASK")
+                m3F.printRed("THERE'S NOT MASK")
                 break
             # print("eye.image.shape", eye.image.shape)
             # print("eye.mask.shape", eye.mask.shape)
