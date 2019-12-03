@@ -66,7 +66,10 @@ def semicircle(eye, show):
     finalImg = cv2.cvtColor(cimg, cv2.COLOR_BGR2RGB)
     if (show):
         m3F.imshow(finalImg, "semicircles")
-    return finalImg
+    #return finalImg
+    return eye
+    
+    
     #plt.imshow((img * 255).astype(np.uint8))
     #plt.show
 
