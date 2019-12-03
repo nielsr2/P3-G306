@@ -87,7 +87,7 @@ def generateComparison(photoArray, outputName=None, fileName=None):
     now_string = now.strftime("%d-%m-%Y--%H-%M-%S")
     # print(facesToSave[0], type(facesToSave[0]))
     output = concat(facesToSave, direction="v")
-    m3Show.imshow(output, "asdfadf")
+    # m3Show.imshow(output, "asdfadf")
     if (outputName is not None):
         # file = open(("EXPORTS/COMPARISONS/" + fileName + "_" + now_string + ".txt"), "w+")
         # file.write(ffxa)
@@ -114,7 +114,7 @@ def exportToFolder(photoArray, inputFolder, parent=None, fileName=None):
                     for attr in eye.__dict__.items():
                         print("attr", attr)
                         if attr[0] is fileName:
-                            m3Show.imshow(attr[1],"asdf")
+                            # m3Show.imshow(attr[1],"asdf")
                             os.makedirs(outputFolder, exist_ok=True)
                             path = outputFolder  + os.path.basename(photo.path) + "_" + str(eyeCount) + ".jpeg"
                             print("path", path)
@@ -122,7 +122,7 @@ def exportToFolder(photoArray, inputFolder, parent=None, fileName=None):
                             eyeCount += 1
 
 
-def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None, debug=True ):
+def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None, debug=True, debugIris=True):
     # print("photoBatch")
     photoArray = []
     # **********************************************************************
@@ -143,16 +143,21 @@ def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None
 
     # **********************************************************************
     # perform PRE functions ( like face detection! )
+    print("**********************************************************************")
+    print("**********************************************************************")
+    m3F.printBlue("DOING PRE FUNCIONS")
+    print("**********************************************************************")
+    print("**********************************************************************")
     for function in preArray:
-        print("function.__name__  in pre: ", function.__name__ )
+        print("function.__name__  in pre: ", function.__name__)
         if (function.__name__ == "findEyes"):
-            print("FOUND FINDEYES FUNC")
+            # print("FOUND FINDEYES FUNC")
             for photo in photoArray:
                 # print("NIBBBBBsss")
                 params = preArray[function]
                 photo.faces = function(photo, **params)
         elif (function.__name__ == "fakeEyes"):
-            print("fakeEyes")
+            # print("fakeEyes")
             params = preArray[function]
             photoArray = function(photoArray, **params)
         else:
@@ -162,12 +167,23 @@ def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None
 
     # **********************************************************************
     #  Set debug flag for all functions in functionArray
+    # if debug:
     for function in functionArray:
-        functionParams = functionArray[function]
-        functionParams["show"] = debug
+        params = functionArray[function]
+        params["show"] = debug
+
+    # if irisDebug:
+    for function in irisArray:
+        params = irisArray[function]
+        params["show"] = debugIris
 
     # **********************************************************************
     #  perform iterations on photos
+    print("**********************************************************************")
+    print("**********************************************************************")
+    m3F.printBlue("DOING FUNCION ARRAY")
+    print("**********************************************************************")
+    print("**********************************************************************")
     for photo in photoArray:
         # print(photo)
         # for face in photo.faces:
@@ -175,9 +191,13 @@ def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None
         photo = iterFunction(photo, functionArray)
 
 
-    m3F.printBlue("DOING IRIS ARRAY")
     # **********************************************************************
     # perform stuff on irisArray
+    print("**********************************************************************")
+    print("**********************************************************************")
+    m3F.printBlue("DOING IRIS FUNCION ARRAY")
+    print("**********************************************************************")
+    print("**********************************************************************")
     for function in irisArray:
         m3F.printBlue("function name " + function.__name__)
         params = irisArray[function]
@@ -196,7 +216,7 @@ def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None
                             if eye.iris is not None:
                                 params["inputImg"] = eye.iris
                                 eye.iris = function(**params)
-                                m3Show.imshow(eye.iris, "eye.iris NIELS TEST")
+                                # m3Show.imshow(eye.iris, "eye.iris NIELS TEST")
     # **********************************************************************
     #  perform POST functions ( such as generate comparison etc.)
     for function in postArray:
@@ -222,7 +242,7 @@ def concat(images, direction="h"):
     # print("images", images)
     hs, ws = [], [] # used for storing widths and heights, as images should be of the same size in one of the directons. used for picking highest value
     for img in images:
-        m3Show.imshow(img, "img in images (concat)")
+        # m3Show.imshow(img, "img in images (concat)")
         # if img is not None:
         if (len(img.shape) == 3):
             # print("######## WAS 3 DIM")
@@ -240,7 +260,7 @@ def concat(images, direction="h"):
     for img in images:
 
         if img is not None:
-            print("img", img)
+            # print("img", img)
             newSize = np.zeros_like(img)
             if (len(img.shape) == 3):
                 newSize = np.resize(newSize, (hs[0], ws[0], 3))
