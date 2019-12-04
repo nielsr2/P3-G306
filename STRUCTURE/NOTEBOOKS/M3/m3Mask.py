@@ -57,7 +57,7 @@ def fullImgEyeOutline(photo, show):
     for face in photo.faces:
         for eye in face.eyes:
             if not isinstance(eye.mask, type(None)):
-                coor = eye.coordinates
+                coor = eye.cropRect
                 # fullMask[coor[0]:x, coor[1]:y] = eye.mask
 
                 for i in eye.circle[0, :]:
@@ -83,7 +83,7 @@ def makeFullMask(inputImg, show):
     x, y, channels = fullMask.shape
     for eye in inputImg.eyes:
         if not isinstance(eye.mask, type(None)):
-            coor = eye.coordinates
+            coor = eye.cropRect
             # fullMask[coor[0]:x, coor[1]:y] = eye.mask
             print("coor", coor)
             fullMask[coor[1]:coor[1]+eye.mask.shape[0], coor[0]:coor[0]+eye.mask.shape[1]] = eye.mask
@@ -94,22 +94,40 @@ def makeFullMask(inputImg, show):
     return inputImg
 
 
-def makePolyMask(eye, show=True):
-
-    # for eye in inputImg.eyes:
-    polyMask = eye.image.copy()
+def makePolyMask(photo, show=True):
+    polyMask = photo.originalImage.copy()
     polyMask.fill(0)
-    print("EYE COOR", eye.landmarkPoints)
-    polyMask = cv2.fillPoly(polyMask, np.int_([eye.landmarkPoints]), (255, 255, 255))
-    m3Show.imshow(polyMask, "POLYMASK")
-    # epm = m3Class.Eye(np.asarray(pil_image.crop(left)), left, lEyeCoor)
-    # epm = polyMask.crop(eye.coordinates)
-    eye.polyMask = m3F.typeSwap(m3F.typeSwap(polyMask).crop(eye.coordinates))
-    if show:
-        m3Show.imshow(eye.polyMask, "poly")
-    return eye
+    for face in photo.faces:
+        for eye in face.eyes:
 
 
+            print("EYE COOR", eye.landmarkPoints)
+            polyMask = cv2.fillPoly(polyMask, np.int_([eye.landmarkPoints]), (255, 255, 255))
+            m3Show.imshow(polyMask, "POLYMASK")
+            # epm = m3Class.Eye(np.asarray(pil_image.crop(left)), left, lEyeCoor)
+            # epm = polyMask.crop(eye.cropRect)
+            eye.polyMask = m3F.typeSwap(m3F.typeSwap(polyMask).crop(eye.cropRect))
+            if show:
+                m3Show.imshow(eye.polyMask, "poly")
+
+    return photo
+
+def makeManyPolyMask(photo, show=True):
+    polyMask = photo.originalImage.copy()
+    polyMask.fill(0)
+    for face in photo.faces:
+        for eye in face.eyes:
+
+            # print("EYE COOR", eye.landmarkPoints)
+            polyMask = cv2.fillPoly(polyMask, np.int_([eye.manyLandmarkPoints]), (255, 255, 255))
+            m3Show.imshow(polyMask, "POLYMASK")
+            # epm = m3Class.Eye(np.asarray(pil_image.crop(left)), left, lEyeCoor)
+            # epm = polyMask.crop(eye.cropRect)
+            eye.manyPolyMask = m3F.typeSwap(m3F.typeSwap(polyMask).crop(eye.cropRect))
+            if show:
+                m3Show.imshow(eye.manyPolyMask, "poly")
+
+    return photo
 def applyPolyMask(eye, show=True):
 
     eye.wip = cv2.bitwise_and(eye.wip, eye.polyMask)

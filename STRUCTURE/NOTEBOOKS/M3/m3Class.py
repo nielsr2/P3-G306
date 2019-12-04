@@ -33,21 +33,23 @@ class Face:
 
 class Eye:
     image = None
-    coordinates = None
+    cropRect = None
     landmarkPoints = None
     circle = None
     mask = None
+    manyPolyMask = None
     polyMask = None
     houghOutline = None
     polyMaskedImage = None
+    manyLandmarkPoints = []
     # **********************************************************************
     # wip = work in progress
     wip = None
     # **********************************************************************
     iris = None
-    def __init__(self, im="None", coor="None", landmarkPoints="None"):
+    def __init__(self, im="None", cropRect="None", landmarkPoints="None"):
         self.image = im
-        self.coordinates = coor
+        self.cropRect = cropRect
         self.landmarkPoints = landmarkPoints
         self.wip = np.copy(self.image)
 
