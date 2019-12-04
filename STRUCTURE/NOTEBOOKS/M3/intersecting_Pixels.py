@@ -1,12 +1,20 @@
 import cv2 
 
 #InputImg2 has to be equal to handmade mask. 
+
+def getPixel (inputImg, i,j):
+    pixel = image.getpixel((i, j))
+    return pixel
+    
+    
 def cntImgPxl (inputImg1, inputImg2): 
     
     
     
     inputImg1 = cv2.imread("15.jpg_0hardedge.jpg",0)
     inputImg2 = cv2.imread("15.jpg_0softedge.jpg",0)
+    
+    
 
     ret,binary1 = cv2.threshold(inputImg1,127,255,cv2.THRESH_BINARY)
     ret,binary2 = cv2.threshold(inputImg2,127,255,cv2.THRESH_BINARY)
@@ -16,6 +24,7 @@ def cntImgPxl (inputImg1, inputImg2):
 
     for i in range(rows1):
         for j in range(cols1):
+                  
             k = inputImg1[i,j]
             #Non-black pixels
             cntNotBlack1 = cv2.countNonZero(binary1)
