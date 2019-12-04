@@ -1,0 +1,139 @@
+graph:{
+  title:"classes_Pyreverse"
+  layoutalgorithm:dfs
+  late_edge_labels:yes
+  port_sharing:no
+  manhattan_edges:yes
+  node: {title:"0"  label:"\fbASTWalker\fn\n\f_______________\n\f08handler\n\f_______________\n\f10get_callbacks()\n\f10leave()\n\f10visit()\n\f10walk()"
+  shape:box
+}
+  node: {title:"1"  label:"\fbClassDiadefGenerator\fn\n\f______________________\n\f08classdiagram\n\f______________________\n\f10class_diagram()"
+  shape:box
+}
+  node: {title:"2"  label:"\fbClassDiagram\fn\n\f_______________________\n\f08TYPE : str\n\f08depends : list\n\f08objects : list\n\f08relationships : dict\n\f08title\n\f_______________________\n\f10add_object()\n\f10add_relationship()\n\f10class_names()\n\f10classe()\n\f10classes()\n\f10extract_relationships()\n\f10get_attrs()\n\f10get_methods()\n\f10get_relationship()\n\f10get_relationships()\n\f10has_node()\n\f10nodes()\n\f10object_from_node()"
+  shape:box
+}
+  node: {title:"3"  label:"\fbDefaultDiadefGenerator\fn\n\f________________________\n\f08classdiagram\n\f08pkgdiagram : NoneType\n\f________________________\n\f10leave_project()\n\f10visit_classdef()\n\f10visit_importfrom()\n\f10visit_module()\n\f10visit_project()"
+  shape:box
+}
+  node: {title:"4"  label:"\fbDiaDefGenerator\fn\n\f_________________________\n\f08anc_level : int\n\f08association_level : int\n\f08classdiagram : NoneType\n\f08config\n\f08linker\n\f08module_names\n\f_________________________\n\f10add_class()\n\f10extract_classes()\n\f10get_ancestors()\n\f10get_associated()\n\f10get_title()\n\f10show_node()"
+  shape:box
+}
+  node: {title:"5"  label:"\fbDiadefsHandler\fn\n\f________________\n\f08config\n\f________________\n\f10get_diadefs()"
+  shape:box
+}
+  node: {title:"6"  label:"\fbDiagramEntity\fn\n\f_________________\n\f08node : NoneType\n\f08title : str\n\f_________________"
+  shape:box
+}
+  node: {title:"7"  label:"\fbDiagramWriter\fn\n\f____________________\n\f08config\n\f08printer : NoneType\n\f____________________\n\f10close_graph()\n\f10get_title()\n\f10get_values()\n\f10set_printer()\n\f10write()\n\f10write_classes()\n\f10write_packages()"
+  shape:box
+}
+  node: {title:"8"  label:"\fbDotWriter\fn\n\f______________________\n\f08file_name\n\f08printer : DotBackend\n\f______________________\n\f10close_graph()\n\f10get_title()\n\f10get_values()\n\f10set_printer()"
+  shape:box
+}
+  node: {title:"9"  label:"\fbFigure\fn\n\f________"
+  shape:box
+}
+  node: {title:"10"  label:"\fbFilterMixIn\fn\n\f_____________\n\f10show_attr()"
+  shape:box
+}
+  node: {title:"11"  label:"\fbIdGeneratorMixIn\fn\n\f__________________\n\f08id_count : int\n\f__________________\n\f10generate_id()\n\f10init_counter()"
+  shape:box
+}
+  node: {title:"12"  label:"\fbLinker\fn\n\f____________________________\n\f08inherited_interfaces : int\n\f08link_class\n\f08link_function\n\f08link_module\n\f08link_project\n\f08project\n\f08tag : bool\n\f____________________________\n\f10compute_module()\n\f10handle_assignattr_type()\n\f10visit_assignname()\n\f10visit_classdef()\n\f10visit_functiondef()\n\f10visit_import()\n\f10visit_importfrom()\n\f10visit_module()\n\f10visit_package()\n\f10visit_project()"
+  shape:box
+}
+  node: {title:"13"  label:"\fbLocalsVisitor\fn\n\f_______________\n\f10visit()"
+  shape:box
+}
+  node: {title:"14"  label:"\fbPackageDiagram\fn\n\f_______________________\n\f08TYPE : str\n\f_______________________\n\f10add_from_depend()\n\f10extract_relationships()\n\f10get_module()\n\f10module()\n\f10modules()"
+  shape:box
+}
+  node: {title:"15"  label:"\fbProject\fn\n\f_________________\n\f08items\n\f08keys\n\f08locals : dict\n\f08modules : list\n\f08name : str\n\f08path : NoneType\n\f08values\n\f_________________\n\f10add_module()\n\f10get_children()\n\f10get_module()"
+  shape:box
+}
+  node: {title:"16"  label:"\fbRelationship\fn\n\f_________________\n\f08from_object\n\f08name : NoneType\n\f08to_object\n\f08type\n\f_________________"
+  shape:box
+}
+  node: {title:"17"  label:"\fbRun\fn\n\f_________________\n\f08options : tuple\n\f_________________\n\f10run()"
+  shape:box
+}
+  node: {title:"18"  label:"\fbVCGPrinter\fn\n\f_____________\n\f08emit_edge\n\f08emit_node\n\f_____________\n\f10close_graph()\n\f10edge()\n\f10node()\n\f10open_graph()"
+  shape:box
+}
+  node: {title:"19"  label:"\fbVCGWriter\fn\n\f_____________\n\f08graph_file\n\f08printer\n\f_____________\n\f10close_graph()\n\f10get_title()\n\f10get_values()\n\f10set_printer()"
+  shape:box
+}
+  edge: {sourcename:"1" targetname:"4"  arrowstyle:solid
+  backarrowstyle:none
+  backarrowsize:10
+}
+  edge: {sourcename:"2" targetname:"9"  arrowstyle:solid
+  backarrowstyle:none
+  backarrowsize:10
+}
+  edge: {sourcename:"2" targetname:"10"  arrowstyle:solid
+  backarrowstyle:none
+  backarrowsize:10
+}
+  edge: {sourcename:"3" targetname:"4"  arrowstyle:solid
+  backarrowstyle:none
+  backarrowsize:10
+}
+  edge: {sourcename:"3" targetname:"13"  arrowstyle:solid
+  backarrowstyle:none
+  backarrowsize:10
+}
+  edge: {sourcename:"6" targetname:"9"  arrowstyle:solid
+  backarrowstyle:none
+  backarrowsize:10
+}
+  edge: {sourcename:"8" targetname:"7"  arrowstyle:solid
+  backarrowstyle:none
+  backarrowsize:10
+}
+  edge: {sourcename:"12" targetname:"11"  arrowstyle:solid
+  backarrowstyle:none
+  backarrowsize:10
+}
+  edge: {sourcename:"12" targetname:"13"  arrowstyle:solid
+  backarrowstyle:none
+  backarrowsize:10
+}
+  edge: {sourcename:"13" targetname:"0"  arrowstyle:solid
+  backarrowstyle:none
+  backarrowsize:10
+}
+  edge: {sourcename:"14" targetname:"2"  arrowstyle:solid
+  backarrowstyle:none
+  backarrowsize:10
+}
+  edge: {sourcename:"16" targetname:"9"  arrowstyle:solid
+  backarrowstyle:none
+  backarrowsize:10
+}
+  edge: {sourcename:"19" targetname:"7"  arrowstyle:solid
+  backarrowstyle:none
+  backarrowsize:10
+}
+  edge: {sourcename:"2" targetname:"1"  label:"classdiagram"
+  arrowstyle:solid
+  backarrowstyle:none
+  textcolor:green
+}
+  edge: {sourcename:"2" targetname:"3"  label:"classdiagram"
+  arrowstyle:solid
+  backarrowstyle:none
+  textcolor:green
+}
+  edge: {sourcename:"14" targetname:"3"  label:"pkgdiagram"
+  arrowstyle:solid
+  backarrowstyle:none
+  textcolor:green
+}
+  edge: {sourcename:"18" targetname:"19"  label:"printer"
+  arrowstyle:solid
+  backarrowstyle:none
+  textcolor:green
+}
+}

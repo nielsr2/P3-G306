@@ -59,7 +59,7 @@ def funcArrToStr(multilevelDict):
     return json.dumps(dict)
 
 
-def generateComparison(photoArray, outputName=None, fileName=None):
+def generateComparison(photoArray, outputName=None, attrs=None ,  fileName=None):
     print("generateComparison")
     facesToSave = []
     for photo in photoArray:
@@ -74,6 +74,7 @@ def generateComparison(photoArray, outputName=None, fileName=None):
                     # print("EYEYEYEYEYEYEYEYEY")
                     for attr in eye.__dict__.items():
                         # print("attr", attr)
+                        print(attrs)
                         if attr[0] is fileName:
                             if attr[1] is not None:
                                 facesToSave.append(attr[1])

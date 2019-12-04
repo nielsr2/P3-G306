@@ -1,11 +1,22 @@
+
 import numpy as np
+import pylint
+# pyreverse -o png -p Pyreverse pylint/pyreverse/
+
+
+def returnAttr(obj, attributeName):
+    for attribute in obj.__dict__.items():
+        if attribute[0] is attributeName:
+            return attribute[1]  # return data for attribute
 
 
 class Photo:
     originalImage = None
+    loResImage = None
     path = None
     faces = []
     mask = None
+    bigMask = None
     def __init__(self, originalImage="None", path="None"):
         self.originalImage = originalImage
         self.path = path

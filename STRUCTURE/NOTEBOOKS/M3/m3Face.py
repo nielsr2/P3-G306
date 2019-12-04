@@ -23,6 +23,7 @@ def findEyes(photo, division, show=True):
     pil_image = Image.fromarray(copy)
     inputImg = copy
     inputImg = cv2.resize(inputImg, downScaledDim)
+    photo.loResImage = inputImg
     dimToScaleUp = division
     # if show:
         # print("originalShape", h, w, c)
@@ -265,16 +266,17 @@ def findEyes2(photo, division, show=True):
 
 def findEyes2(photo, division, show=True):
     # downScaledDim = (round(w/100 *(scalePercent)),round(h/100 * (scalePercent)))
-    h, w, c = photo.originalImage.shape
-    downScaledDim = ((round(w/division)),round(h/division))
-    copy = photo.originalImage.copy()
-    pil_image = Image.fromarray(copy)
-    inputImg = copy
-    img = cv2.resize(inputImg, downScaledDim)
+    # h, w, c = photo.originalImage.shape
+    # downScaledDim = ((round(w/division)),round(h/division))
+    # copy = photo.originalImage.copy()
+    # pil_image = Image.fromarray(copy)
+    # inputImg = copy
+    # img = cv2.resize(inputImg, downScaledDim)
+    img = photo.loResImage
     dimToScaleUp = division
     detector = dlib.get_frontal_face_detector()
     dets = detector(img, 1)
-    print("dets", dets)
+    # print("dets", dets)
     print("Number of faces detected: {}".format(len(dets)))
     for index, data in enumerate(dets):
         if index == 0:
@@ -282,37 +284,48 @@ def findEyes2(photo, division, show=True):
             #     k, d.left(), d.top(), d.right(), d.bottom()))
             # Get the landmarks/parts for the face in box d.
             shape = predictor(img, data)
-            print("kkkk", index)
+            # print("kkkk", index)
             # for part in shape.part
             # print("shape.parts():", shape.parts())
             # print("Part 0: {}, Part 1: {} ...".format(shape.part(0),
                                                     # shape.part(1)))
             points = []
-            imgwithPoints = img.copy()
+            # imgwithPoints = photo.originalImage.copy()
             for i in range(shape.num_parts):
                 point = shape.part(i)
                 # for x, y in set:
-                imgwithPoints = cv2.rectangle(imgwithPoints, (point.x - 10, point.y - 10 ), (point.x + 10, point.y + 10), (0, 0, 255), -1)
-                points.append([round(point.x * division), round(point.y * division)])
+                if (i >= 26 and i <= 69):
+                # imgwithPoints = cv2.rectangle(imgwithPoints, (round((point.x* division) - 10), round((point.y * division )- 10) ), (round((point.x* division) + 10), round((point.y*division ) + 10)), (0, 0, 255), -1)
+                # imgwithPoints = cv2.putText(imgwithPoints, str(i), (point.x * division, point.y * division), 1, 3, 0.1, thickness = 1)
+                    points.append([round(point.x * division), round(point.y * division)])
+            # m3Show.imshow(imgwithPoints, "in bounds! imgwithPoints")
+            # cv2.imwrite("heyulooknieelz++++" + datetime.now().strftime("%d-%m-%Y--%H-%M-%S") + ".jpg", imgwithPoints)
+                # imgwithPoints = cv2.rectangle(imgwithPoints, (point.x - 10, point.y - 10 ), (point.x + 10, point.y + 10), (0, 0, 255), -1)
+
             # cv2.imwrite("pointsss" + datetime.now().strftime("%d-%m-%Y--%H-%M-%S") + ".jpg", imgwithPoints)
-            m3Show.imshow(imgwithPoints, "imgwithPoints")
+            # m3Show.imshow(imgwithPoints, "imgwithPoints")
             for eye in photo.faces[0].eyes:
                 cropRect = eye.cropRect
-                print("cropRect", cropRect)
+                # print("cropRect", cropRect)
+                eye.manyLandmarkPoints = []
                 for x, y in points:
                 #"The box is a 4-tuple defining the left, upper, right, and lower pixel coordinate"
                     # print("x, y", x,y)
+                    # print(photo.__dict__.items())
 
-                    imgwithPoints = img.copy()
                     if (x > cropRect[0] and x < cropRect[2]):
                         if (y > cropRect[1] and y < cropRect[3]):
-                            print("in bounds x, y", x, y)
+                            # print("in bounds x, y", x, y)
                             eye.manyLandmarkPoints.append([x, y])
-                            imgwithPoints = cv2.rectangle(imgwithPoints, (round((x) - 100), round((y )- 100) ), (round((x ) + 100), round((y ) + 100)), (0, 0, 255), -1)
-                m3Show.imshow(imgwithPoints, "in bounds! imgwithPoints")
-                cv2.imwrite("pointsssonlyeyes" + datetime.now().strftime("%d-%m-%Y--%H-%M-%S") + ".jpg", imgwithPoints)
 
+            # imgwithPoints = photo.originalImage.copy()
+            # for eye in photo.faces[0].eyes:
+            #     for x,y in points:
+            #         imgwithPoints = cv2.rectangle(imgwithPoints, (round((x) - 10), round((y  )- 10) ), (round((x) + 10), round((y ) + 10)), (0, 0, 255), -1)
+            #     m3Show.imshow(imgwithPoints, "in bounds! imgwithPoints")
+            # cv2.imwrite("pointsss++++" + datetime.now().strftime("%d-%m-%Y--%H-%M-%S") + ".jpg", imgwithPoints)
     return photo
 
 predictor = dlib.shape_predictor("MODELS/shape_predictor_194_face_landmarks.dat")
+# predictor = dlib.shape_predictor(("MODELS/2.dat"))
 # def find194(img):
