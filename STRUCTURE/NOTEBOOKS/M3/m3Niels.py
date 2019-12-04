@@ -156,10 +156,14 @@ def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None
                 # print("NIBBBBBsss")
                 params = preArray[function]
                 photo.faces = function(photo, **params)
-        elif (function.__name__ == "fakeEyes"):
+        elif (function.__name__ == "fakeEyes" ):
             # print("fakeEyes")
             params = preArray[function]
             photoArray = function(photoArray, **params)
+        elif (function.__name__ == "findEyes2"):
+            params = preArray[function]
+            for photo in photoArray:
+                photo = function(photo, **params)
         else:
             # for photo in photoArray:
             params = preArray[function]
@@ -203,11 +207,12 @@ def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None
         params = irisArray[function]
         if ("eye" in params):
             # m3F.printBlue(("Doing an eye with" + currentFunctionName))
-            for face in photo.faces:
-                if face.eyes is not None:
-                    for eye in face.eyes:
-                        params["eye"] = eye
-                        eye = function(**params)
+            for photo in photoArray:
+                for face in photo.faces:
+                    # if face.eyes is not None:
+                        for eye in face.eyes:
+                            params["eye"] = eye
+                            eye = function(**params)
         else:
             for photo in photoArray:
                 for face in photo.faces:

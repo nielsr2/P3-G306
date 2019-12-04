@@ -16,12 +16,15 @@ def semicircle(eye, show):
     #iris = "iris_test2.jpeg"
     #img = cv2.imread(path)
     
-    img = eye.wip
+    #img = eye.wip
+    img = eye.iris
     cimg = img
     m3F.imshow(cimg, "cimg")
     
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    canny = cv2.Canny(img,200,20)
+    canny = cv2.Canny(img,100,img.shape[0])
+    
+    m3F.imshow(canny, "semi circle canny")
     
     
     for i in eye.circle[0,:]:
