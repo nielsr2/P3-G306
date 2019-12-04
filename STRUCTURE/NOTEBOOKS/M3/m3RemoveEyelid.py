@@ -39,13 +39,11 @@ def removeEyelid(eye, show):
     
     m3F.imshow(gray,"iris blob")
     
-    kernel1 = np.ones((5, 5), np.uint8)
+    kernel1 = np.ones((15, 15), np.uint8)
     kernel2 = np.ones((3, 3), np.uint8)
-    closing1 = cv2.morphologyEx(gray, cv2.MORPH_CLOSE, kernel1,iterations=6)
+    closing1 = cv2.morphologyEx(gray, cv2.MORPH_CLOSE, kernel1,iterations=2)
     closing2 = cv2.morphologyEx(gray, cv2.MORPH_CLOSE, kernel2)
-    opening = cv2.morphologyEx(gray, cv2.MORPH_OPEN, kernel1)
     
-    m3F.imshow(closing1,"closed. Kernel 3, 6 iterations")
-    m3F.imshow(opening,"opened. Kernel 15")
+    m3F.imshow(closing1,"closed. Kernel 15, 2 iterations")
     #m3F.imshow(closing2,"closed. Kernel 3")
     return closing1
