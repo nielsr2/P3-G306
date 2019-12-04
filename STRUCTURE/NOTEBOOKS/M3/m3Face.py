@@ -95,46 +95,46 @@ def findEyes(photo, division, show=True):
 
 import dlib
 
-
-
-def findEyes2(photo, division, show=True):
-    detector = dlib.get_frontal_face_detector()
-
-    # downScaledDim = (round(w/100 *(scalePercent)),round(h/100 * (scalePercent)))
-    h, w, c = photo.originalImage.shape
-    downScaledDim = ((round(w/division)),round(h/division))
-    copy = photo.originalImage.copy()
-    pil_image = Image.fromarray(copy)
-    inputImg = copy
-    img = cv2.resize(inputImg, downScaledDim)
-    dimToScaleUp = division
-    predictor = dlib.shape_predictor
-    ("MODELS/shape_predictor_194_face_landmarks.dat")
-    dets = detector(img, 1)
-    print("dets", dets)
-    print("Number of faces detected: {}".format(len(dets)))
-    for k, d in enumerate(dets):
-        # print("Detection {}: Left: {} Top: {} Right: {} Bottom: {}".format(
-        #     k, d.left(), d.top(), d.right(), d.bottom()))
-        # Get the landmarks/parts for the face in box d.
-        shape = predictor(img, d)
-        print("kkkk", k)
-        # for part in shape.part
-        # print("shape.parts():", shape.parts())
-        # print("Part 0: {}, Part 1: {} ...".format(shape.part(0),
-                                                  # shape.part(1)))
-
-        imgwithPoints = img.copy()
-        for i in range(shape.num_parts):
-            p = shape.part(i)
-            print("p", p)
-            # for x, y in set:
-            imgwithPoints = cv2.rectangle(imgwithPoints, (p.x - 10, p.y - 10 ), (p.x + 10, p.y + 10), (0, 0, 255), -1)
-        cv2.imwrite("pointsss" + datetime.now().strftime("%d-%m-%Y--%H-%M-%S") + ".jpg", imgwithPoints)
-        m3Show.imshow(imgwithPoints, "imgwithPoints")
-
-
-
+#
+#
+# def findEyes2(photo, division, show=True):
+#     detector = dlib.get_frontal_face_detector()
+#
+#     # downScaledDim = (round(w/100 *(scalePercent)),round(h/100 * (scalePercent)))
+#     h, w, c = photo.originalImage.shape
+#     downScaledDim = ((round(w/division)),round(h/division))
+#     copy = photo.originalImage.copy()
+#     pil_image = Image.fromarray(copy)
+#     inputImg = copy
+#     img = cv2.resize(inputImg, downScaledDim)
+#     dimToScaleUp = division
+#     predictor = dlib.shape_predictor
+#     ("MODELS/shape_predictor_194_face_landmarks.dat")
+#     dets = detector(img, 1)
+#     print("dets", dets)
+#     print("Number of faces detected: {}".format(len(dets)))
+#     for k, d in enumerate(dets):
+#         # print("Detection {}: Left: {} Top: {} Right: {} Bottom: {}".format(
+#         #     k, d.left(), d.top(), d.right(), d.bottom()))
+#         # Get the landmarks/parts for the face in box d.
+#         shape = predictor(img, d)
+#         print("kkkk", k)
+#         # for part in shape.part
+#         # print("shape.parts():", shape.parts())
+#         # print("Part 0: {}, Part 1: {} ...".format(shape.part(0),
+#                                                   # shape.part(1)))
+#
+#         imgwithPoints = img.copy()
+#         for i in range(shape.num_parts):
+#             p = shape.part(i)
+#             # print("p", p)
+#             # for x, y in set:
+#             imgwithPoints = cv2.rectangle(imgwithPoints, (p.x - 10, p.y - 10 ), (p.x + 10, p.y + 10), (0, 0, 255), -1)
+#         cv2.imwrite("pointsss" + datetime.now().strftime("%d-%m-%Y--%H-%M-%S") + ".jpg", imgwithPoints)
+#         m3Show.imshow(imgwithPoints, "imgwithPoints")
+#
+#
+#
 
 
 
@@ -277,7 +277,7 @@ def findEyes2(photo, division, show=True):
     detector = dlib.get_frontal_face_detector()
     dets = detector(img, 1)
     # print("dets", dets)
-    print("Number of faces detected: {}".format(len(dets)))
+    # print("Number of faces detected: {}".format(len(dets)))
     for index, data in enumerate(dets):
         if index == 0:
             # print("Detection {}: Left: {} Top: {} Right: {} Bottom: {}".format(
@@ -326,6 +326,6 @@ def findEyes2(photo, division, show=True):
             # cv2.imwrite("pointsss++++" + datetime.now().strftime("%d-%m-%Y--%H-%M-%S") + ".jpg", imgwithPoints)
     return photo
 
-predictor = dlib.shape_predictor("MODELS/shape_predictor_194_face_landmarks.dat")
-# predictor = dlib.shape_predictor(("MODELS/2.dat"))
+# predictor = dlib.shape_predictor("MODELS/shape_predictor_194_face_landmarks.dat")
+predictor = dlib.shape_predictor(("MODELS/2.dat"))
 # def find194(img):

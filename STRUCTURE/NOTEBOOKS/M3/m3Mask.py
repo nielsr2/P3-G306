@@ -10,6 +10,11 @@ from matplotlib import pyplot as plt
 sys.path.append("/M3")
 
 
+
+
+
+
+
 def makeCircularMask(photo, show=True, onlyOne=True):
     # for photo in photoArray:
         # print("photo")
@@ -36,6 +41,12 @@ def makeCircularMask(photo, show=True, onlyOne=True):
     return photo
 
 
+
+
+
+
+
+
 def makeCircularOutline(photo, show=True):
     for face in photo.faces:
         for eye in face.eyes:
@@ -49,6 +60,17 @@ def makeCircularOutline(photo, show=True):
                     if (show):
                         m3Show.imshow(maskImg, "mask")
     return photo
+
+
+
+
+
+
+
+
+
+
+
 
 
 def fullImgEyeOutline(photo, show):
@@ -73,6 +95,18 @@ def fullImgEyeOutline(photo, show):
     return photo
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 def makeFullMask(inputImg, show):
     fullMask = inputImg.orginalImage.copy()
     fullMask.fill(0)
@@ -89,6 +123,7 @@ def makeFullMask(inputImg, show):
             fullMask[coor[1]:coor[1]+eye.mask.shape[0], coor[0]:coor[0]+eye.mask.shape[1]] = eye.mask
     inputImg.mask = fullMask
     if (show):
+        pass
         # m3Show.imshow(inputImg.orginalImage, "full original")
         # m3Show.imshow(fullMask, "full mask")
     return inputImg
@@ -103,11 +138,10 @@ def makePolyMask(photo, show=True):
     polyMask =  np.zeros_like(photo.originalImage)
     for face in photo.faces:
         for eye in face.eyes:
-
-
-            print("EYE COOR", eye.landmarkPoints)
+            # print("EYE COOR", eye.landmarkPoints)
             polyMask = cv2.fillPoly(polyMask, np.int_([eye.landmarkPoints]), (255, 255, 255))
-            m3Show.imshow(polyMask, "POLYMASK")
+            if show:
+                m3Show.imshow(polyMask, "POLYMASK")
             # epm = m3Class.Eye(np.asarray(pil_image.crop(left)), left, lEyeCoor)
             # epm = polyMask.crop(eye.cropRect)
             eye.polyMask = m3F.typeSwap(m3F.typeSwap(polyMask).crop(eye.cropRect))
@@ -117,9 +151,11 @@ def makePolyMask(photo, show=True):
     return photo
 
 
+
+
+
 def makeManyPolyMask(photo, show=True):
     polyMask =  np.zeros_like(photo.originalImage)
-
     for face in photo.faces:
         for eye in face.eyes:
 
@@ -133,6 +169,13 @@ def makeManyPolyMask(photo, show=True):
             m3Show.imshow(eye.manyPolyMask, "manypoly")
 
     return photo
+
+
+
+
+
+
+
 
 
 def applyPolyMask(eye, show=True):
@@ -149,15 +192,29 @@ def applyPolyMask(eye, show=True):
 # import attr
 
 
+
+
+
+
 def returnAttr(obj, attributeName):
     for attribute in obj.__dict__.items():
         if attribute[0] is attributeName:
             return attribute[1]  # return data for attribute
 
+
+
+
+
+
+
 def rattr(obj, attributeName):
     for attribute in obj.__dict__.items():
         if attribute[0] is attributeName:
             return attribute[1]  # return data for attribute
+
+
+
+
 
 def mask(eye, img=None, mask=None, dest=None, show=True):
     # print(eye.__dict__.items())
@@ -195,29 +252,29 @@ def applyCircMask(photo, show=True, useOriginal=True):
                 m3Show.imshow(eye.iris, "masked")
     return photo
 
-
-
-
-def placeEyesInFull(photo, fullImgAttr, eyeAttr, dest, show, mask=True):
-    fullImg = None
-    if mask:  # if mask, make black
-        fullImg = np.zeros_like(returnAttr(photo, fullImgAttr))
-    else:
-        fullImg = rattr(photo, fullImgAttr).copy()
-    x, y, channels = fullImg.shape
-
-    for eye in photo.eyes:
-        eyeAttr = rattr(photo, eyeAttr) # get the eyes images to put in full image
-        if eyeAttr is not None:
-            coor = eye.cropRect
-            # fullMask[coor[0]:x, coor[1]:y] = eye.mask
-            # print("coor", coor)
-            fullImg[coor[1]:coor[1]+eyeAttr.shape[0], coor[0]:coor[0]+eyeAttr.shape[1]] = eyeAttr
-    setattr(photo, dest, fullImg)
-    if (show):
-        m3Show.imshow(fullImg, "fullImg")
-
-    return photo
+#
+#
+#
+# def placeEyesInFull(photo, fullImgAttr, eyeAttr, dest, show, mask=True):
+#     fullImg = None
+#     if mask:  # if mask, make black
+#         fullImg = np.zeros_like(returnAttr(photo, fullImgAttr))
+#     else:
+#         fullImg = rattr(photo, fullImgAttr).copy()
+#     x, y, channels = fullImg.shape
+#
+#     for eye in photo.eyes:
+#         eyeAttr = rattr(photo, eyeAttr) # get the eyes images to put in full image
+#         if eyeAttr is not None:
+#             coor = eye.cropRect
+#             # fullMask[coor[0]:x, coor[1]:y] = eye.mask
+#             # print("coor", coor)
+#             fullImg[coor[1]:coor[1]+eyeAttr.shape[0], coor[0]:coor[0]+eyeAttr.shape[1]] = eyeAttr
+#     setattr(photo, dest, fullImg)
+#     if (show):
+#         m3Show.imshow(fullImg, "fullImg")
+#
+#     return photo
 
 # def cropToEue(photo,):
 #     for face in photo.faces:

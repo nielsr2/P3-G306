@@ -72,10 +72,12 @@ def generateComparison(photoArray, outputName=None, attrs=None ,  fileName=None)
                 for eye in face.eyes:
                     # m3Show.imshow(eye.wip, "fasf")
                     # print("EYEYEYEYEYEYEYEYEY")
+                    print(attrs)
                     for attr in eye.__dict__.items():
                         # print("attr", attr)
-                        print(attrs)
-                        if attr[0] is fileName:
+
+                        if attr[0] in attrs:
+                            # if
                             if attr[1] is not None:
                                 facesToSave.append(attr[1])
                             else:
@@ -121,6 +123,15 @@ def exportToFolder(photoArray, inputFolder, parent=None, fileName=None):
                             print("path", path)
                             cv2.imwrite(path, attr[1])
                             eyeCount += 1
+
+#        _           _
+#       | |         | |
+#  _ __ | |__   ___ | |_ ___
+# | '_ \| '_ \ / _ \| __/ _ \
+# | |_) | | | | (_) | || (_) |
+# | .__/|_| |_|\___/ \__\___/
+# | |
+# |_|
 
 
 def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None, debug=True, debugIris=True):
@@ -201,11 +212,29 @@ def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None
     print("**********************************************************************")
     print("**********************************************************************")
     m3F.printBlue("DOING IRIS FUNCION ARRAY")
-    print("**********************************************************************")
+    #          _ . - = - . _
+    #        . "  \  \   /  /  " .
+    #      ,  \                 /  .
+    #    . \   _,.--~=~"~=~--.._   / .
+    #   ;  _.-"  / \ !   ! / \  "-._  .
+    #  / ,"     / ,` .---. `, \     ". \
+    # /.'   `~  |   /:::::\   |  ~`   '.\
+    # \`.  `~   |   \:::::/   | ~`  ~ .'/
+    #  \ `.  `~ \ `, `~~~' ,` /   ~`.' /
+    #   .  "-._  \ / !   ! \ /  _.-"  .
+    #    ./    "=~~.._  _..~~=`"    \.
+    #      ,/         ""          \,
+    #        . _/             \_ .
+    #           " - ./. .\. - "
+    # print("**********************************************************************")
     print("**********************************************************************")
     for function in irisArray:
+
+
         m3F.printBlue("function name " + function.__name__)
         params = irisArray[function]
+
+
         if ("eye" in params):
             # m3F.printBlue(("Doing an eye with" + currentFunctionName))
             for photo in photoArray:
@@ -232,6 +261,33 @@ def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None
         else:
             photoArray = function(photoArray, **params)
     return photoArray
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def fakeEyes(photoArray):
@@ -282,3 +338,21 @@ def concat(images, direction="h"):
     else:
         result = np.concatenate(outImgs, axis=0)
     return result
+
+
+
+
+
+def rattr(obj, attributeName):
+    for attribute in obj.__dict__.items():
+        if attribute[0] is attributeName:
+            return attribute[1]  # return data for attribute
+
+# , input=irisOrg):
+#     return photo
+def storeAttr(photo, eyeAttr, attrName):
+    for face in photo.faces:
+        for eye in face.eyes:
+            setattr(eye, attrName, rattr(eye.eyeAttr, attrName))
+
+    return photo
