@@ -8,9 +8,8 @@ from PIL import ImageFilter, ImageEnhance
 import PIL
 import math
 
-def removeEyelid(inputImg, show):
+def removeEyelid(eye, show):
     #m3F.imshow(eye.iris,"removeEyelid")
-    eye = inputImg.photo.face.eye
     gray = cv2.cvtColor(eye.iris, cv2.COLOR_BGR2GRAY)
     (minVal, maxVal, minLoc, maxLoc) = cv2.minMaxLoc(gray)
     print("maxVal", maxVal)
@@ -34,16 +33,17 @@ def removeEyelid(inputImg, show):
                         #print("done here")
                         #gray.putpixel((x,y),minVal)
                         gray[x,y] = 0
+        break
                 
     #gray = m3F.typeSwap(gray)            
     
     m3F.imshow(gray,"iris blob")
     
-    kernel1 = np.ones((3, 3), np.uint8)
-    kernel2 = np.ones((15, 15), np.uint8)
-    closing1 = cv2.morphologyEx(gray, cv2.MORPH_CLOSE, kernel2)
-    closing2 = cv2.morphologyEx(gray, cv2.MORPH_CLOSE, kernel1)
+    kernel1 = np.ones((15, 15), np.uint8)
+    kernel2 = np.ones((3, 3), np.uint8)
+    closing1 = cv2.morphologyEx(gray, cv2.MORPH_CLOSE, kernel1,iterations=2)
+    closing2 = cv2.morphologyEx(gray, cv2.MORPH_CLOSE, kernel2)
     
-    m3F.imshow(closing1,"closed. Kernel 15")
-    m3F.imshow(closing2,"closed. Kernel 3")
+    m3F.imshow(closing1,"closed. Kernel 15, 2 iterations")
+    #m3F.imshow(closing2,"closed. Kernel 3")
     return closing1
