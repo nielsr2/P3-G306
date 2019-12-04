@@ -96,7 +96,7 @@ def batchProcess2(inputFolder, functionArray, export, onephoto):
             if (didEyes):
                 if (imagePath.eyes is not None):
                     for eye in imagePath.eyes:
-                        # print("eye coor: " + str(eye.coordinates))
+                        # print("eye coor: " + str(eye.cropRect))
                         if (currentFunctionName == "findCircleSimple" or currentFunctionName == "makeCircularMask"):
                             currentFunction["inputImg"] = eye
                             eye = function(**currentFunction)
