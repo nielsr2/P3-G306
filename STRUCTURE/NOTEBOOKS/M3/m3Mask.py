@@ -125,7 +125,7 @@ def makeManyPolyMask(photo, show=True):
             # epm = polyMask.crop(eye.cropRect)
             eye.manyPolyMask = m3F.typeSwap(m3F.typeSwap(polyMask).crop(eye.cropRect))
             if show:
-                m3Show.imshow(eye.manyPolyMask, "poly")
+                m3Show.imshow(eye.manyPolyMask, "manypoly")
 
     return photo
 def applyPolyMask(eye, show=True):

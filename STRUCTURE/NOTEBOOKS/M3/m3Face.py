@@ -293,8 +293,8 @@ def findEyes2(photo, division, show=True):
                 point = shape.part(i)
                 # for x, y in set:
                 imgwithPoints = cv2.rectangle(imgwithPoints, (point.x - 10, point.y - 10 ), (point.x + 10, point.y + 10), (0, 0, 255), -1)
-                points.append([point.x * division, point.y * division])
-            cv2.imwrite("pointsss" + datetime.now().strftime("%d-%m-%Y--%H-%M-%S") + ".jpg", imgwithPoints)
+                points.append([round(point.x * division), round(point.y * division)])
+            # cv2.imwrite("pointsss" + datetime.now().strftime("%d-%m-%Y--%H-%M-%S") + ".jpg", imgwithPoints)
             m3Show.imshow(imgwithPoints, "imgwithPoints")
             for eye in photo.faces[0].eyes:
                 cropRect = eye.cropRect
@@ -306,10 +306,11 @@ def findEyes2(photo, division, show=True):
                     imgwithPoints = img.copy()
                     if (x > cropRect[0] and x < cropRect[2]):
                         if (y > cropRect[1] and y < cropRect[3]):
-                            # print("in bounds x, y", x, y)
+                            print("in bounds x, y", x, y)
                             eye.manyLandmarkPoints.append([x, y])
-                            imgwithPoints = cv2.rectangle(imgwithPoints, (x - 100, y - 100 ), (x + 100, y + 100), (0, 0, 255), -1)
+                            imgwithPoints = cv2.rectangle(imgwithPoints, (round((x) - 100), round((y )- 100) ), (round((x ) + 100), round((y ) + 100)), (0, 0, 255), -1)
                 m3Show.imshow(imgwithPoints, "in bounds! imgwithPoints")
+                cv2.imwrite("pointsssonlyeyes" + datetime.now().strftime("%d-%m-%Y--%H-%M-%S") + ".jpg", imgwithPoints)
 
     return photo
 
