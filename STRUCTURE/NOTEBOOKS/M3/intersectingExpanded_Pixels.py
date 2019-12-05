@@ -8,10 +8,11 @@ def cntImgPxl (inputImg1, inputImg2):
     #INPUTIMAGE 2 IS THE BASECASE - The handmask
     #Important value !!!overlapingWhitePixelPer!!!!
 
-    inputImg1 = cv2.imread(inputImg1,cv2.IMREAD_GRAYSCALE)
-    inputImg2 = cv2.imread(inputImg2,cv2.IMREAD_GRAYSCALE)
-
-
+    #inputImg1 = cv2.imread(inputImg1,cv2.IMREAD_GRAYSCALE)
+    #inputImg2 = cv2.imread(inputImg2,cv2.IMREAD_GRAYSCALE)
+    inputImg1 =cv2.IMREAD_GRAYSCALE(inputImg1)
+    inputImg2 =cv2.IMREAD_GRAYSCALE(inputImg2)
+    
 
     ret,binary1 = cv2.threshold(inputImg1,127,255,cv2.THRESH_BINARY)
     ret,binary2 = cv2.threshold(inputImg2,127,255,cv2.THRESH_BINARY)
