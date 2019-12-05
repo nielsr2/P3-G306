@@ -59,7 +59,7 @@ def funcArrToStr(multilevelDict):
     return json.dumps(dict)
 
 
-def generateComparison(photoArray, outputName=None, fileName=None):
+def generateComparison(photoArray, outputName=None, attrs=None ,  fileName=None):
     print("generateComparison")
     facesToSave = []
     for photo in photoArray:
@@ -72,9 +72,12 @@ def generateComparison(photoArray, outputName=None, fileName=None):
                 for eye in face.eyes:
                     # m3Show.imshow(eye.wip, "fasf")
                     # print("EYEYEYEYEYEYEYEYEY")
+                    print(attrs)
                     for attr in eye.__dict__.items():
                         # print("attr", attr)
-                        if attr[0] is fileName:
+
+                        if attr[0] in attrs:
+                            # if
                             if attr[1] is not None:
                                 facesToSave.append(attr[1])
                             else:
@@ -121,8 +124,17 @@ def exportToFolder(photoArray, inputFolder, parent=None, fileName=None):
                             cv2.imwrite(path, attr[1])
                             eyeCount += 1
 
+#        _           _
+#       | |         | |
+#  _ __ | |__   ___ | |_ ___
+# | '_ \| '_ \ / _ \| __/ _ \
+# | |_) | | | | (_) | || (_) |
+# | .__/|_| |_|\___/ \__\___/
+# | |
+# |_|
 
-def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None, debug=True, debugIris=True):
+
+def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None, debug=True, debugIris=True, comparisonFolder="PICTURES/Test_set_easy_mask"):
     # print("photoBatch")
     photoArray = []
     # **********************************************************************
@@ -131,7 +143,10 @@ def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None
         # doing batchprocess for folder of images
         # m3F.printBlue("doing batchprocess for folder of images")
         inputImages = glob.glob(ins + "*.*g")
+        inputImages.sort()
         #print("is " + inputImages)
+
+
         for imagePath in inputImages:
             # print("?????!!!!!??????")
             inputImage = cv2.imread(imagePath, -1)
@@ -200,11 +215,29 @@ def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None
     print("**********************************************************************")
     print("**********************************************************************")
     m3F.printBlue("DOING IRIS FUNCION ARRAY")
-    print("**********************************************************************")
+    #          _ . - = - . _
+    #        . "  \  \   /  /  " .
+    #      ,  \                 /  .
+    #    . \   _,.--~=~"~=~--.._   / .
+    #   ;  _.-"  / \ !   ! / \  "-._  .
+    #  / ,"     / ,` .---. `, \     ". \
+    # /.'   `~  |   /:::::\   |  ~`   '.\
+    # \`.  `~   |   \:::::/   | ~`  ~ .'/
+    #  \ `.  `~ \ `, `~~~' ,` /   ~`.' /
+    #   .  "-._  \ / !   ! \ /  _.-"  .
+    #    ./    "=~~.._  _..~~=`"    \.
+    #      ,/         ""          \,
+    #        . _/             \_ .
+    #           " - ./. .\. - "
+    # print("**********************************************************************")
     print("**********************************************************************")
     for function in irisArray:
+
+
         m3F.printBlue("function name " + function.__name__)
         params = irisArray[function]
+
+
         if ("eye" in params):
             # m3F.printBlue(("Doing an eye with" + currentFunctionName))
             for photo in photoArray:
@@ -223,7 +256,7 @@ def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None
                                 eye.iris = function(**params)
                                 # m3Show.imshow(eye.iris, "eye.iris NIELS TEST")
     # **********************************************************************
-    #  perform POST functions ( such as generate comparison etc.)
+    #  perform POST functions ( such as generate comparison etc.)f
     for function in postArray:
         params = postArray[function]
         if (function.__name__ == "exportToFolder"):
@@ -231,6 +264,51 @@ def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None
         else:
             photoArray = function(photoArray, **params)
     return photoArray
+
+
+
+
+
+
+
+
+
+
+
+
+
+def loadMasksForComparison(photoArray, maskFolder):
+    maskImgs = glob.glob(maskFolder + "*.*g")
+    #print("is " + inputImages)
+    print("maskImgs", maskImgs)
+    maskImgs.sort()
+    print("maskImgs", maskImgs)
+    # for maskPath in maskImgs:
+        # print("maskPath", maskPath
+    count = 0
+    for photo in photoArray:
+        # inputImage = cv2.imread(imagePath, -1)
+        photo.testMask = cv2.imread(maskImgs[count], -1)
+        m3Show.imshow(photo.testMask, "photo.testMask")
+        count += 1
+        for face in photo.faces:
+            for eye in face.eyes:
+                eye.testMask = m3F.typeSwap(m3F.typeSwap(photo.testMask).crop(eye.cropRect))
+    return photoArray
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 def fakeEyes(photoArray):
@@ -281,3 +359,21 @@ def concat(images, direction="h"):
     else:
         result = np.concatenate(outImgs, axis=0)
     return result
+
+
+
+
+
+def rattr(obj, attributeName):
+    for attribute in obj.__dict__.items():
+        if attribute[0] is attributeName:
+            return attribute[1]  # return data for attribute
+
+# , input=irisOrg):
+#     return photo
+def storeAttr(photo, eyeAttr, attrName):
+    for face in photo.faces:
+        for eye in face.eyes:
+            setattr(eye, attrName, rattr(eye.eyeAttr, attrName))
+
+    return photo
