@@ -171,7 +171,45 @@ def makeManyPolyMask(photo, show=True):
     return photo
 
 
+def makeManyPolyRegMask(photo, show=True):
+    polyMask =  np.zeros_like(photo.originalImage)
+    for face in photo.faces:
+        for eye in face.eyes:
+            
+            print("landmarks locations",eye.manyLandmarkPoints)
+            print("landmarks x",[x[0] for x in eye.manyLandmarkPoints])
+            print("10 landmarks x",[x[0] for x in eye.manyLandmarkPoints[0:10]])
+            #x_upper = [x[0] for x in eye.manyLandmarkPoints[0:10]]
+            x_upper = []
+            y_upper = []
+            x_lower = []
+            y_lower = []
+            for x,y in eye.manyLandmarkPoints[1:10]:
+                x_upper.append(x)
+                y_upper.append(y)
+                
+            for x,y in eye.manyLandmarkPoints[10:20]:
+                x_lower.append(x)
+                y_lower.append(y)
+                
+            upper_points = np.array(eye.manyLandmarkPoints[0:10])
+            print("upper points",upper_points,upper_points.dtype)
 
+            
+            
+
+            # print("manyLandmarkPoints", eye.manyLandmarkPoints)
+            polyMask = cv2.fillPoly(polyMask, np.int_([eye.manyLandmarkPoints]), (255, 255, 255))
+            # m3Show.imshow(polyMask, "POLYMASK")
+            # epm = m3Class.Eye(np.asarray(pil_image.crop(left)), left, lEyeCoor)
+            # epm = polyMask.crop(eye.cropRect)
+            eye.manyPolyMask = m3F.typeSwap(m3F.typeSwap(polyMask).crop(eye.cropRect))
+            
+            cv2.polylines(eye.manyPolyMask, np.int32([upper_points]), True, (0,0, 255))  # args: image, points, closed, color
+            # if show:
+            m3Show.imshow(eye.manyPolyMask, "manypoly")
+
+    return photo
 
 
 
