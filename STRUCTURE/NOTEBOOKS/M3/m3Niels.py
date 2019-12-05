@@ -58,45 +58,45 @@ def funcArrToStr(multilevelDict):
         dict.append(e)
     return json.dumps(dict)
 
-
-def generateComparison(photoArray, outputName=None, attrs=None ,  fileName=None):
-    print("generateComparison")
-    facesToSave = []
-    for photo in photoArray:
-        # if (jnustEyes
-        # print("PHOTO")
-        for face in photo.faces:
-            # print("FACE")
-            eyesToSave = []
-            if not (type(face.eyes) == type(None)):
-                for eye in face.eyes:
-                    # m3Show.imshow(eye.wip, "fasf")
-                    # print("EYEYEYEYEYEYEYEYEY")
-                    print(attrs)
-                    for attr in eye.__dict__.items():
-                        # print("attr", attr)
-
-                        if attr[0] in attrs:
-                            # if
-                            if attr[1] is not None:
-                                facesToSave.append(attr[1])
-                            else:
-                                facesToSave.append(eye.image)
-            # if (len(eyesToSave) > 1):
-                # facesToSave.append(eyesToSave)
-            # else:
-                # facesToSave.append(eyesToSave[0])
-    now = datetime.now()
-    now_string = now.strftime("%d-%m-%Y--%H-%M-%S")
-    # print(facesToSave[0], type(facesToSave[0]))
-    output = concat(facesToSave, direction="v")
-    # m3Show.imshow(output, "asdfadf")
-    if (outputName is not None):
-        # file = open(("EXPORTS/COMPARISONS/" + fileName + "_" + now_string + ".txt"), "w+")
-        # file.write(ffxa)
-        cv2.imwrite("EXPORTS/COMPARISONS/" + outputName + "_" + now_string + ".jpg", output)
-    else:
-        cv2.imwrite("EXPORTS/COMPARISONS/" + now_string + ".jpg", output)
+#
+# def generateComparison(photoArray, outputName=None, attrs=None ,  fileName=None):
+#     print("generateComparison")
+#     facesToSave = []
+#     for photo in photoArray:
+#         # if (jnustEyes
+#         # print("PHOTO")
+#         for face in photo.faces:
+#             # print("FACE")
+#             eyesToSave = []
+#             if not (type(face.eyes) == type(None)):
+#                 for eye in face.eyes:
+#                     # m3Show.imshow(eye.wip, "fasf")
+#                     # print("EYEYEYEYEYEYEYEYEY")
+#                     print(attrs)
+#                     for attr in eye.__dict__.items():
+#                         # print("attr", attr)
+#
+#                         if attr[0] in attrs:
+#                             # if
+#                             if attr[1] is not None:
+#                                 facesToSave.append(attr[1])
+#                             # else:
+#                             #     facesToSave.append(eye.image)
+#             # if (len(eyesToSave) > 1):
+#                 # facesToSave.append(eyesToSave)
+#             # else:
+#                 # facesToSave.append(eyesToSave[0])
+#     now = datetime.now()
+#     now_string = now.strftime("%d-%m-%Y--%H-%M-%S")
+#     # print(facesToSave[0], type(facesToSave[0]))
+#     output = concat(facesToSave, direction="v")
+#     # m3Show.imshow(output, "asdfadf")
+#     if (outputName is not None):
+#         # file = open(("EXPORTS/COMPARISONS/" + fileName + "_" + now_string + ".txt"), "w+")
+#         # file.write(ffxa)
+#         cv2.imwrite("EXPORTS/COMPARISONS/" + outputName + "_" + now_string + ".jpg", output)
+#     else:
+#         cv2.imwrite("EXPORTS/COMPARISONS/" + now_string + ".jpg", output)
 
 
 def exportToFolder(photoArray, inputFolder, parent=None, fileName=None):
@@ -116,7 +116,7 @@ def exportToFolder(photoArray, inputFolder, parent=None, fileName=None):
                 for eye in face.eyes:
                     for attr in eye.__dict__.items():
                         print("attr", attr)
-                        if attr[0] is fileName:
+                        if attr[0] is attr:
                             # m3Show.imshow(attr[1],"asdf")
                             os.makedirs(outputFolder, exist_ok=True)
                             path = outputFolder  + os.path.basename(photo.path) + "_" + str(eyeCount) + ".jpeg"
@@ -134,7 +134,7 @@ def exportToFolder(photoArray, inputFolder, parent=None, fileName=None):
 # |_|
 
 
-def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None, debug=True, debugIris=True, comparisonFolder="PICTURES/Test_set_easy_mask"):
+def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None, debug=True, debugIris=True):
     # print("photoBatch")
     photoArray = []
     # **********************************************************************
@@ -232,20 +232,17 @@ def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None
     # print("**********************************************************************")
     print("**********************************************************************")
     for function in irisArray:
-
-
         m3F.printBlue("function name " + function.__name__)
         params = irisArray[function]
-
 
         if ("eye" in params):
             # m3F.printBlue(("Doing an eye with" + currentFunctionName))
             for photo in photoArray:
                 for face in photo.faces:
                     # if face.eyes is not None:
-                        for eye in face.eyes:
-                            params["eye"] = eye
-                            eye = function(**params)
+                    for eye in face.eyes:
+                        params["eye"] = eye
+                        eye = function(**params)
         else:
             for photo in photoArray:
                 for face in photo.faces:
@@ -266,25 +263,14 @@ def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None
     return photoArray
 
 
-
-
-
-
-
-
-
-
-
-
-
 def loadMasksForComparison(photoArray, maskFolder):
     maskImgs = glob.glob(maskFolder + "*.*g")
-    #print("is " + inputImages)
+    # print("is " + inputImages)
     print("maskImgs", maskImgs)
     maskImgs.sort()
     print("maskImgs", maskImgs)
     # for maskPath in maskImgs:
-        # print("maskPath", maskPath
+    #       print("maskPath", maskPath
     count = 0
     for photo in photoArray:
         # inputImage = cv2.imread(imagePath, -1)
@@ -293,22 +279,11 @@ def loadMasksForComparison(photoArray, maskFolder):
         count += 1
         for face in photo.faces:
             for eye in face.eyes:
-                eye.testMask = m3F.typeSwap(m3F.typeSwap(photo.testMask).crop(eye.cropRect))
+                eye.testMask = m3F.typeSwap(
+                                m3F.typeSwap(photo.testMask)
+                                .crop(eye.cropRect)
+                                                )
     return photoArray
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 def fakeEyes(photoArray):
@@ -328,12 +303,10 @@ def concat(images, direction="h"):
         # m3Show.imshow(img, "img in images (concat)")
         # if img is not None:
         if (len(img.shape) == 3):
-            # print("######## WAS 3 DIM")
             h, w, c = img.shape
             hs.append(h)
             ws.append(w)
         else:
-            # print("######## WAS ELSE DIM")
             h, w = img.shape
             hs.append(h)
             ws.append(w)
@@ -361,9 +334,6 @@ def concat(images, direction="h"):
     return result
 
 
-
-
-
 def rattr(obj, attributeName):
     for attribute in obj.__dict__.items():
         if attribute[0] is attributeName:
@@ -371,9 +341,47 @@ def rattr(obj, attributeName):
 
 # , input=irisOrg):
 #     return photo
+
+
 def storeAttr(photo, eyeAttr, attrName):
     for face in photo.faces:
         for eye in face.eyes:
             setattr(eye, attrName, rattr(eye.eyeAttr, attrName))
 
     return photo
+
+#  attrs: a list of attrs of eye. like ["image", "wip", "iris", "mask"]
+def generateComparison(photoArray, outputName=None,
+                       attrs=None, folderName=None):
+    # print("generateComparison")
+    for photo in photoArray:
+        facesToSave = []
+        for face in photo.faces:
+            if not (type(face.eyes) == type(None)): # TODO: fix this
+                for eye in face.eyes:
+                    # print(attrs)
+                    for attr in eye.__dict__.items():
+                        # print("attr", attr)
+
+                        if attr[0] in attrs:
+                            # if
+                            if attr[1] is not None:
+                                facesToSave.append(attr[1])
+                            # else:
+                            #     facesToSave.append(eye.image)
+            # if (len(eyesToSave) > 1):
+                # facesToSave.append(eyesToSave)
+            # else:
+                # facesToSave.append(eyesToSave[0])
+        now = datetime.now()
+        now_string = now.strftime("%d-%m-%Y--%H-%M-%S")
+        # print(facesToSave[0], type(facesToSave[0]))
+        output = concat(facesToSave, direction="v")
+        m3Show.imshow(output, "generateComparison output")
+        # if (outputName is not None):
+            # file = open(("EXPORTS/COMPARISONS/" + fileName + "_" + now_string + ".txt"), "w+")
+            # file.write(ffxa)
+        os.makedirs("EXPORTS/" + folderName + "/",exist_ok=True)
+        cv2.imwrite("EXPORTS/" + folderName + "/" + os.path.basename(photo.path) + "_"  + ".jpg", output)
+        # else:
+        #     cv2.imwrite("EXPORTS/COMPARISONS/" + now_string + ".jpg", output)

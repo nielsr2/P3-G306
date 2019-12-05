@@ -68,7 +68,7 @@ def findEyes(photo, division, show=True):
             for x, y in eyeLandmarkPoints:
                 xs.append(x)
                 ys.append(y)
-                print("x y ", x, y)
+                # print("x y ", x, y)
             xs.sort(reverse=True)
             ys.sort(reverse=True)
             maxX = xs[0]
@@ -308,7 +308,9 @@ def findEyes2(photo, division, show=True):
                 cropRect = eye.cropRect
                 # print("cropRect", cropRect)
                 eye.manyLandmarkPoints = []
+                ys = []
                 for x, y in points:
+                    ys.append(y)
                 #"The box is a 4-tuple defining the left, upper, right, and lower pixel coordinate"
                     # print("x, y", x,y)
                     # print(photo.__dict__.items())

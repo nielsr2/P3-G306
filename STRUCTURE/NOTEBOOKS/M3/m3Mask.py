@@ -47,7 +47,7 @@ def makeCircularMask(photo, show=True, onlyOne=True):
 
 
 
-def makeCircularOutline(photo, show=True):
+def makeCircularOutline(photo, show=True, dest=None):
     for face in photo.faces:
         for eye in face.eyes:
             maskImg = eye.wip.copy()
@@ -56,7 +56,8 @@ def makeCircularOutline(photo, show=True):
                 for i in eye.circle[0, :]:
                     print("i", i)
                     cv2.circle(maskImg, (i[0], i[1]), i[2], (255, 255, 255), 2)
-                    eye.mask = maskImg
+                    # eye.mask = maskImg
+                    setattr(eye, dest, maskImg)
                     if (show):
                         m3Show.imshow(maskImg, "mask")
     return photo
@@ -224,9 +225,9 @@ def mask(eye, img=None, mask=None, dest=None, show=True):
     print( "mask.shape", mask.shape)
     destination = returnAttr(eye, dest)
     bah = cv2.bitwise_and(img, mask)
-    m3Show.imshow(bah, "mask masked")
-    m3Show.imshow(eye.image, "to compare")
-    # setattr(eye, dest, "string")
+    # m3Show.imshow(bah, "mask masked")
+    # m3Show.imshow(eye.image, "to compare")
+    setattr(eye, dest, bah)
     # print(eye.__dict__.items())
 
     return eye
