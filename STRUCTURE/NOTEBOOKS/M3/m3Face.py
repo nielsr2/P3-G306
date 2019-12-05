@@ -326,6 +326,6 @@ def findEyes2(photo, division, show=True):
             # cv2.imwrite("pointsss++++" + datetime.now().strftime("%d-%m-%Y--%H-%M-%S") + ".jpg", imgwithPoints)
     return photo
 
-# predictor = dlib.shape_predictor("MODELS/shape_predictor_194_face_landmarks.dat")
-predictor = dlib.shape_predictor(("MODELS/2.dat"))
+predictor = dlib.shape_predictor("MODELS/shape_predictor_194_face_landmarks.dat")
+# predictor = dlib.shape_predictor(("MODELS/2.dat"))
 # def find194(img):

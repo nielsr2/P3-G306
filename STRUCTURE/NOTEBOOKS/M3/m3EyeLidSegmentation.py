@@ -27,9 +27,9 @@ def segmentEyelid(eye, show):
 
     #print("indices",indices)
 
-    print("shape",iris.shape[0])
+    print("shape", iris.shape[0])
 
-    
+
 
     for i in eye.circle[0, :]:
         #print("x,y",x,y)
@@ -38,8 +38,8 @@ def segmentEyelid(eye, show):
                 #print("What is i?",i[0],i[1])
             if math.sqrt(((x-i[0])**2)+((y-i[1])**2)) < i[2]:
                 cv2.circle(iris,(x,y),1,(0,255,0))
-                
+
         m3F.imshow(iris, "Found edges")
 
-    
+
     return iris

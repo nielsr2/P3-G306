@@ -134,7 +134,7 @@ def exportToFolder(photoArray, inputFolder, parent=None, fileName=None):
 # |_|
 
 
-def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None, debug=True, debugIris=True):
+def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None, debug=True, debugIris=True, comparisonFolder="PICTURES/Test_set_easy_mask"):
     # print("photoBatch")
     photoArray = []
     # **********************************************************************
@@ -143,7 +143,10 @@ def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None
         # doing batchprocess for folder of images
         # m3F.printBlue("doing batchprocess for folder of images")
         inputImages = glob.glob(ins + "*.*g")
+        inputImages.sort()
         #print("is " + inputImages)
+
+
         for imagePath in inputImages:
             # print("?????!!!!!??????")
             inputImage = cv2.imread(imagePath, -1)
@@ -253,7 +256,7 @@ def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None
                                 eye.iris = function(**params)
                                 # m3Show.imshow(eye.iris, "eye.iris NIELS TEST")
     # **********************************************************************
-    #  perform POST functions ( such as generate comparison etc.)
+    #  perform POST functions ( such as generate comparison etc.)f
     for function in postArray:
         params = postArray[function]
         if (function.__name__ == "exportToFolder"):
@@ -274,6 +277,24 @@ def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None
 
 
 
+def loadMasksForComparison(photoArray, maskFolder):
+    maskImgs = glob.glob(maskFolder + "*.*g")
+    #print("is " + inputImages)
+    print("maskImgs", maskImgs)
+    maskImgs.sort()
+    print("maskImgs", maskImgs)
+    # for maskPath in maskImgs:
+        # print("maskPath", maskPath
+    count = 0
+    for photo in photoArray:
+        # inputImage = cv2.imread(imagePath, -1)
+        photo.testMask = cv2.imread(maskImgs[count], -1)
+        m3Show.imshow(photo.testMask, "photo.testMask")
+        count += 1
+        for face in photo.faces:
+            for eye in face.eyes:
+                eye.testMask = m3F.typeSwap(m3F.typeSwap(photo.testMask).crop(eye.cropRect))
+    return photoArray
 
 
 
