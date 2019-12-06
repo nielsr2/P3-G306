@@ -6,6 +6,8 @@ import numpy as np
 import os
 import os.path
 import cv2
+import json
+
 
 # http://ozzmaker.com/add-colour-to-text-in-python/
 
@@ -73,7 +75,9 @@ def gHist(imagePath):
         plt.bar(i, hist[i], alpha=0.3)
     plt.show()
 
+
 # swaps input between numpy ndArray (OPENCV USES) and PIL image
+
 def typeSwap(inputIm):
     # printBlue("typeswap:")
     nd = np.ndarray(1)
@@ -99,16 +103,42 @@ def imshow(inputImg, title):
     plt.imshow(cv2.cvtColor(inputImg, cv2.COLOR_BGR2RGB))
     plt.show()
 
+
 def getRed(inputImg, show):
-
     (channel_b, channel_g, channel_r) = cv2.split(inputImg)
-
     channel_r = cv2.cvtColor(channel_r, cv2.COLOR_GRAY2BGR)
-    
-
-
     if (show):
         imshow(channel_r,"red")
-
-
     return channel_r
+
+# **********************************************************************
+# **********************************************************************
+
+
+#  Return an attribute of an object dynamically.
+#  This allows us to use an attribute as a parameter for a function.
+#  i.e. accessessing an eye's attribute, like wip, iris.
+#  this is needed as you won't able to just pass the parameter (x) like eye.x
+def rattr(obj, attributeName):
+    for attribute in obj.__dict__.items():
+        if attribute[0] is attributeName:
+            return attribute[1]  # return data for attribute
+
+
+def storeAttr(photo, eyeAttr, attrName):
+    for face in photo.faces:
+        for eye in face.eyes:
+            setattr(eye, attrName, rattr(eye.eyeAttr, attrName))
+    return photo
+
+
+# **********************************************************************
+# **********************************************************************
+
+def funcArrToStr(multilevelDict):
+    dict = []
+    for function in multilevelDict:
+        print(function.__name__)
+        e = {function.__name__: multilevelDict[function]}
+        dict.append(e)
+    return json.dumps(dict)

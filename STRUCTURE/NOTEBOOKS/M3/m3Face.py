@@ -11,7 +11,7 @@ from M3 import m3F as m3F
 from M3 import m3Show
 from datetime import datetime
 # Find all facial features in all the faces in the image
-
+import dlib
 
 def findEyes(photo, division, show=True):
     # print("photo type", type(photo))
@@ -93,7 +93,6 @@ def findEyes(photo, division, show=True):
         faces.append(m3Class.Face(eyes))
     return faces
 
-import dlib
 
 #
 #
