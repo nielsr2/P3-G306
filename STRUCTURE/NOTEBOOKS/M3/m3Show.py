@@ -11,6 +11,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm,colors
 import time
 
+
 def imshow(inputImg, title):
     # print(inputImg)
     plt.clf()

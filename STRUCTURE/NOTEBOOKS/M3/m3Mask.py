@@ -9,12 +9,6 @@ import numpy as np
 from matplotlib import pyplot as plt
 sys.path.append("/M3")
 
-
-
-
-
-
-
 def makeCircularMask(photo, show=True, onlyOne=True):
     # for photo in photoArray:
         # print("photo")
