@@ -195,7 +195,7 @@ def makeManyPolyRegMask(photo, show=True):
             upper_points = np.array(eye.manyLandmarkPoints[0:10])
             print("upper points",upper_points,upper_points.dtype)
 
-            
+            cv2.polylines(eye.manyPolyMask, np.int32([upper_points]), True, (255, 255, 255))  # args: image, points, closed, color
             
 
             # print("manyLandmarkPoints", eye.manyLandmarkPoints)
@@ -204,8 +204,6 @@ def makeManyPolyRegMask(photo, show=True):
             # epm = m3Class.Eye(np.asarray(pil_image.crop(left)), left, lEyeCoor)
             # epm = polyMask.crop(eye.cropRect)
             eye.manyPolyMask = m3F.typeSwap(m3F.typeSwap(polyMask).crop(eye.cropRect))
-            
-            cv2.polylines(eye.manyPolyMask, np.int32([upper_points]), True, (0,0, 255))  # args: image, points, closed, color
             # if show:
             m3Show.imshow(eye.manyPolyMask, "manypoly")
 
