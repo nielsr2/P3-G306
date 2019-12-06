@@ -39,7 +39,7 @@ def reduceColor(inputImg, show, n_colors=16):
             plt.figure(1)
             plt.clf()
             plt.axis('off')
-            plt.title('Quantized image (64 colors, K-Means)')
+            plt.title('Quantized image ({} colors, K-Means)'.format(n_colors))
             plt.imshow(recreate_image(kmeans.cluster_centers_, labels, w, h))
             plt.show()
         output = recreate_image(kmeans.cluster_centers_, labels, w, h)

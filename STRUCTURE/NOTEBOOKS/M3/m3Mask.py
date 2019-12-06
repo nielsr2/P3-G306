@@ -168,11 +168,6 @@ def makeManyPolyMask(photo, show=True):
 
 
 
-
-
-
-
-
 def applyPolyMask(eye, show=True):
     polymask = None
     eye.wip = cv2.bitwise_and(eye.wip, eye.polyMask)
