@@ -362,7 +362,6 @@ def generateComparison(photoArray, outputName=None,
                     # print(attrs)
                     for attr in eye.__dict__.items():
                         # print("attr", attr)
-
                         if attr[0] in attrs:
                             # if
                             if attr[1] is not None:

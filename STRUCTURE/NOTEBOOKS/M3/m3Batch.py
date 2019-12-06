@@ -23,261 +23,166 @@ export = boolean on whether to export the final result as an img
 # **********************************************************************
 
 
-def nTest():
-    return "test1", "test2"
+
+#        _           _
+#       | |         | |
+#  _ __ | |__   ___ | |_ ___
+# | '_ \| '_ \ / _ \| __/ _ \
+# | |_) | | | | (_) | || (_) |
+# | .__/|_| |_|\___/ \__\___/
+# | |
+# |_|
 
 
-def batchProcess2(inputFolder, functionArray, export, onephoto):
-    # print("batchProcess ran with folder: " + inputFolder)
-    if onephoto:
-        inputImages = inputFolder
-    else:
-        inputImages = glob.glob(inputFolder + "*.*g")
-    outputFolder = "../PICTURES"
-    # if not (os.path.exists(outputFolder)):  # if outfolder does not exist, create it
-    # print("inputImages", inputImages)
-    if (export):
-    
-        outputFolder = os.getcwd() + "/EXPORTS/" + inputFolder.replace("PICTURES/",
-                                                                       "").replace("/", "") + now_string
-        # print("path", outputFolder)
-        os.mkdir(outputFolder)
-        # print("../PICTURES/" + datetime.date())
-    # print("output folder did not exist,", outputFolder, "created.")
 
-# **********************************************************************
-# IF FACE
+def photoBatch(ins, functionArray, postArray=None, preArray=None, irisArray=None, debug=True, debugIris=True):
+    # print("photoBatch")
     photoArray = []
-    didEyes = False
+    # **********************************************************************
+    #  checking if folder with imgs, or just a single img
+    if (type(ins) is type("str")): #is folder, since it's a folder path
+        # doing batchprocess for folder of images
+        # m3F.printBlue("doing batchprocess for folder of images")
+        inputImages = glob.glob(ins + "*.*g")
+        inputImages.sort()
+        #print("is " + inputImages)
 
-    for function in functionArray:
-        if (function.__name__ == "findEyes"):
-            didEyes = True
-            eyeFunc = function
-            currentFunction = functionArray[function]
-            if not onephoto:
-                for imagePath in inputImages:
-                    inputImage = cv2.imread(imagePath, -1)
-                    currentFunction["inputImg"] = inputImage
-                    face = m3Class.Immer(inputImage, imagePath)
-                    face.eyes = function(**currentFunction)
-                    photoArray.append(face)
-            else:
-                currentFunction["inputImg"] = inputImages
-                face = m3Class.Immer(inputImages, "bah")
-                face.eyes = function(**currentFunction)
-                photoArray.append(face)
 
-    if (didEyes):
-        functionArray.pop(eyeFunc)
-    if (didEyes or onephoto):
-
-        inputImages = photoArray
-
-    for imagePath in inputImages:
-        m3Show.imshow(imagePath.orginalImage, "original photo")
-        print("************************************************************\
-            ****************************************************")
-
-        # -1 means "return the loaded image as is (with alpha channel)."
-        if (didEyes or onephoto):
-            inputImage = imagePath
-        else:
-            print("processing: " + imagePath)
+        for imagePath in inputImages:
+            # print("?????!!!!!??????")
             inputImage = cv2.imread(imagePath, -1)
-        outputImage = None
-        for function in functionArray:
-            currentFunction = functionArray[function]
-            # print("current function: ", current)
-            currentFunctionName = function.__name__
-            print("function name ", function.__name__)
-            # m3F.imshow(inputImage, "BATCH DEBUGGING")
-            # https://realpython.com/python-kwargs-and-args/
-            if (didEyes):
-                if (imagePath.eyes is not None):
-                    for eye in imagePath.eyes:
-                        # print("eye coor: " + str(eye.cropRect))
-                        if (currentFunctionName == "findCircleSimple" or currentFunctionName == "makeCircularMask"):
-                            currentFunction["inputImg"] = eye
-                            eye = function(**currentFunction)
-                        elif not (currentFunctionName == "makeFullMask" or currentFunctionName == "makePolyMask" or currentFunctionName == "applyPolyMask" or currentFunctionName == "makeComparison"):
-                            currentFunction["inputImg"] = eye.image
-                            eye.image = function(**currentFunction)
-                        # elif not (currentFunctionName == "makeFullMask"):
-                        #     currentFunction["inputImg"] = eye.image
-                        #     eye.image = function(**currentFunction)
-                    if(currentFunctionName == "makeFullMask" or currentFunctionName == "makePolyMask" or currentFunctionName == "applyPolyMask"):
-                        print("FULL OR POLY")
-                        currentFunction["inputImg"] = imagePath
-                        imagePath = function(**currentFunction)
-                    if(currentFunctionName == "makeComparison"):
-                        currentFunction["photoArray"] = photoArray
-                        currentFunction["functionArray"] = functionArray
-                        function(**currentFunction)
-                    if (currentFunctionName == "fullImgEyeOutline"):
-                        outputImage = function(**currentFunction)
-
-            else:
-                currentFunction["inputImg"] = inputImage
-                outputImage = function(**currentFunction)
-                inputImage = outputImage
-        if (export and not didEyes):
-            imagePath2 = imagePath.path.replace(inputFolder, "")
-            outPath = outputFolder + "/" + imagePath2
-            # print("OUT PATH: ", outPath)
-            cv2.imwrite(outPath, outputImage)
-        if (onephoto and didEyes):
-            print("TRALALALLALALAL")
-            if (type(outputImage) is not type(None) ):
-            #     if (len(outputImage.shape) > 0):
-                return outputImage.mask
-
-
-def batchProcess(inputFolder, functionArray, export):
-
-    # print("batchProcess ran with folder: " + inputFolder)
-    inputImages = glob.glob(inputFolder + "*.*g")
-    outputFolder = "../PICTURES"
-    # if not (os.path.exists(outputFolder)):  # if outfolder does not exist, create it
-    # print("inputImages", inputImages)
-    if (export):
-        now = datetime.now()
-        now_string = now.strftime("%d-%m-%Y--%H-%M-%S")
-        path = "../PICTURES/" + now_string
-        print("path", path)
-        os.mkdir(path)
-        # print("../PICTURES/" + datetime.date())
-    # print("output folder did not exist,", outputFolder, "created.")
-    for imagePath in inputImages:
-        # if (m3F.evalSize(imagePath, 10, 10)):
-        print("************************************************************\
-            ****************************************************")
-        print("processing: " + imagePath)
-        # -1 means "return the loaded image as is (with alpha channel)."
-        inputImage = cv2.imread(imagePath, -1)
-        for function in functionArray:
-            currentFunction = functionArray[function]
-            # print("current function: ", current)
-            currentFunction["inputImg"] = inputImage
-            # m3F.imshow(inputImage, "BATCH DEBUGGING")
-            # https://realpython.com/python-kwargs-and-args/
-            print("**************************************")
-            print("running" + str(function))
-            outputImage = function(**currentFunction)
-            inputImage = outputImage
-        # else:
-        #     print("************************************************************\
-        #             ****************************************************")
-        #     m3F.printRed("IMAGE TOOO SMALL")
-        #     continue
-        if (export):
-            imagePath = imagePath.replace(inputFolder, "")
-            imagePath = outputFolder + imagePath
-            cv2.imwrite(imagePath, outputImage)
-
-
-def makeComparison(photoArray, functionArray, fileName):
-    faces = []
-    # print(str(functionArray))
-    for face in photoArray:
-        eyes = []
-        if not (type(face.eyes) == type(None)):
-            for eye in face.eyes:
-                # h = m3Show.Histogram(eye.image, passThru=False)
-                print( "**********************************************************************")
-                print("appending EYES ******")
-                eyes.append(eye.image)
-        # else:
-        #     text = np.zeros(shape=[200, 300, 3], dtype=np.uint8)
-        #     cv2.putText(
-        #             img=text,
-        #             text="no eyes found",
-        #             org=(0, 0),
-        #             fontFace=cv2.FONT_HERSHEY_COMPLEX,
-        #             fontScale=4,
-        #             color=(255, 255, 255))
-        #     eyes.append(text)
-            eyes = concat(eyes)
-            faces.append(eyes)
-        now = datetime.now()
-        now_string = now.strftime("%d-%m-%Y--%H-%M-%S")
-    output = concat(faces, direction="v")
-    m3Show.imshow(output, "bag")
-    cv2.imwrite("EXPORTS/COMPARISONS/" + fileName + ".jpg", output)
-
-def concat(images, direction="h"):
-    # print("images", images)
-    hs, ws = [], []
-    for img in images:
-        if (len(img.shape) == 3):
-            print("######## WAS 3 DIM")
-            h, w, c = img.shape
-            hs.append(h)
-            ws.append(w)
-        else:
-            print("######## WAS ELSE DIM")
-            h, w = img.shape
-            hs.append(h)
-            ws.append(w)
-    hs.sort(reverse=True)
-    ws.sort(reverse=True)
-    outImgs = []
-    for img in images:
-        newSize = np.zeros_like(img)
-        if (len(img.shape) == 3):
-            newSize = np.resize(newSize, (hs[0], ws[0], 3))
-        else:
-            newSize = np.resize(newSize, (hs[0], ws[0]))
-        newSize[0:img.shape[0], 0:img.shape[1]] = img
-        outImgs.append(newSize)
-    if (direction == "h"):
-        result = np.concatenate((outImgs), axis=1)
+            photoArray.append(m3Class.Photo(inputImage, imagePath))
     else:
-        result = np.concatenate((outImgs), axis=0)
-    return result
-    # m3Show.imshow(fnes, "new sie test")
-    # print("sort", hs[0], newSize.shape)
+        # doing batchprocess for single image
+        # m3F.printBlue("doing batchprocess for single image")
+        photoArray.append(m3Class.Photo(ins, "bla"))
 
-# **********************************************************************
-# **********************************************************************
-# **********************************************************************
-# **********************************************************************
-# **********************************************************************
-# **********************************************************************
+    # **********************************************************************
+    # perform PRE functions ( like face detection! )
+    print("**********************************************************************")
+    print("**********************************************************************")
+    m3F.printBlue("DOING PRE FUNCIONS")
+    print("**********************************************************************")
+    print("**********************************************************************")
+    for function in preArray:
+        print("function.__name__  in pre: ", function.__name__)
+        if (function.__name__ == "findEyes"):
+            # print("FOUND FINDEYES FUNC")
+            for photo in photoArray:
+                # print("NIBBBBBsss")
+                params = preArray[function]
+                photo.faces = function(photo, **params)
+        elif (function.__name__ == "fakeEyes" ):
+            # print("fakeEyes")
+            params = preArray[function]
+            photoArray = function(photoArray, **params)
+        elif (function.__name__ == "findEyes2"):
+            params = preArray[function]
+            for photo in photoArray:
+                photo = function(photo, **params)
+        else:
+            # for photo in photoArray:
+            params = preArray[function]
+            function(photoArray, **params)
 
-#
-# def batchProcess3(inputs, functionArray, export, exportAs="photo", isJustEyes=False):
-#     photoArray = []
-#
-#     isSingle = False
-#
-#
-#     # for photos in photoArray:
-#
-#     if (export):
-#         now = datetime.now()
-#         now_string = now.strftime("-%d-%m-%Y---%H-%M-%S")
-#         outputFolder = os.getcwd() + "/EXPORTS/" + inputs.replace("PICTURES/", "").replace("/", "") + now_string
-#         # print("path", outputFolder)
-#         os.mkdir(outputFolder)
-# # **********************************************************************
-# # doing facedetection
-# # **********************************************************************
-#     # **********************************************************************
-#     # print("len(photoArray)", len(photoArray))
-#     # if ((len(photoArray[0].eyes) == 0 and exportAs == "live") or (photoArray[0] is type(None))):
-#     #     print("no face found!!!, just passing input as is")
-#     #     print("isSingle", isSingle)
-#     #     return inputs
-#     # **********************************************************************
-#
-#     for photo in photoArray:
-#
-#     if (exportAs == "live"):
-#         outputs = []
-#         for photo in photoArray:
-#             # if (didFaceDetection):
-#                 # m3Show.imshow(face.eyes.wipx$$)
-#             # m3Show.imshow(photo.mask, "p m")
-#             return photo.mask
-#             outputs.append(face.originalImage)
+    # **********************************************************************
+    #  Set debug flag for all functions in functionArray
+    # if debug:
+    for function in functionArray:
+        params = functionArray[function]
+        params["show"] = debug
+
+    # if irisDebug:
+    for function in irisArray:
+        params = irisArray[function]
+        params["show"] = debugIris
+
+    # **********************************************************************
+    #  perform iterations on photos
+    print("**********************************************************************")
+    print("**********************************************************************")
+    m3F.printBlue("DOING FUNCION ARRAY")
+    print("**********************************************************************")
+    print("**********************************************************************")
+    for photo in photoArray:
+        # print(photo)
+        # for face in photo.faces:
+        #     print(face)
+        photo = iterFunction(photo, functionArray)
+
+
+    # **********************************************************************
+    # perform stuff on irisArray
+    print("**********************************************************************")
+    print("**********************************************************************")
+    m3F.printBlue("DOING IRIS FUNCION ARRAY")
+    #          _ . - = - . _
+    #        . "  \  \   /  /  " .
+    #      ,  \                 /  .
+    #    . \   _,.--~=~"~=~--.._   / .
+    #   ;  _.-"  / \ !   ! / \  "-._  .
+    #  / ,"     / ,` .---. `, \     ". \
+    # /.'   `~  |   /:::::\   |  ~`   '.\
+    # \`.  `~   |   \:::::/   | ~`  ~ .'/
+    #  \ `.  `~ \ `, `~~~' ,` /   ~`.' /
+    #   .  "-._  \ / !   ! \ /  _.-"  .
+    #    ./    "=~~.._  _..~~=`"    \.
+    #      ,/         ""          \,
+    #        . _/             \_ .
+    #           " - ./. .\. - "
+    # print("**********************************************************************")
+    print("**********************************************************************")
+    for function in irisArray:
+        m3F.printBlue("function name " + function.__name__)
+        params = irisArray[function]
+
+        if ("eye" in params):
+            # m3F.printBlue(("Doing an eye with" + currentFunctionName))
+            for photo in photoArray:
+                for face in photo.faces:
+                    # if face.eyes is not None:
+                    for eye in face.eyes:
+                        params["eye"] = eye
+                        eye = function(**params)
+        else:
+            for photo in photoArray:
+                for face in photo.faces:
+                    if face.eyes is not None:
+                        for eye in face.eyes:
+                            if eye.iris is not None:
+                                params["inputImg"] = eye.iris
+                                eye.iris = function(**params)
+                                # m3Show.imshow(eye.iris, "eye.iris NIELS TEST")
+    # **********************************************************************
+    #  perform POST functions ( such as generate comparison etc.)f
+    for function in postArray:
+        params = postArray[function]
+        if (function.__name__ == "exportToFolder"):
+            function(photoArray, ins, **params)
+        else:
+            photoArray = function(photoArray, **params)
+    return photoArray
+
+
+def loadMasksForComparison(photoArray, maskFolder):
+    maskImgs = glob.glob(maskFolder + "*.*g")
+    # print("is " + inputImages)
+    print("maskImgs", maskImgs)
+    maskImgs.sort()
+    print("maskImgs", maskImgs)
+    # for maskPath in maskImgs:
+    #       print("maskPath", maskPath
+    count = 0
+    for photo in photoArray:
+        # inputImage = cv2.imread(imagePath, -1)
+        photo.testMask = cv2.imread(maskImgs[count], -1)
+        m3Show.imshow(photo.testMask, "photo.testMask")
+        count += 1
+        for face in photo.faces:
+            for eye in face.eyes:
+                eye.testMask = m3F.typeSwap(
+                                m3F.typeSwap(
+                                 photo.testMask)
+                                .crop(eye.cropRect)
+                                                )
+    return photoArray
