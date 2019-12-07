@@ -262,7 +262,7 @@ def mask(eye, img=None, mask=None, dest=None, show=True):
     bah = cv2.bitwise_and(img, mask)
     m3Show.imshow(bah, "mask masked")
     m3Show.imshow(eye.image, "to compare")
-    # setattr(eye, dest, "string")
+    setattr(eye, dest, bah)
     # print(eye.__dict__.items())
 
     return eye

@@ -17,7 +17,7 @@ def batchcc(photoArray):
                 compare(eye.testMask,thresh1)
 
 def compare(machineMask,manMask):
-    
+         
     print (machineMask)
     print (manMask)
     
