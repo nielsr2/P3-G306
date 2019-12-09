@@ -172,7 +172,8 @@ def makeManyPolyMask(photo, show=True):
 
 def applyPolyMask(eye, show=True):
     polymask = None
-    eye.wip = cv2.bitwise_and(eye.wip, eye.manyPolyMask)
+    eye.wip = cv2.bitwise_and(eye.wip, eye.polyMask)
+        eye.wip = cv2.bitwise_and(eye.wip, eye.manyPolyMask)
     if show:
         m3Show.imshow(eye.wip, "masked")
     return eye
