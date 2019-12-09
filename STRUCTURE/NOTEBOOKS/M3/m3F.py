@@ -76,7 +76,7 @@ def gHist(imagePath):
     plt.show()
 
 
-# swaps input between numpy ndArray (OPENCV USES) and PIL image
+# swaps input between numpy ndArray (as OPENCV USES) and PIL image
 
 def typeSwap(inputIm):
     # printBlue("typeswap:")

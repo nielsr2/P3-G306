@@ -31,7 +31,13 @@ export = boolean on whether to export the final result as an img
 # | |
 # |_|
 
-
+# takes input of either string for folder w. pics, or path for single.
+# takes dictionaries of function: parameters for both
+# * pre-processing e.g. find eyes
+# * processing of eye images
+# * processing of irisArray
+# * a post processing of images (e.g. generate comparison)
+# debug-variables toggles show parameter for corresponding functions
 def photoBatch(ins, functionArray,
                postArray=None, preArray=None, irisArray=None,
                debug=True, debugIris=True):
@@ -164,7 +170,8 @@ def photoBatch(ins, functionArray,
 # **********************************************************************
 # **********************************************************************
 
-
+# This loads our 'truth' masks, since images are properly named, they are assigned using a loop on sorted paths.
+# it crops the truth masks for each eye, and their cropping rect.
 def loadMasksForComparison(photoArray, maskFolder):
     maskImgs = glob.glob(maskFolder + "*.*g")  # load folder of masked images
     # print("maskImgs", maskImgs)
@@ -277,7 +284,8 @@ def generateComparison(photoArray, outputName=None,
 
 # used to concatenate pictures (used in generateComparison).
 # i.e. putting pictures besides eachother, or below
-
+# first dimensions are sorted, as the dim must match for the side they're
+# concatenated.
 
 def concat(images, direction="h"):
     # print("images", images)
@@ -321,7 +329,7 @@ def concat(images, direction="h"):
 # **********************************************************************
 # **********************************************************************
 
-
+# makes face objs with a single eye obj ( when running processing on exported eyes)
 def fakeEyes(photoArray):
     print("fakeEyes ran")
     for photo in photoArray:

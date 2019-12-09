@@ -34,13 +34,6 @@ def makeCircularMask(photo, show=True, onlyOne=True):
                 eye.mask = maskImg
     return photo
 
-
-
-
-
-
-
-
 def makeCircularOutline(photo, show=True, dest=None):
     for face in photo.faces:
         for eye in face.eyes:
@@ -135,6 +128,15 @@ def makePolyMask(photo, show=True):
         for eye in face.eyes:
             # print("EYE COOR", eye.landmarkPoints)
             polyMask = cv2.fillPoly(polyMask, np.int_([eye.landmarkPoints]), (255, 255, 255))
+            # polymask = cv2.fillConvexPoly(polyMask, np.int_([eye.landmarkPoints]), (255, 255, 255),1000)
+            # polymask = cv2.drawContours(polyMask, np.int_([eye.landmarkPoints]),-1, (255, 255, 255), 2)
+            # polymask = cv2.approxPolyDP(np.int_([eye.landmarkPoints]),4, True)
+            # xs, ys = [], []
+            # for x, y in eye.eye.landmarkPoints:
+            #     xs.append(x)
+            #     ys.append(y)
+            # polymask = cv2.poly
+            # print(polymask)
             if show:
                 m3Show.imshow(polyMask, "POLYMASK")
             # epm = m3Class.Eye(np.asarray(pil_image.crop(left)), left, lEyeCoor)
@@ -146,7 +148,7 @@ def makePolyMask(photo, show=True):
     return photo
 
 
-
+# p
 
 
 def makeManyPolyMask(photo, show=True):
@@ -170,7 +172,7 @@ def makeManyPolyMask(photo, show=True):
 
 def applyPolyMask(eye, show=True):
     polymask = None
-    eye.wip = cv2.bitwise_and(eye.wip, eye.polyMask)
+    eye.wip = cv2.bitwise_and(eye.wip, eye.manyPolyMask)
     if show:
         m3Show.imshow(eye.wip, "masked")
     return eye

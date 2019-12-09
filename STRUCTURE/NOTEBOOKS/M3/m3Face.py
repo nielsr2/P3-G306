@@ -14,9 +14,9 @@ import dlib
 
 # this uses the library face_recognition to find 68 points.
 # first the image is downscaled, to allow faster processing
-# the landmarks of each are aree sorted, as to get the boundaries of the eye
+# the landmarks of each are are sorted, as to get the boundaries of the eye (ex. min x equals left edge)
 # A margin of 0.2 is added
-
+# face obj with eyes, cropping rectangle, and the landmarks is returned
 
 def findEyes(photo, division, show=True, debug=False):
     h, w, c = photo.originalImage.shape
@@ -91,11 +91,11 @@ def findEyes(photo, division, show=True, debug=False):
     return faces
 
 
-predictor = dlib.shape_predictor("MODELS/shape_predictor_194_face_landmarks.dat")
 
 # predictor = dlib.shape_predictor(("MODELS/2.dat"))
 
 # def find194(img):
+predictor = dlib.shape_predictor("MODELS/shape_predictor_194_face_landmarks.dat")
 
 def findEyes2(photo, division, show=True, ):
     img = photo.loResImage
