@@ -125,10 +125,11 @@ def makeFullMask(photoArray, show=False):
 
 
 def makePolyMask(photo, show=True):
-    polyMask =  np.zeros_like(photo.originalImage)
+    # polyMask =  np.zeros_like(photo.originalImage)
     for face in photo.faces:
         for eye in face.eyes:
-            # print("EYE COOR", eye.landmarkPoints)
+            polyMask =  np.zeros_like(eye.image)
+            print("EYE COOR", eye.landmarkPoints)
             polyMask = cv2.fillPoly(polyMask, np.int_([eye.landmarkPoints]), (255, 255, 255))
             # polymask = cv2.fillConvexPoly(polyMask, np.int_([eye.landmarkPoints]), (255, 255, 255),1000)
             # polymask = cv2.drawContours(polyMask, np.int_([eye.landmarkPoints]),-1, (255, 255, 255), 2)
@@ -143,7 +144,8 @@ def makePolyMask(photo, show=True):
                 m3Show.imshow(polyMask, "POLYMASK")
             # epm = m3Class.Eye(np.asarray(pil_image.crop(left)), left, lEyeCoor)
             # epm = polyMask.crop(eye.cropRect)
-            eye.polyMask = m3F.typeSwap(m3F.typeSwap(polyMask).crop(eye.cropRect))
+            # eye.polyMask = m3F.typeSwap(m3F.typeSwap(polyMask).crop(eye.cropRect))
+            eye.polyMask = polyMask
             if show:
                 m3Show.imshow(eye.polyMask, "poly")
 
@@ -154,16 +156,19 @@ def makePolyMask(photo, show=True):
 
 
 def makeManyPolyMask(photo, show=True):
-    polyMask =  np.zeros_like(photo.originalImage)
+    # **********************************************************************
+    # polyMask =  np.zeros_like(photo.originalImage)
+    # **********************************************************************
     for face in photo.faces:
         for eye in face.eyes:
-
-            # print("manyLandmarkPoints", eye.manyLandmarkPoints)
+            polyMask =  np.zeros_like(eye.image)
+            print("manyLandmarkPoints", eye.manyLandmarkPoints)
             polyMask = cv2.fillPoly(polyMask, np.int_([eye.manyLandmarkPoints]), (255, 255, 255))
             # m3Show.imshow(polyMask, "POLYMASK")
             # epm = m3Class.Eye(np.asarray(pil_image.crop(left)), left, lEyeCoor)
             # epm = polyMask.crop(eye.cropRect)
-            eye.manyPolyMask = m3F.typeSwap(m3F.typeSwap(polyMask).crop(eye.cropRect))
+            # eye.manyPolyMask = m3F.typeSwap(m3F.typeSwap(polyMask).crop(eye.cropRect))
+            eye.manyPolyMask = polyMask
             # if show:
             m3Show.imshow(eye.manyPolyMask, "manypoly")
 

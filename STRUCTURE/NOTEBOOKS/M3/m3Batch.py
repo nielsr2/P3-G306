@@ -30,7 +30,9 @@ export = boolean on whether to export the final result as an img
 # | |_) | | | | (_) | || (_) |
 # | .__/|_| |_|\___/ \__\___/
 # | |
+# **********************************************************************
 # |_|
+
 
 # takes input of either string for folder w. pics, or path for single.
 # takes dictionaries of function: parameters for both
@@ -70,11 +72,10 @@ def photoBatch(ins, functionArray,
     print("**********************************************************************")
     print("**********************************************************************")
     for function in preArray:
-        print("function.__name__  in pre: ", function.__name__)
+        print("function.__name__  in pre: ", function.__name__, function.__dir__)
         if (function.__name__ == "findEyes"):
             # print("FOUND FINDEYES FUNC")
             for photo in photoArray:
-                # print("NIBBBBBsss")
                 params = preArray[function]
                 photo.faces = function(photo, **params)
         elif (function.__name__ == "fakeEyes" ):
