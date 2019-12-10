@@ -92,9 +92,11 @@ def run(tempeye, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMin
             else:
                 return img
         else:
+            eye.noCircles = True
             if (tempShow):
                 m3F.imshow(cimg, "no circles found")
                 m3F.printRed("NO CIRCLES FOUND^^^")
+            return eye
     else:
         m3F.printRed("Image is NONE")
 

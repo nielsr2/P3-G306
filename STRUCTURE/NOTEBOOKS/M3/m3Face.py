@@ -82,6 +82,7 @@ def findEyes(photo, division, show=True, debug=False):
             if show:
                 m3Show.imshow(np.asarray(pil_image.crop(cropRect)), "cropRect")
             upscaledLandmarks = []
+            # croprect: "The box is a 4-tuple defining the left, upper, right, and lower pixel coordinate"
             for x, y in eyeLandmarkPoints:
                 upscaledLandmarks.append((x * division, y * division))
                 # y = y * division

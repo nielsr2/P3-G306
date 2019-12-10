@@ -6,6 +6,7 @@ from datetime import datetime
 from . import m3F
 from M3 import m3Class
 from M3 import m3Show
+from M3 import m3CSV
 
 # **********************************************************************
 # exampe of input
@@ -179,6 +180,8 @@ def loadMasksForComparison(photoArray, maskFolder):
     # print("maskImgs", maskImgs)
     count = 0
     for photo in photoArray:
+        print("LOADING: ", maskImgs[count], "FOR ", photo.path)
+
         photo.testMask = cv2.imread(maskImgs[count], -1)
         m3Show.imshow(photo.testMask, "photo.testMask")
         count += 1
@@ -247,10 +250,17 @@ def iterFunction(photo, functionArray):
 
 
 def generateComparison(photoArray, outputName=None,
-                       attrs=None, folderName=None):
-    # print("generateComparison")
+                       attrs=None, folderName=None, exportFullMask=False, CSV=True, settings=None):
+    # print("generateComparison
+    os.makedirs("EXPORTS/" + folderName + "/", exist_ok=True)
+
     for photo in photoArray:
         facesToSave = []
+        if (exportFullMask):
+            os.makedirs("EXPORTS/" + folderName + "/", exist_ok=True)
+            cv2.imwrite("EXPORTS/" + folderName + "/"
+                        + os.path.basename(photo.path) + "_FullMask" + ".jpg", photo.fullMask)
+
         for face in photo.faces:
             if not (type(face.eyes) == type(None)): # TODO: fix this
                 for eye in face.eyes:
@@ -273,11 +283,18 @@ def generateComparison(photoArray, outputName=None,
         output = concat(facesToSave, direction="v")
         m3Show.imshow(output, "generateComparison output")
         if (folderName is not None):
-            os.makedirs("EXPORTS/" + folderName + "/", exist_ok=True)
             cv2.imwrite("EXPORTS/" + folderName + "/"
                         + os.path.basename(photo.path) + "_" + ".jpg", output)
         else:
             cv2.imwrite("EXPORTS/COMPARISONS/" + now_string + ".jpg", output)
+        m3CSV.makeCSV(photoArray, "EXPORTS/" + folderName + "/" + "data.csv")
+        file = open("EXPORTS/" + folderName + "/" + "settings.txt","w+")
+        count = 1
+        # for element in m3F.funcArrToStr():
+        #     print("element",element)
+        file.write(str(settings))
+            # count += 1
+        file.close()
 
 # **********************************************************************
 # **********************************************************************

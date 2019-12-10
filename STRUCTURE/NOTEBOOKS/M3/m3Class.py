@@ -50,6 +50,7 @@ class Eye:
     mask = None
     manyPolyMask = None
     polyMask = None
+    noCircles = False
     houghOutline = None
     polyMaskedImage = None
     manyLandmarkPoints = []

@@ -12,13 +12,16 @@ from matplotlib import cm,colors
 import time
 
 
-def imshow(inputImg, title):
+def imshow(inputImg, title, gray=False):
     # print(inputImg)
     plt.clf()
     plt.title(title)
     plt.axis("off")
     # print("inputImg.shape", inputImg.shape)
-    plt.imshow(cv2.cvtColor(inputImg, cv2.COLOR_BGR2RGB), interpolation='none')
+    if gray:
+        plt.imshow(inputImg)
+    else:
+        plt.imshow(cv2.cvtColor(inputImg, cv2.COLOR_BGR2RGB), interpolation='none')
     plt.show()
     # plt.axes
     return inputImg

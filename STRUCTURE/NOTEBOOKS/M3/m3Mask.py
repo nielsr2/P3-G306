@@ -95,26 +95,28 @@ def fullImgEyeOutline(photo, show):
 
 
 
-def makeFullMask(inputImg, show):
-    fullMask = inputImg.orginalImage.copy()
-    fullMask.fill(0)
+def makeFullMask(photoArray, show=False):
+    for photo in photoArray:
+        fullMask = photo.originalImage.copy()
+        fullMask.fill(0)
 
-    # img1 = cv.imread('messi5.jpg')
-    # img2 = cv.imread('opencv-logo-white.png')
-    # I want to put logo on top-left corner, So I create a ROI
-    x, y, channels = fullMask.shape
-    for eye in inputImg.eyes:
-        if not isinstance(eye.mask, type(None)):
-            coor = eye.cropRect
-            # fullMask[coor[0]:x, coor[1]:y] = eye.mask
-            # print("coor", coor)
-            fullMask[coor[1]:coor[1]+eye.mask.shape[0], coor[0]:coor[0]+eye.mask.shape[1]] = eye.mask
-    inputImg.mask = fullMask
-    if (show):
-        pass
-        # m3Show.imshow(inputImg.orginalImage, "full original")
-        # m3Show.imshow(fullMask, "full mask")
-    return inputImg
+        # img1 = cv.imread('messi5.jpg')
+        # img2 = cv.imread('opencv-logo-white.png')
+        # I want to put logo on top-left corner, So I create a ROI
+        x, y, channels = fullMask.shape
+        for face in photo.faces:
+            for eye in face.eyes:
+                if not isinstance(eye.mask, type(None)):
+                    coor = eye.cropRect
+                    # fullMask[coor[0]:x, coor[1]:y] = eye.mask
+                    # print("coor", coor)
+                    fullMask[coor[1]:coor[1]+eye.mask.shape[0], coor[0]:coor[0]+eye.mask.shape[1]] = eye.mask
+                    photo.fullMask = fullMask
+                    if (show):
+                        pass
+                        # m3Show.imshow(inputImg.orginalImage, "full original")
+                        # m3Show.imshow(fullMask, "full mask")
+    return photoArray
 
 
 
@@ -173,7 +175,7 @@ def makeManyPolyMask(photo, show=True):
 def applyPolyMask(eye, show=True):
     polymask = None
     eye.wip = cv2.bitwise_and(eye.wip, eye.polyMask)
-        eye.wip = cv2.bitwise_and(eye.wip, eye.manyPolyMask)
+    # eye.wip = cv2.bitwise_and(eye.wip, eye.manyPolyMask)
     if show:
         m3Show.imshow(eye.wip, "masked")
     return eye
@@ -211,8 +213,17 @@ def rattr(obj, attributeName):
 
 def mask(eye, img=None, mask=None, dest=None, show=True):
     # print(eye.__dict__.items())
+    # print("img", img)
+    # print("mask", mask)
+    # m3Show.imshow(img, "mask masked")
+    # m3Show.imshow(mask, "to compare")
+
     img = returnAttr(eye, img)
     mask = returnAttr(eye, mask)
+    if (img is None or mask is None):
+        m3F.printRed(" IMG OR MASK WAS NONE. NOT MASKING")
+        eye.noCircles = True
+        return eye
     print("img.shape", img.shape)
     print( "mask.shape", mask.shape)
     destination = returnAttr(eye, dest)
