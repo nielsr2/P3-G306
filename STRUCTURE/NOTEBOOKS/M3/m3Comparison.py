@@ -108,23 +108,36 @@ def pixelcomparison(photoArray, eyeAttr="", show=True):
 
                     autoMask = orgAutoMask.astype("float64")
                     handMask = orgHandMask.astype("float64")
+                    TPi, FNi, FPi = None,None,None
+                    # TPi = np.ndarray(shape=(autoMask.shape), dtype=np.uint8)
+                    # FNi = np.ndarray(shape=(autoMask.shape), dtype=np.uint8)
+                    # FPi = np.ndarray(shape=(autoMask.shape), dtype=np.uint8)
+                    orgAutoMask
+                    TPi = np.zeros_like(orgAutoMask)
+                    FNi = np.zeros_like(orgAutoMask)
+                    FPi = np.zeros_like(orgAutoMask)
                     print( autoMask.shape, "autoMask", handMask.shape, "handMask")
                     for y in range(height):
                         for x in range(width):
 
                             autoMask[y,x,0]= (orgAutoMask[y,x,0]/255)
                             handMask[y,x,0]= (orgHandMask[y,x,0]/255)
+
+                            # TPi = np.zeros_like(eye.image)
                             # print("autoMask[y,x,0]", autoMask[y,x,0],"handMask[y,x,0]",handMask[y,x,0])
                             if (autoMask[y,x,0] == handMask[y,x,0]):
                                 TruePositive += handMask[y,x,0]
+                                TPi[y,x] = (0,255,0)
 
-                            if (autoMask[y,x,0] < handMask[y,x,0]):
+                            elif (autoMask[y,x,0] < handMask[y,x,0]):
                                 FalseNegative += (handMask[y,x,0]-autoMask[y,x,0])
                                 TruePositive += autoMask[y,x,0]/handMask[y,x,0]
+                                FNi[y,x] = (255,0,0)
 
-                            if (autoMask[y,x,0] > handMask[y,x,0]):
+                            elif (autoMask[y,x,0] > handMask[y,x,0]):
                                 FalsePositive += autoMask[y,x,0] - handMask[y,x,0]
                                 TruePositive += handMask[y,x,0]/autoMask[y,x,0]
+                                FPi[y,x] = (0,0,255)
 
                             handMaskAccumLum += handMask[y,x,0]
                             autoMaskAccumLum += autoMask[y,x,0]
@@ -145,12 +158,19 @@ def pixelcomparison(photoArray, eyeAttr="", show=True):
                     eye.FN = FalseNegative
                     eye.FP = FalsePositive
                     eye.TPFN = FalseNegative + TruePositive
+                    eye.TPi = TPi
+                    # eye.TPi = TPi
+                    eye.FNi = FNi
+                    eye.FPi = FPi
+                    m3Show.imshow(eye.TPi, "TPI")
+                    m3Show.imshow(eye.FNi, "FNi")
+                    m3Show.imshow(eye.FPi, "FPi")
                     # eye.TP = TruePositive
                     print("TruePositive%",TruePositive,"% of accumulated pixel values of handmask")
                     print("FalseNegative%",FalseNegative,"% of accumulated pixel values of handmask")
                     print("FalsePositive%",FalsePositive,"% of accumulated pixel values of handmask")
                     print("FalsePositive%",FalsePositive1,"% of accumulated pixel values of automask")
-
+                    print("FalseNegative + TruePositive",FalseNegative + TruePositive)
 
                     autoMask = autoMask*255
                     handMask = handMask*255
