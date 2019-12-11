@@ -215,7 +215,7 @@ def loadMasksForComparison(photoArray, maskFolder):
     # print("maskImgs", maskImgs)
     count = 0
     for photo in photoArray:
-        print("LOADING: ", maskImgs[count], "FOR ", photo.path)
+        # print("LOADING: ", maskImgs[count], "FOR ", photo.path)
 
         photo.testMask = cv2.imread(maskImgs[count], -1)
         m3Show.imshow(photo.testMask, "photo.testMask")
@@ -330,7 +330,7 @@ def generateComparison(photoArray, outputName=None,
         file.write(str(settings))
             # count += 1
         file.close()
-
+    return photoArray
 # **********************************************************************
 # **********************************************************************
 

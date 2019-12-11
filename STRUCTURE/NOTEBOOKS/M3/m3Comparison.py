@@ -76,6 +76,7 @@ def pixelcomparison(photoArray, eyeAttr="", show=True):
                     eye.TP = 0
                     eye.FN = 0
                     eye.FP = 0
+                    eye.TPFN = 0
                 else:
 
                     # ret, autoThresh = cv2.threshold(eye.iris,1,255,cv2.THRESH_BINARY)
@@ -143,6 +144,7 @@ def pixelcomparison(photoArray, eyeAttr="", show=True):
                     eye.TP = TruePositive
                     eye.FN = FalseNegative
                     eye.FP = FalsePositive
+                    eye.TPFN = FalseNegative + TruePositive
                     # eye.TP = TruePositive
                     print("TruePositive%",TruePositive,"% of accumulated pixel values of handmask")
                     print("FalseNegative%",FalseNegative,"% of accumulated pixel values of handmask")

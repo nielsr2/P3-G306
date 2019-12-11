@@ -12,7 +12,10 @@ def findCircleAndMakeMask(eye, eyeAttr="", houghParams="", maskParams="", show=T
     image = getattr(eye, eyeAttr)
     circles = findCircle(image, **houghParams)
     print("circles", circles)
-    eye.houghMask = makeCircularMask(eye.image, circles, show=True, onlyOne=True)
+    if circles is not None:
+        eye.houghMask = makeCircularMask(eye.image, circles, show=True, onlyOne=True)
+    else:
+        eye.noCircles = True
     return eye
 
 
@@ -210,15 +213,18 @@ def makeCircularMask(img, circles, show=True, onlyOne=True):
     maskImg = np.zeros_like(img)
     # if not isinstance(eye.circle, type(None)):
         # firstCircle = eye.circle[0]
-    if onlyOne:
-        i = circles[0][0]
-        # print("i", i)
-        # print("onlyone", i[0], i[1], i[2])
-        cv2.circle(maskImg, (i[0], i[1]), i[2], (255,  255, 255), -1)
-    else:
-        for i in circles[0, :]:
+    if circles is not None:
+        if onlyOne:
+            i = circles[0][0]
             # print("i", i)
+            # print("onlyone", i[0], i[1], i[2])
             cv2.circle(maskImg, (i[0], i[1]), i[2], (255,  255, 255), -1)
+        else:
+            for i in circles[0, :]:
+                # print("i", i)
+                cv2.circle(maskImg, (i[0], i[1]), i[2], (255,  255, 255), -1)
+    else:
+        return maskImg
     if (show):
         m3Show.imshow(maskImg, "mask")
     return maskImg

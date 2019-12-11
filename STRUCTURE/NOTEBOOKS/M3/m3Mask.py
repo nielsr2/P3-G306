@@ -195,27 +195,29 @@ def rattr(obj, attributeName):
 
 def mask(eye, img=None, mask=None, dest=None, show=True):
     # print(eye.__dict__.items())
-    # print("img", img)
-    # print("mask", mask)
+    print("img", img)
+    print("mask", mask)
     # m3Show.imshow(img, "mask masked")
     # m3Show.imshow(mask, "to compare")
     # print("eye in mask",eye)
     img = returnAttr(eye, img)
     mask = returnAttr(eye, mask)
+
     if (img is None or mask is None):
+        setattr(eye, dest, np.zeros_like(img))
         m3F.printRed(" IMG OR MASK WAS NONE. NOT MASKING")
         eye.noCircles = True
         return eye
     # print("img.shape", img.shape)
     # print( "mask.shape", mask.shape)
-    destination = returnAttr(eye, dest)
+    # destination = returnAttr(eye, dest)
     bah = cv2.bitwise_and(img, mask)
-
-
-    m3Show.imshow(img, "image to be masked")
-    m3Show.imshow(mask, "mask")
-    m3Show.imshow(bah, "result")
     setattr(eye, dest, bah)
+    if show:
+        m3Show.imshow(img, "image to be masked")
+        m3Show.imshow(mask, "mask")
+        m3Show.imshow(bah, "result")
+
     # print(eye.__dict__.items())
 
     return eye

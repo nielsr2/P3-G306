@@ -3,12 +3,12 @@
 import csv
 def makeCSV(photoArray, fileToSave):
     with open(fileToSave, 'w', newline='') as csvfile:
-        fieldnames = ['image_name','eye','noCircles', 'TP', 'FN', 'FP']
+        fieldnames = ['image_name','eye','noCircles', 'TP', 'FN', 'FP', "TPFN"]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         for photo in photoArray:
             for face in photo.faces:
                 eyeCount = 0
                 for eye in face.eyes:
-                    writer.writerow({'image_name': photo.path, 'eye': eyeCount, 'noCircles': eye.noCircles, 'TP': eye.TP, 'FN': eye.FN, 'FP': eye.FP })
+                    writer.writerow({'image_name': photo.path, 'eye': eyeCount, 'noCircles': eye.noCircles, 'TP': eye.TP, 'FN': eye.FN, 'FP': eye.FP, "TPFN": eye.TPFN })
                     eyeCount += 1
