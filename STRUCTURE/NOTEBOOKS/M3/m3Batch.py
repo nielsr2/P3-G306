@@ -6,6 +6,7 @@ from datetime import datetime
 from . import m3F
 from M3 import m3Class
 from M3 import m3Show
+from M3 import m3CSV
 
 # **********************************************************************
 # exampe of input
@@ -29,7 +30,9 @@ export = boolean on whether to export the final result as an img
 # | |_) | | | | (_) | || (_) |
 # | .__/|_| |_|\___/ \__\___/
 # | |
+# **********************************************************************
 # |_|
+
 
 # takes input of either string for folder w. pics, or path for single.
 # takes dictionaries of function: parameters for both
@@ -69,11 +72,10 @@ def photoBatch(ins, functionArray,
     print("**********************************************************************")
     print("**********************************************************************")
     for function in preArray:
-        print("function.__name__  in pre: ", function.__name__)
+        print("function.__name__  in pre: ", function.__name__, function.__dir__)
         if (function.__name__ == "findEyes"):
             # print("FOUND FINDEYES FUNC")
             for photo in photoArray:
-                # print("NIBBBBBsss")
                 params = preArray[function]
                 photo.faces = function(photo, **params)
         elif (function.__name__ == "fakeEyes" ):
@@ -112,7 +114,34 @@ def photoBatch(ins, functionArray,
         # print(photo)
         # for face in photo.faces:
         #     print(face)
-        photo = iterFunction(photo, functionArray)
+        doingFor = None
+        for function in functionArray:
+            params = functionArray[function]
+
+
+            if (function == "doFor"):
+                # print("shitzngiggles!!!", )
+                for face in photo.faces:
+                    for eye in face.eyes:
+                        doingFor = params["doAs"]
+                        setattr(eye, params["doAs"], getattr(eye, params["original"]))
+                        # m3Show.imshow(eye.image, "orignal")
+                        # m3Show.imshow(getattr(eye, params["doAs"]), params["doAs"])
+                        # print(eye.__dict__.items())
+            elif (function == "doForEye"):
+                # print("EYEEYYEYEYE")
+                doingFor = "eye"
+            else:
+                print("function.__name__  in pre: ", function.__name__)
+                for face in photo.faces:
+                    for eye in face.eyes:
+
+                        if doingFor == "eye":
+                            function(eye, **params)
+                        else:
+                            # print("doingFor",doingFor, "gottenattr", getattr(eye, str(doingFor)))
+                            setattr(eye, doingFor, function(getattr(eye, str(doingFor)), **params))
+        # photo = iterFunction(photo, functionArray)
 
     # **********************************************************************
     # perform stuff on irisArray
@@ -179,6 +208,8 @@ def loadMasksForComparison(photoArray, maskFolder):
     # print("maskImgs", maskImgs)
     count = 0
     for photo in photoArray:
+        print("LOADING: ", maskImgs[count], "FOR ", photo.path)
+
         photo.testMask = cv2.imread(maskImgs[count], -1)
         m3Show.imshow(photo.testMask, "photo.testMask")
         count += 1
@@ -247,10 +278,17 @@ def iterFunction(photo, functionArray):
 
 
 def generateComparison(photoArray, outputName=None,
-                       attrs=None, folderName=None):
-    # print("generateComparison")
+                       attrs=None, folderName=None, exportFullMask=False, CSV=True, settings=None):
+    # print("generateComparison
+    os.makedirs("EXPORTS/" + folderName + "/", exist_ok=True)
+
     for photo in photoArray:
         facesToSave = []
+        if (exportFullMask):
+            os.makedirs("EXPORTS/" + folderName + "/", exist_ok=True)
+            cv2.imwrite("EXPORTS/" + folderName + "/"
+                        + os.path.basename(photo.path) + "_FullMask" + ".jpg", photo.fullMask)
+
         for face in photo.faces:
             if not (type(face.eyes) == type(None)): # TODO: fix this
                 for eye in face.eyes:
@@ -273,11 +311,18 @@ def generateComparison(photoArray, outputName=None,
         output = concat(facesToSave, direction="v")
         m3Show.imshow(output, "generateComparison output")
         if (folderName is not None):
-            os.makedirs("EXPORTS/" + folderName + "/", exist_ok=True)
             cv2.imwrite("EXPORTS/" + folderName + "/"
                         + os.path.basename(photo.path) + "_" + ".jpg", output)
         else:
             cv2.imwrite("EXPORTS/COMPARISONS/" + now_string + ".jpg", output)
+        m3CSV.makeCSV(photoArray, "EXPORTS/" + folderName + "/" + "data.csv")
+        file = open("EXPORTS/" + folderName + "/" + "settings.txt","w+")
+        count = 1
+        # for element in m3F.funcArrToStr():
+        #     print("element",element)
+        file.write(str(settings))
+            # count += 1
+        file.close()
 
 # **********************************************************************
 # **********************************************************************

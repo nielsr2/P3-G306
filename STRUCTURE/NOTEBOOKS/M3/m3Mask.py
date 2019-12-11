@@ -9,30 +9,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 sys.path.append("/M3")
 
-def makeCircularMask(photo, show=True, onlyOne=True):
-    # for photo in photoArray:
-        # print("photo")
-    # photo = inputImg
-    for face in photo.faces:
-        # print("facee")
-        for eye in face.eyes:
-            # print("eye")
-            maskImg = np.zeros_like(eye.wip)
-            if not isinstance(eye.circle, type(None)):
-                # firstCircle = eye.circle[0]
-                if onlyOne:
-                    i = eye.circle[0][0]
-                    # print("i", i)
-                    # print("onlyone", i[0], i[1], i[2])
-                    cv2.circle(maskImg, (i[0], i[1]), i[2], (255,  255, 255), -1)
-                else:
-                    for i in eye.circle[0, :]:
-                        # print("i", i)
-                        cv2.circle(maskImg, (i[0], i[1]), i[2], (255,  255, 255), -1)
-                if (show):
-                    m3Show.imshow(maskImg, "mask")
-                eye.mask = maskImg
-    return photo
+
 
 def makeCircularOutline(photo, show=True, dest=None):
     for face in photo.faces:
@@ -95,26 +72,28 @@ def fullImgEyeOutline(photo, show):
 
 
 
-def makeFullMask(inputImg, show):
-    fullMask = inputImg.orginalImage.copy()
-    fullMask.fill(0)
+def makeFullMask(photoArray, show=False):
+    for photo in photoArray:
+        fullMask = photo.originalImage.copy()
+        fullMask.fill(0)
 
-    # img1 = cv.imread('messi5.jpg')
-    # img2 = cv.imread('opencv-logo-white.png')
-    # I want to put logo on top-left corner, So I create a ROI
-    x, y, channels = fullMask.shape
-    for eye in inputImg.eyes:
-        if not isinstance(eye.mask, type(None)):
-            coor = eye.cropRect
-            # fullMask[coor[0]:x, coor[1]:y] = eye.mask
-            # print("coor", coor)
-            fullMask[coor[1]:coor[1]+eye.mask.shape[0], coor[0]:coor[0]+eye.mask.shape[1]] = eye.mask
-    inputImg.mask = fullMask
-    if (show):
-        pass
-        # m3Show.imshow(inputImg.orginalImage, "full original")
-        # m3Show.imshow(fullMask, "full mask")
-    return inputImg
+        # img1 = cv.imread('messi5.jpg')
+        # img2 = cv.imread('opencv-logo-white.png')
+        # I want to put logo on top-left corner, So I create a ROI
+        x, y, channels = fullMask.shape
+        for face in photo.faces:
+            for eye in face.eyes:
+                if not isinstance(eye.mask, type(None)):
+                    coor = eye.cropRect
+                    # fullMask[coor[0]:x, coor[1]:y] = eye.mask
+                    # print("coor", coor)
+                    fullMask[coor[1]:coor[1]+eye.mask.shape[0], coor[0]:coor[0]+eye.mask.shape[1]] = eye.mask
+                    photo.fullMask = fullMask
+                    if (show):
+                        pass
+                        # m3Show.imshow(inputImg.orginalImage, "full original")
+                        # m3Show.imshow(fullMask, "full mask")
+    return photoArray
 
 
 
@@ -123,10 +102,11 @@ def makeFullMask(inputImg, show):
 
 
 def makePolyMask(photo, show=True):
-    polyMask =  np.zeros_like(photo.originalImage)
+    # polyMask =  np.zeros_like(photo.originalImage)
     for face in photo.faces:
         for eye in face.eyes:
-            # print("EYE COOR", eye.landmarkPoints)
+            polyMask =  np.zeros_like(eye.image)
+            print("EYE COOR", eye.landmarkPoints)
             polyMask = cv2.fillPoly(polyMask, np.int_([eye.landmarkPoints]), (255, 255, 255))
             # polymask = cv2.fillConvexPoly(polyMask, np.int_([eye.landmarkPoints]), (255, 255, 255),1000)
             # polymask = cv2.drawContours(polyMask, np.int_([eye.landmarkPoints]),-1, (255, 255, 255), 2)
@@ -141,7 +121,8 @@ def makePolyMask(photo, show=True):
                 m3Show.imshow(polyMask, "POLYMASK")
             # epm = m3Class.Eye(np.asarray(pil_image.crop(left)), left, lEyeCoor)
             # epm = polyMask.crop(eye.cropRect)
-            eye.polyMask = m3F.typeSwap(m3F.typeSwap(polyMask).crop(eye.cropRect))
+            # eye.polyMask = m3F.typeSwap(m3F.typeSwap(polyMask).crop(eye.cropRect))
+            eye.polyMask = polyMask
             if show:
                 m3Show.imshow(eye.polyMask, "poly")
 
@@ -152,16 +133,19 @@ def makePolyMask(photo, show=True):
 
 
 def makeManyPolyMask(photo, show=True):
-    polyMask =  np.zeros_like(photo.originalImage)
+    # **********************************************************************
+    # polyMask =  np.zeros_like(photo.originalImage)
+    # **********************************************************************
     for face in photo.faces:
         for eye in face.eyes:
-
-            # print("manyLandmarkPoints", eye.manyLandmarkPoints)
+            polyMask =  np.zeros_like(eye.image)
+            print("manyLandmarkPoints", eye.manyLandmarkPoints)
             polyMask = cv2.fillPoly(polyMask, np.int_([eye.manyLandmarkPoints]), (255, 255, 255))
             # m3Show.imshow(polyMask, "POLYMASK")
             # epm = m3Class.Eye(np.asarray(pil_image.crop(left)), left, lEyeCoor)
             # epm = polyMask.crop(eye.cropRect)
-            eye.manyPolyMask = m3F.typeSwap(m3F.typeSwap(polyMask).crop(eye.cropRect))
+            # eye.manyPolyMask = m3F.typeSwap(m3F.typeSwap(polyMask).crop(eye.cropRect))
+            eye.manyPolyMask = polyMask
             # if show:
             m3Show.imshow(eye.manyPolyMask, "manypoly")
 
@@ -173,7 +157,7 @@ def makeManyPolyMask(photo, show=True):
 def applyPolyMask(eye, show=True):
     polymask = None
     eye.wip = cv2.bitwise_and(eye.wip, eye.polyMask)
-        eye.wip = cv2.bitwise_and(eye.wip, eye.manyPolyMask)
+    # eye.wip = cv2.bitwise_and(eye.wip, eye.manyPolyMask)
     if show:
         m3Show.imshow(eye.wip, "masked")
     return eye
@@ -211,8 +195,17 @@ def rattr(obj, attributeName):
 
 def mask(eye, img=None, mask=None, dest=None, show=True):
     # print(eye.__dict__.items())
+    # print("img", img)
+    # print("mask", mask)
+    # m3Show.imshow(img, "mask masked")
+    # m3Show.imshow(mask, "to compare")
+
     img = returnAttr(eye, img)
     mask = returnAttr(eye, mask)
+    if (img is None or mask is None):
+        m3F.printRed(" IMG OR MASK WAS NONE. NOT MASKING")
+        eye.noCircles = True
+        return eye
     print("img.shape", img.shape)
     print( "mask.shape", mask.shape)
     destination = returnAttr(eye, dest)

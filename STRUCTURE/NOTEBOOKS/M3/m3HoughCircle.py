@@ -8,12 +8,20 @@ import os
 from PIL import ImageFilter, ImageEnhance
 import PIL
 
+def findCircleAndMakeMask(eye, eyeAttr="", houghParams="", maskParams="", show=True):
+    image = getattr(eye, eyeAttr)
+    circles = findCircle(image, **houghParams)
+    print("circles", circles)
+    eye.houghMask = makeCircularMask(eye.image, circles, show=True, onlyOne=True):
+    pass
+
+
 # TODO - RENAME THEM FROM PARAMX TO SOOMETHINNG MEANINGFUL
-def findCircle(eye, resolution, min_dist, param_1, param_2, min_radius_width_divider, max_radius_width_divider, show):
+def findCircle(img, resolution, min_dist, param_1, param_2, min_radius_width_divider, max_radius_width_divider, show):
     # old params for HoughCircle: img, cv2.HOUGH_GRADIENT, 1.5, 120, param1=60, param2=15, minRadius=0, maxRadius=int(m3F.typeSwap(img).height / 2))
-    min_radius = int(m3F.typeSwap(eye.wip).width/min_radius_width_divider)
-    max_radius = int(m3F.typeSwap(eye.wip).width/max_radius_width_divider)
-    run(eye, resolution, min_dist, param_1, param_2, min_radius, max_radius, show)
+    min_radius = int(m3F.typeSwap(img).width/min_radius_width_divider)
+    max_radius = int(m3F.typeSwap(img).width/max_radius_width_divider)
+    return run(img, resolution, min_dist, param_1, param_2, min_radius, max_radius, show)
 
 
 def findCircleSimple(eye, show):
@@ -46,14 +54,14 @@ def findCircleSimpleDouble(eye, show):
 def run(tempeye, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMinRadius, tempMaxRadius, tempShow):
     print("***************************************************************************************")
 
-    img = tempeye
+    img = tempeye.copy()
     print(tempMinRadius)
-    isEyeClass = False
-    eye = None
-    if isinstance(img, type(m3Class.Eye())):
-        isEyeClass = True
-        eye = tempeye
-        img = eye.wip.copy()
+    # isEyeClass = False
+    # eye = None
+    # if isinstance(img, type(m3Class.Eye())):
+    #     isEyeClass = True
+    #     eye = tempeye
+    #     img = eye.wip.copy()
         # print("DID EYE")
     if not isinstance(img, type(None)):
         cimg = img.copy()
@@ -67,34 +75,33 @@ def run(tempeye, tempResolution, tempMin_dist, tempParam_1, tempParam_2, tempMin
 
 #        circles = cv2.HoughCircles(img,cv2.HOUGH_GRADIENT,,120,param1=200,param2=10,
 #                                   minRadius=int(m3F.typeSwap(img).height/6),maxRadius=int(m3F.typeSwap(img).height/2.5))
-
+        # print("circles!!!!", circles)
+        # return circles
         if not isinstance(circles, type(None)):
 
             if (circles.size != 0):
                 circles = np.uint16(np.around(circles))
                 # print(circles)
                 index = 0
-                for i in circles[0, :]:
+                if (tempShow):
+                    for i in circles[0, :]:
                     # if img[i[1],i[0]] < 15:
                         # draw the outer circle
-                        cv2.circle(cimg, (i[0], i[1]), i[2], (0, 255, 0), 2)
+                            cv2.circle(cimg, (i[0], i[1]), i[2], (0, 255, 0), 2)
                         # draw the center of the circle
-                        cv2.circle(cimg, (i[0], i[1]), 2, (0, 0, 255), 3)
-                eye.houghOutline = cimg
-                if (tempShow):
+                            cv2.circle(cimg, (i[0], i[1]), 2, (0, 0, 255), 3)
+                # eye.houghOutline = cimg
+
                     m3F.imshow(cimg, "Circle")
                     m3F.printGreen("CIRCLES FOUND^^^")
                     print("img out", img.shape)
-            if isEyeClass:
-                eye.circle = circles
-                # print("RETURNED AN EYE WITH CIRCLES")
-                return eye
-            else:
-                return img
+            return circles
         else:
+            # eye.noCircles = True
             if (tempShow):
                 m3F.imshow(cimg, "no circles found")
                 m3F.printRed("NO CIRCLES FOUND^^^")
+            return None
     else:
         m3F.printRed("Image is NONE")
 
@@ -161,8 +168,57 @@ def runDouble(tempeye, tempResolution, tempMin_dist, tempParam_1, tempParam_2, t
                 print("img out", img.shape)
             return img
         else:
+
             if (tempShow):
                 m3F.imshow(cimg, "no circles found")
                 m3F.printRed("NO CIRCLES FOUND^^^")
     else:
         m3F.printRed("Image is NONE")
+
+
+
+def makeCircularMask(photo, show=True, onlyOne=True):
+    # for photo in photoArray:
+        # print("photo")
+    # photo = inputImg
+    for face in photo.faces:
+        # print("facee")
+        for eye in face.eyes:
+            # print("eye")
+            maskImg = np.zeros_like(eye.wip)
+            if not isinstance(eye.circle, type(None)):
+                # firstCircle = eye.circle[0]
+                if onlyOne:
+                    i = eye.circle[0][0]
+                    # print("i", i)
+                    # print("onlyone", i[0], i[1], i[2])
+                    cv2.circle(maskImg, (i[0], i[1]), i[2], (255,  255, 255), -1)
+                else:
+                    for i in eye.circle[0, :]:
+                        # print("i", i)
+                        cv2.circle(maskImg, (i[0], i[1]), i[2], (255,  255, 255), -1)
+                if (show):
+                    m3Show.imshow(maskImg, "mask")
+                eye.mask = maskImg
+    return photo
+
+def makeCircularMask(img, circles, show=True, onlyOne=True):
+    # for photo in photoArray:
+        # print("photo")
+    # photo = inputImg
+            # print("eye")
+            maskImg = np.zeros_like(img)
+            if not isinstance(eye.circle, type(None)):
+                # firstCircle = eye.circle[0]
+                if onlyOne:
+                    i = circle[0][0]
+                    # print("i", i)
+                    # print("onlyone", i[0], i[1], i[2])
+                    cv2.circle(maskImg, (i[0], i[1]), i[2], (255,  255, 255), -1)
+                else:
+                    for i in circle[0, :]:
+                        # print("i", i)
+                        cv2.circle(maskImg, (i[0], i[1]), i[2], (255,  255, 255), -1)
+                if (show):
+                    m3Show.imshow(maskImg, "mask")
+                return mask

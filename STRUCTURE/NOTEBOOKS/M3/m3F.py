@@ -135,10 +135,11 @@ def storeAttr(photo, eyeAttr, attrName):
 # **********************************************************************
 # **********************************************************************
 
-def funcArrToStr(multilevelDict):
+def funcArrToStr(settings):
     dict = []
-    for function in multilevelDict:
-        print(function.__name__)
-        e = {function.__name__: multilevelDict[function]}
-        dict.append(e)
-    return json.dumps(dict)
+    for el in settings:
+        for function in el:
+            print(function.__name__)
+            e = {function.__name__: el[function]}
+            dict.append(e)
+    return dict
