@@ -16,8 +16,9 @@ def medianFilter(inputImg, kernelSize, show):
 
 
 def blur(inputImg, kernelSize, show):
-    print("inputImg",inputImg)
-    outputImg = cv2.blur(inputImg, kernelSize)
+    # print("inputImg",inputImg)
+    outputImg = inputImg.copy()
+    cv2.blur(inputImg, kernelSize, outputImg)
     if (show):
         m3F.imshow(outputImg, "median blur")
     return outputImg

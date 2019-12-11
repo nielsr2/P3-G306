@@ -117,12 +117,12 @@ def photoBatch(ins, functionArray,
         doingFor = None
         # print("functionArray", functionArray)
         for el in functionArray:
-            # print("el", el, type(el))
+            print("el", el, type(el))
             # el = retdict(**el)
             # print("el", el, type(el))
             for function, params in el.items():
                 # params = functionArray[function]
-                print("function, ", function)
+                print("function, params", function, params)
 
                 if (function == "doFor"):
                     # print("shitzngiggles!!!", )
@@ -142,18 +142,58 @@ def photoBatch(ins, functionArray,
                     for face in photo.faces:
                         for eye in face.eyes:
                             m3F.printGreen("doingFor")
-                            m3F.printGreen(str(doingFor))
+                            # m3F.printGreen(str(doingFor))
                             if doingFor == "eye":
                                 eye = function(eye, **params)
                             else:
                             # print("doingFor",doingFor, "gottenattr", getattr(eye, str(doingFor)))
-                                result = function(getattr(eye, str(doingFor)), **params)
-                                setattr(eye, doingFor, result)
+                                setattr(eye, doingFor, function(getattr(eye, str(doingFor)), **params))
         # photo = iterFunction(photo, functionArray)
 
     # **********************************************************************
     # perform stuff on irisArray
-
+    print("**********************************************************************")
+    print("**********************************************************************")
+    m3F.printBlue("DOING IRIS FUNCION ARRAY")
+    #          _ . - = - . _
+    #        . "  \  \   /  /  " .
+    #      ,  \                 /  .
+    #    . \   _,.--~=~"~=~--.._   / .
+    #   ;  _.-"  / \ !   ! / \  "-._  .
+    #  / ,"     / ,` .---. `, \     ". \
+    # /.'   `~  |   /:::::\   |  ~`   '.\
+    # \`.  `~   |   \:::::/   | ~`  ~ .'/
+    #  \ `.  `~ \ `, `~~~' ,` /   ~`.' /
+    #   .  "-._  \ / !   ! \ /  _.-"  .
+    #    ./    "=~~.._  _..~~=`"    \.
+    #      ,/         ""          \,
+    #        . _/             \_ .
+    #           " - ./. .\. - "
+    # print("**********************************************************************")
+    # print("**********************************************************************")
+    # for function in irisArray:
+    #     m3F.printBlue("function name " + function.__name__)
+    #     params = irisArray[function]
+    #
+    #     if ("eye" in params):
+    #         # m3F.printBlue(("Doing an eye with" + currentFunctionName))
+    #         for photo in photoArray:
+    #             for face in photo.faces:
+    #                 # if face.eyes is not None:
+    #                 for eye in face.eyes:
+    #                     params["eye"] = eye
+    #                     eye = function(**params)
+    #     else:
+    #         for photo in photoArray:
+    #             for face in photo.faces:
+    #                 if face.eyes is not None:
+    #                     for eye in face.eyes:
+    #                         if eye.iris is not None:
+    #                             params["inputImg"] = eye.iris
+    #                             eye.iris = function(**params)
+    #                             # m3Show.imshow(eye.iris, "eye.iris NIELS TEST")
+    # # **********************************************************************
+    #  perform POST functions ( such as generate comparison etc.)f
     for function in postArray:
         params = postArray[function]
         if (function.__name__ == "exportToFolder"):
