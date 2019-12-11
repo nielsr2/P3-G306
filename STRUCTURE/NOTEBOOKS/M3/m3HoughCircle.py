@@ -10,12 +10,15 @@ import PIL
 
 def findCircleAndMakeMask(eye, eyeAttr="", houghParams="", maskParams="", show=True):
     image = getattr(eye, eyeAttr)
+    eye.noCircles = False
     circles = findCircle(image, **houghParams)
+    eye.circles = circles
     print("circles", circles)
     if circles is not None:
         eye.houghMask = makeCircularMask(eye.image, circles, show=True, onlyOne=True)
     else:
         eye.noCircles = True
+        eye.circles = None
     return eye
 
 

@@ -82,13 +82,13 @@ def pixelcomparison(photoArray, eyeAttr="", show=True):
                     # ret, autoThresh = cv2.threshold(eye.iris,1,255,cv2.THRESH_BINARY)
                     orgAutoMask = getattr(eye, eyeAttr)
                     print("orgAutoMask",eyeAttr)
-                    cv2.imwrite(orgAutoMask, )
+                    # cv2.imwrite(orgAutoMask, )
                     # m3Show.imshow("orgAutoMask", orgAutoMask)
                     # m3Show.imshow("orgHandMask",eye.testMask )
-                    file = open("EXPORTS/" + "blur4.txt","w+")
-                    file.write(np.array2string(orgAutoMask,max_line_width=None, precision=None, suppress_small=None, threshold=10000000))
+                    # file = open("EXPORTS/" + "blur4.txt","w+")
+                    # file.write(np.array2string(orgAutoMask,max_line_width=None, precision=None, suppress_small=None, threshold=10000000))
                         # count += 1
-                    file.close()
+                    # file.close()
                     ret, orgAutoMask = cv2.threshold(orgAutoMask,1,255,cv2.THRESH_BINARY)
                     ret, orgHandMask = cv2.threshold(eye.testMask,1,255,cv2.THRESH_BINARY)
                     # orgHandMask = eye.testMask
@@ -135,22 +135,38 @@ def pixelcomparison(photoArray, eyeAttr="", show=True):
 
                             # TPi = np.zeros_like(eye.image)
                             # print("autoMask[y,x,0]", autoMask[y,x,0],"handMask[y,x,0]",handMask[y,x,0])
+                            # if (autoMask[y,x,0] == handMask[y,x,0]):
+                            #     TruePositive += handMask[y,x,0]
+                            #     TPi[y,x] = (0,255,0)
+                            # if (autoMask[y,x,0] == 0 and handMask[y,x,0] == 0):
+                            #     # TruePositive += handMask[y,x,0]
+                            #     TNi[y,x] = (0,127,0)
+                            #
+                            # elif (autoMask[y,x,0] < handMask[y,x,0]):
+                            #     FalseNegative += (handMask[y,x,0]-autoMask[y,x,0])
+                            #     # TruePositive += autoMask[y,x,0]/handMask[y,x,0]
+                            #     TruePositive += handMask[y,x,0]/autoMask[y,x,0]
+                            #     FNi[y,x] = (255,0,0)
+                            #
+                            # elif (autoMask[y,x,0] > handMask[y,x,0]):
+                            #     FalsePositive += autoMask[y,x,0] - handMask[y,x,0]
+                            #     TruePositive += autoMask[y,x,0]/handMask[y,x,0]
+                            #     FPi[y,x] = (0,0,255)
+
                             if (autoMask[y,x,0] == handMask[y,x,0]):
                                 TruePositive += handMask[y,x,0]
                                 TPi[y,x] = (0,255,0)
                             if (autoMask[y,x,0] == 0 and handMask[y,x,0] == 0):
                                 # TruePositive += handMask[y,x,0]
                                 TNi[y,x] = (0,127,0)
-
-                            elif (autoMask[y,x,0] < handMask[y,x,0]):
+                            if (autoMask[y,x,0] < handMask[y,x,0]):
                                 FalseNegative += (handMask[y,x,0]-autoMask[y,x,0])
-                                # TruePositive += autoMask[y,x,0]/handMask[y,x,0]
-                                TruePositive += handMask[y,x,0]/autoMask[y,x,0]
+                                TruePositive += autoMask[y,x,0]
                                 FNi[y,x] = (255,0,0)
 
-                            elif (autoMask[y,x,0] > handMask[y,x,0]):
+                            if (autoMask[y,x,0] > handMask[y,x,0]):
                                 FalsePositive += autoMask[y,x,0] - handMask[y,x,0]
-                                TruePositive += autoMask[y,x,0]/handMask[y,x,0]
+                                TruePositive += handMask[y,x,0]
                                 FPi[y,x] = (0,0,255)
 
                             handMaskAccumLum += handMask[y,x,0]

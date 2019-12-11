@@ -349,3 +349,25 @@ def fakeEyes(photoArray):
         temp.append(m3Class.Face([m3Class.Eye(photo.originalImage)]))
         photo.faces = temp
     return photoArray
+
+
+
+
+
+kMeanList = [2,5,30]
+kMeanList = []
+
+for index in range(0,(len(kMeanList))):
+    print(index)
+    RCparams = fArray[m3Color.reduceColor]
+#    print(params)
+
+    RCparams["n_colors"] = kMeanList[index]
+    print("changed", RCparams)
+    GCParams = postFunctions[m3Batch.generateComparison]
+    GCParams["folderName"] = "niels_test" + str(kMeanList[index])
+    print(GCParams)
+  #  GCParams = GCParams["foldername"]
+ #   print( GCParams["foldername"])
+    pa.iterate(fArray)
+    pa.post(postFunctions)

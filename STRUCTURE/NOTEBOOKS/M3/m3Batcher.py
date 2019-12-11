@@ -45,8 +45,10 @@ class photoBatcher:
                 self.photoArray = function(self.photoArray, **params)
 
     # **********************************************************************
+
     def iterate(self, functionArray):
         print("iterate() photoArray", self.photoArray)
+        paCopy = self.photoArray
         for photo in self.photoArray:
             doingFor = None
             # print("functionArray", functionArray)
@@ -75,13 +77,14 @@ class photoBatcher:
                         print("function.__name__  in pre: ", function.__name__)
                         for face in photo.faces:
                             for eye in face.eyes:
-                                m3F.printGreen("doingFor")
+                                print("!!!!!!!!doingFor", doingFor)
                                 # m3F.printGreen(str(doingFor))
                                 if doingFor == "eye":
                                     eye = function(eye, **params)
                                 else:
+                                    if not eye.noCircles:
                                 # print("doingFor",doingFor, "gottenattr", getattr(eye, str(doingFor)))
-                                    setattr(eye, doingFor, function(getattr(eye, str(doingFor)), **params))
+                                        setattr(eye, doingFor, function(getattr(eye, str(doingFor)), **params))
     def post(self, postArray):
         for function in postArray:
             params = postArray[function]

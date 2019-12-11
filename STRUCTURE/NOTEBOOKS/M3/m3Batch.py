@@ -349,10 +349,12 @@ def concat(images, direction="h"):
             h, w, c = img.shape
             hs.append(h)
             ws.append(w)
-        else:
+        elif(len(img.shape) == 2):
             h, w = img.shape
             hs.append(h)
             ws.append(w)
+        else:
+            continue
     hs.sort(reverse=True)
     ws.sort(reverse=True)
     outImgs = []
@@ -362,7 +364,7 @@ def concat(images, direction="h"):
             newSize = np.zeros_like(img)
             if (len(img.shape) == 3):
                 newSize = np.resize(newSize, (hs[0], ws[0], 3))
-            else:
+            elif(len(img.shape) == 2):
                 newSize = np.resize(newSize, (hs[0], ws[0]))
             newSize[0:img.shape[0], 0:img.shape[1]] = img
             outImgs.append(newSize)
