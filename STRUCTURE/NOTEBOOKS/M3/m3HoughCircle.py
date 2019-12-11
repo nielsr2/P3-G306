@@ -3,7 +3,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 sys.path.append("/M3")
 from M3 import m3F as m3F
-from M3 import m3Class
+from M3 import m3Class, m3Show
 import os
 from PIL import ImageFilter, ImageEnhance
 import PIL
@@ -12,8 +12,8 @@ def findCircleAndMakeMask(eye, eyeAttr="", houghParams="", maskParams="", show=T
     image = getattr(eye, eyeAttr)
     circles = findCircle(image, **houghParams)
     print("circles", circles)
-    eye.houghMask = makeCircularMask(eye.image, circles, show=True, onlyOne=True):
-    pass
+    eye.houghMask = makeCircularMask(eye.image, circles, show=True, onlyOne=True)
+    return eye
 
 
 # TODO - RENAME THEM FROM PARAMX TO SOOMETHINNG MEANINGFUL
@@ -207,18 +207,18 @@ def makeCircularMask(img, circles, show=True, onlyOne=True):
         # print("photo")
     # photo = inputImg
             # print("eye")
-            maskImg = np.zeros_like(img)
-            if not isinstance(eye.circle, type(None)):
-                # firstCircle = eye.circle[0]
-                if onlyOne:
-                    i = circle[0][0]
-                    # print("i", i)
-                    # print("onlyone", i[0], i[1], i[2])
-                    cv2.circle(maskImg, (i[0], i[1]), i[2], (255,  255, 255), -1)
-                else:
-                    for i in circle[0, :]:
-                        # print("i", i)
-                        cv2.circle(maskImg, (i[0], i[1]), i[2], (255,  255, 255), -1)
-                if (show):
-                    m3Show.imshow(maskImg, "mask")
-                return mask
+    maskImg = np.zeros_like(img)
+    # if not isinstance(eye.circle, type(None)):
+        # firstCircle = eye.circle[0]
+    if onlyOne:
+        i = circles[0][0]
+        # print("i", i)
+        # print("onlyone", i[0], i[1], i[2])
+        cv2.circle(maskImg, (i[0], i[1]), i[2], (255,  255, 255), -1)
+    else:
+        for i in circles[0, :]:
+            # print("i", i)
+            cv2.circle(maskImg, (i[0], i[1]), i[2], (255,  255, 255), -1)
+    if (show):
+        m3Show.imshow(maskImg, "mask")
+    return maskImg

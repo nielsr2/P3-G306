@@ -73,7 +73,7 @@ def photoBatch(ins, functionArray,
     print("**********************************************************************")
     for function in preArray:
         print("function.__name__  in pre: ", function.__name__, function.__dir__)
-        if (function.__name__ == "findEyes"):
+        if (function.__name__ == "findEyes68"):
             # print("FOUND FINDEYES FUNC")
             for photo in photoArray:
                 params = preArray[function]
@@ -82,7 +82,7 @@ def photoBatch(ins, functionArray,
             # print("fakeEyes")
             params = preArray[function]
             photoArray = function(photoArray, **params)
-        elif (function.__name__ == "findEyes2"):
+        elif (function.__name__ == "findEyes194"):
             params = preArray[function]
             for photo in photoArray:
                 photo = function(photo, **params)
@@ -94,14 +94,14 @@ def photoBatch(ins, functionArray,
     # **********************************************************************
     #  Set debug flag for all functions in functionArray
     # if debug:
-    for function in functionArray:
-        params = functionArray[function]
-        params["show"] = debug
-
-    # if irisDebug:
-    for function in irisArray:
-        params = irisArray[function]
-        params["show"] = debugIris
+    # for function in functionArray:
+    #     params = functionArray[function]
+    #     params["show"] = debug
+    #
+    # # if irisDebug:
+    # for function in irisArray:
+    #     params = irisArray[function]
+    #     params["show"] = debugIris
 
     # **********************************************************************
     #  perform iterations on photos
@@ -115,78 +115,45 @@ def photoBatch(ins, functionArray,
         # for face in photo.faces:
         #     print(face)
         doingFor = None
-        for function in functionArray:
-            params = functionArray[function]
+        # print("functionArray", functionArray)
+        for el in functionArray:
+            # print("el", el, type(el))
+            # el = retdict(**el)
+            # print("el", el, type(el))
+            for function, params in el.items():
+                # params = functionArray[function]
+                print("function, ", function)
 
-
-            if (function == "doFor"):
-                # print("shitzngiggles!!!", )
-                for face in photo.faces:
-                    for eye in face.eyes:
-                        doingFor = params["doAs"]
-                        setattr(eye, params["doAs"], getattr(eye, params["original"]))
+                if (function == "doFor"):
+                    # print("shitzngiggles!!!", )
+                    for face in photo.faces:
+                        for eye in face.eyes:
+                            doingFor = params["doAs"]
+                            setattr(eye, params["doAs"], getattr(eye, params["original"]))
                         # m3Show.imshow(eye.image, "orignal")
                         # m3Show.imshow(getattr(eye, params["doAs"]), params["doAs"])
                         # print(eye.__dict__.items())
-            elif (function == "doForEye"):
-                # print("EYEEYYEYEYE")
-                doingFor = "eye"
-            else:
-                print("function.__name__  in pre: ", function.__name__)
-                for face in photo.faces:
-                    for eye in face.eyes:
+                elif (function == "doForEye"):
+                    print("doingFor = eye")
+                    doingFor = "eye"
+                else:
 
-                        if doingFor == "eye":
-                            function(eye, **params)
-                        else:
+                    print("function.__name__  in pre: ", function.__name__)
+                    for face in photo.faces:
+                        for eye in face.eyes:
+                            m3F.printGreen("doingFor")
+                            m3F.printGreen(str(doingFor))
+                            if doingFor == "eye":
+                                eye = function(eye, **params)
+                            else:
                             # print("doingFor",doingFor, "gottenattr", getattr(eye, str(doingFor)))
-                            setattr(eye, doingFor, function(getattr(eye, str(doingFor)), **params))
+                                result = function(getattr(eye, str(doingFor)), **params)
+                                setattr(eye, doingFor, result)
         # photo = iterFunction(photo, functionArray)
 
     # **********************************************************************
     # perform stuff on irisArray
-    print("**********************************************************************")
-    print("**********************************************************************")
-    m3F.printBlue("DOING IRIS FUNCION ARRAY")
-    #          _ . - = - . _
-    #        . "  \  \   /  /  " .
-    #      ,  \                 /  .
-    #    . \   _,.--~=~"~=~--.._   / .
-    #   ;  _.-"  / \ !   ! / \  "-._  .
-    #  / ,"     / ,` .---. `, \     ". \
-    # /.'   `~  |   /:::::\   |  ~`   '.\
-    # \`.  `~   |   \:::::/   | ~`  ~ .'/
-    #  \ `.  `~ \ `, `~~~' ,` /   ~`.' /
-    #   .  "-._  \ / !   ! \ /  _.-"  .
-    #    ./    "=~~.._  _..~~=`"    \.
-    #      ,/         ""          \,
-    #        . _/             \_ .
-    #           " - ./. .\. - "
-    # print("**********************************************************************")
-    print("**********************************************************************")
-    for function in irisArray:
-        m3F.printBlue("function name " + function.__name__)
-        params = irisArray[function]
 
-        if ("eye" in params):
-            # m3F.printBlue(("Doing an eye with" + currentFunctionName))
-            for photo in photoArray:
-                for face in photo.faces:
-                    # if face.eyes is not None:
-                    for eye in face.eyes:
-                        params["eye"] = eye
-                        eye = function(**params)
-        else:
-            for photo in photoArray:
-                for face in photo.faces:
-                    if face.eyes is not None:
-                        for eye in face.eyes:
-                            if eye.iris is not None:
-                                params["inputImg"] = eye.iris
-                                eye.iris = function(**params)
-                                # m3Show.imshow(eye.iris, "eye.iris NIELS TEST")
-    # **********************************************************************
-    #  perform POST functions ( such as generate comparison etc.)f
     for function in postArray:
         params = postArray[function]
         if (function.__name__ == "exportToFolder"):

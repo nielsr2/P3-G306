@@ -101,32 +101,32 @@ def makeFullMask(photoArray, show=False):
 
 
 
-def makePolyMask(photo, show=True):
-    # polyMask =  np.zeros_like(photo.originalImage)
-    for face in photo.faces:
-        for eye in face.eyes:
-            polyMask =  np.zeros_like(eye.image)
-            print("EYE COOR", eye.landmarkPoints)
-            polyMask = cv2.fillPoly(polyMask, np.int_([eye.landmarkPoints]), (255, 255, 255))
-            # polymask = cv2.fillConvexPoly(polyMask, np.int_([eye.landmarkPoints]), (255, 255, 255),1000)
-            # polymask = cv2.drawContours(polyMask, np.int_([eye.landmarkPoints]),-1, (255, 255, 255), 2)
-            # polymask = cv2.approxPolyDP(np.int_([eye.landmarkPoints]),4, True)
-            # xs, ys = [], []
-            # for x, y in eye.eye.landmarkPoints:
-            #     xs.append(x)
-            #     ys.append(y)
-            # polymask = cv2.poly
-            # print(polymask)
-            if show:
-                m3Show.imshow(polyMask, "POLYMASK")
-            # epm = m3Class.Eye(np.asarray(pil_image.crop(left)), left, lEyeCoor)
-            # epm = polyMask.crop(eye.cropRect)
-            # eye.polyMask = m3F.typeSwap(m3F.typeSwap(polyMask).crop(eye.cropRect))
-            eye.polyMask = polyMask
-            if show:
-                m3Show.imshow(eye.polyMask, "poly")
-
-    return photo
+# def makePolyMask(photo, show=True):
+#     # polyMask =  np.zeros_like(photo.originalImage)
+#     for face in photo.faces:
+#         for eye in face.eyes:
+#             polyMask =  np.zeros_like(eye.image)
+#             print("EYE COOR", eye.landmarkPoints)
+#             polyMask = cv2.fillPoly(polyMask, np.int_([eye.landmarkPoints]), (255, 255, 255))
+#             # polymask = cv2.fillConvexPoly(polyMask, np.int_([eye.landmarkPoints]), (255, 255, 255),1000)
+#             # polymask = cv2.drawContours(polyMask, np.int_([eye.landmarkPoints]),-1, (255, 255, 255), 2)
+#             # polymask = cv2.approxPolyDP(np.int_([eye.landmarkPoints]),4, True)
+#             # xs, ys = [], []
+#             # for x, y in eye.eye.landmarkPoints:
+#             #     xs.append(x)
+#             #     ys.append(y)
+#             # polymask = cv2.poly
+#             # print(polymask)
+#             if show:
+#                 m3Show.imshow(polyMask, "POLYMASK")
+#             # epm = m3Class.Eye(np.asarray(pil_image.crop(left)), left, lEyeCoor)
+#             # epm = polyMask.crop(eye.cropRect)
+#             # eye.polyMask = m3F.typeSwap(m3F.typeSwap(polyMask).crop(eye.cropRect))
+#             eye.polyMask = polyMask
+#             if show:
+#                 m3Show.imshow(eye.polyMask, "poly")
+#
+#     return photo
 
 
 # p
@@ -199,19 +199,22 @@ def mask(eye, img=None, mask=None, dest=None, show=True):
     # print("mask", mask)
     # m3Show.imshow(img, "mask masked")
     # m3Show.imshow(mask, "to compare")
-
+    # print("eye in mask",eye)
     img = returnAttr(eye, img)
     mask = returnAttr(eye, mask)
     if (img is None or mask is None):
         m3F.printRed(" IMG OR MASK WAS NONE. NOT MASKING")
         eye.noCircles = True
         return eye
-    print("img.shape", img.shape)
-    print( "mask.shape", mask.shape)
+    # print("img.shape", img.shape)
+    # print( "mask.shape", mask.shape)
     destination = returnAttr(eye, dest)
     bah = cv2.bitwise_and(img, mask)
-    # m3Show.imshow(bah, "mask masked")
-    # m3Show.imshow(eye.image, "to compare")
+
+
+    m3Show.imshow(img, "image to be masked")
+    m3Show.imshow(mask, "mask")
+    m3Show.imshow(bah, "result")
     setattr(eye, dest, bah)
     # print(eye.__dict__.items())
 

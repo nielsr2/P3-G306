@@ -68,7 +68,7 @@ import numpy as np
 from M3 import m3Show
 
 
-def pixelcomparison(photoArray, show=True):
+def pixelcomparison(photoArray, eyeAttr="", show=True):
     for photo in photoArray:
         for face in photo.faces:
             for eye in face.eyes:
@@ -77,8 +77,9 @@ def pixelcomparison(photoArray, show=True):
                     eye.FN = 0
                     eye.FP = 0
                 else:
-                    ret, autoThresh = cv2.threshold(eye.iris,1,255,cv2.THRESH_BINARY)
-                    orgAutoMask = autoThresh
+
+                    # ret, autoThresh = cv2.threshold(eye.iris,1,255,cv2.THRESH_BINARY)
+                    orgAutoMask = getattr(eye, eyeAttr)
                     # ret, orgHandMask = cv2.threshold(eye.testMask,1,255,cv2.THRESH_BINARY)
                     orgHandMask = eye.testMask
                     # ret, orgHandMask = cv2.threshold(orgHandMask,1,255,cv2.THRESH_BINARY)
