@@ -114,7 +114,34 @@ def photoBatch(ins, functionArray,
         # print(photo)
         # for face in photo.faces:
         #     print(face)
-        photo = iterFunction(photo, functionArray)
+        doingFor = None
+        for function in functionArray:
+            params = functionArray[function]
+
+
+            if (function == "doFor"):
+                # print("shitzngiggles!!!", )
+                for face in photo.faces:
+                    for eye in face.eyes:
+                        doingFor = params["doAs"]
+                        setattr(eye, params["doAs"], getattr(eye, params["original"]))
+                        # m3Show.imshow(eye.image, "orignal")
+                        # m3Show.imshow(getattr(eye, params["doAs"]), params["doAs"])
+                        # print(eye.__dict__.items())
+            elif (function == "doForEye"):
+                # print("EYEEYYEYEYE")
+                doingFor = "eye"
+            else:
+                print("function.__name__  in pre: ", function.__name__)
+                for face in photo.faces:
+                    for eye in face.eyes:
+
+                        if doingFor == "eye":
+                            function(eye, **params)
+                        else:
+                            # print("doingFor",doingFor, "gottenattr", getattr(eye, str(doingFor)))
+                            setattr(eye, doingFor, function(getattr(eye, str(doingFor)), **params))
+        # photo = iterFunction(photo, functionArray)
 
     # **********************************************************************
     # perform stuff on irisArray

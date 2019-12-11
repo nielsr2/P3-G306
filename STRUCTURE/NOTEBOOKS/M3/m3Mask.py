@@ -9,30 +9,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 sys.path.append("/M3")
 
-def makeCircularMask(photo, show=True, onlyOne=True):
-    # for photo in photoArray:
-        # print("photo")
-    # photo = inputImg
-    for face in photo.faces:
-        # print("facee")
-        for eye in face.eyes:
-            # print("eye")
-            maskImg = np.zeros_like(eye.wip)
-            if not isinstance(eye.circle, type(None)):
-                # firstCircle = eye.circle[0]
-                if onlyOne:
-                    i = eye.circle[0][0]
-                    # print("i", i)
-                    # print("onlyone", i[0], i[1], i[2])
-                    cv2.circle(maskImg, (i[0], i[1]), i[2], (255,  255, 255), -1)
-                else:
-                    for i in eye.circle[0, :]:
-                        # print("i", i)
-                        cv2.circle(maskImg, (i[0], i[1]), i[2], (255,  255, 255), -1)
-                if (show):
-                    m3Show.imshow(maskImg, "mask")
-                eye.mask = maskImg
-    return photo
+
 
 def makeCircularOutline(photo, show=True, dest=None):
     for face in photo.faces:
