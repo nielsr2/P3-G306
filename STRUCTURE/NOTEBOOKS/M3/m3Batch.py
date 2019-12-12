@@ -304,7 +304,9 @@ def generateComparison(photoArray, outputName=None,
                         # print("attr", attr)
                         if attr[0] in attrs:
                             # if
-                            if attr[1] is not None:
+                            # print("attr[1].itemsize", attr[1].size)
+                            if attr[1].size > 1:
+                                # print(attr[0],attr[1], type(attr[1]), attr[1].shape)
                                 facesToSave.append(attr[1])
                             # else:
                             #     facesToSave.append(eye.image)
@@ -322,7 +324,7 @@ def generateComparison(photoArray, outputName=None,
                         + os.path.basename(photo.path) + "_" + ".jpg", output)
         else:
             cv2.imwrite("EXPORTS/COMPARISONS/" + now_string + ".jpg", output)
-        m3CSV.makeCSV(photoArray, "EXPORTS/" + folderName + "/" + "data.csv")
+        m3CSV.makeCSV(photoArray, "EXPORTS/" + folderName + "/" + folderName + ".csv")
         file = open("EXPORTS/" + folderName + "/" + "settings.txt","w+")
         count = 1
         # for element in m3F.funcArrToStr():
@@ -345,6 +347,7 @@ def concat(images, direction="h"):
                      # as images should be of the same size in one of the directons for np.concatenate to work.
                      # used for sorting, and picking highest value
     for img in images:
+        # print("img!!!!", img)
         if (len(img.shape) == 3):
             h, w, c = img.shape
             hs.append(h)
@@ -353,8 +356,8 @@ def concat(images, direction="h"):
             h, w = img.shape
             hs.append(h)
             ws.append(w)
-        else:
-            continue
+        # else:
+            # images.remove(img)
     hs.sort(reverse=True)
     ws.sort(reverse=True)
     outImgs = []

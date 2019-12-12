@@ -7,6 +7,7 @@ from . import m3F
 from M3 import m3Class
 from M3 import m3Show
 from M3 import m3CSV
+from copy import deepcopy
 
 class photoBatcher:
     photoArray = None
@@ -45,11 +46,11 @@ class photoBatcher:
                 self.photoArray = function(self.photoArray, **params)
 
     # **********************************************************************
-
+    paCopy = None
     def iterate(self, functionArray):
         print("iterate() photoArray", self.photoArray)
-        paCopy = self.photoArray
-        for photo in self.photoArray:
+        self.paCopy = deepcopy(self.photoArray)#[:]
+        for photo in self.paCopy:
             doingFor = None
             # print("functionArray", functionArray)
             for el in functionArray:
@@ -62,9 +63,10 @@ class photoBatcher:
 
                     if (function == "doFor"):
                         # print("shitzngiggles!!!", )
+                        doingFor = params["doAs"]
                         for face in photo.faces:
                             for eye in face.eyes:
-                                doingFor = params["doAs"]
+
                                 setattr(eye, params["doAs"], getattr(eye, params["original"]))
                             # m3Show.imshow(eye.image, "orignal")
                             # m3Show.imshow(getattr(eye, params["doAs"]), params["doAs"])
@@ -88,4 +90,4 @@ class photoBatcher:
     def post(self, postArray):
         for function in postArray:
             params = postArray[function]
-            self.photoArray = function(self.photoArray, **params)
+            self.paCopy = function(self.paCopy, **params)

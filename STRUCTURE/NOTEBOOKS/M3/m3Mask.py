@@ -11,20 +11,20 @@ sys.path.append("/M3")
 
 
 
-def makeCircularOutline(photo, show=True, dest=None):
-    for face in photo.faces:
-        for eye in face.eyes:
-            maskImg = eye.wip.copy()
-            if not isinstance(eye.circle, type(None)):
-                # firstCircle = eye.circle[0]
-                for i in eye.circle[0, :]:
-                    print("i", i)
-                    cv2.circle(maskImg, (i[0], i[1]), i[2], (255, 255, 255), 2)
-                    # eye.mask = maskImg
-                    setattr(eye, dest, maskImg)
-                    if (show):
-                        m3Show.imshow(maskImg, "mask")
-    return photo
+def makeCircularOutline(eye, circles, show=False, dest=None):
+    # for face in photo.faces:
+        # for eye in face.eyes:
+    maskImg = eye.image.copy()
+    if not isinstance(eye.circle, type(None)):
+        # firstCircle = eye.circle[0]
+        for i in circles[0, :]:
+            print("i", i)
+            cv2.circle(maskImg, (i[0], i[1]), i[2], (255, 255, 255), 2)
+            # eye.mask = maskImg
+            # setattr(eye, dest, maskImg)
+            if (show):
+                m3Show.imshow(maskImg, "mask")
+    return maskImg
 
 
 

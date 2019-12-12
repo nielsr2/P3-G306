@@ -3,7 +3,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 sys.path.append("/M3")
 from M3 import m3F as m3F
-from M3 import m3Class, m3Show
+from M3 import m3Class, m3Show, m3Mask
 import os
 from PIL import ImageFilter, ImageEnhance
 import PIL
@@ -11,9 +11,12 @@ import PIL
 def findCircleAndMakeMask(eye, eyeAttr="", houghParams="", maskParams="", show=True):
     image = getattr(eye, eyeAttr)
     eye.noCircles = False
+    eye.circles = False
+    eye.houghMask = None
     circles = findCircle(image, **houghParams)
     eye.circles = circles
     print("circles", circles)
+    eye.outline = m3Mask.makeCircularOutline(eye, circles)
     if circles is not None:
         eye.houghMask = makeCircularMask(eye.image, circles, show=True, onlyOne=True)
     else:
