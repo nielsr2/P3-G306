@@ -21,14 +21,19 @@ def reduceColor(inputImg, show, n_colors=16):
     # be in the range [0-1])
 
     if not isinstance(img, type(None)):
+        #Converting to float instead of the default 8 bits interger coding. 
+        #Dividing by 255 is important to make sure that plt.show() works well with float data
+        #The float data needs to be in the range of 0-1, therefore:
         img = np.array(img, dtype=np.float64) / 255
 
         # Load Image and transform to a 2D numpy array.
         w, h, d = original_shape = tuple(img.shape)
         assert d == 3
         image_array = np.reshape(img, (w * h, d))
-
+        
         image_array_sample = shuffle(image_array, random_state=0)[:1000]
+        #Running the K-means Clustering
+        #The .fit() operation computes the algorithm 
         kmeans = KMeans(n_clusters=n_colors, random_state=0).fit(image_array_sample)
 
         # Get labels for all points
